@@ -14,4 +14,7 @@ Every step you've made during the setup phase is clean and smooth. But you might
 </feature>
 
 
-Then you may try the
+<div id = "img2">
+  <img src = "images/2.png" />
+  This is image2
+</div>
