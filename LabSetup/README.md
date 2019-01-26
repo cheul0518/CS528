@@ -2,6 +2,6 @@
 
 Every step you've made during the setup phase is smooth and clean. But you might run into a login issue at the end, which is "ssh_exchange identification: read: Connection reset by peer"
 
-<img src = "images/1.png" width = "750">
+<img src = "images/1.png" width = "850">
 
 ![](images/1.png)
