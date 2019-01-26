@@ -2,9 +2,6 @@
 
 Every step you've made during the setup phase is smooth and clean. But you might run into a login issue at the end, which is "ssh_exchange identification: read: Connection reset by peer" (Feature 1)
 
-<figure>
-<img src = "images/1.png" style="width: 75%"> 
-  <figcaption> Hi </figcaption>
-</figure>
+<img src = "images/1.png" style="width: 45%"> 
 
 Feature 1. ssh_exchange_identifiaction: read: Connection reset by peer 
