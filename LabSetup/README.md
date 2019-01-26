@@ -6,4 +6,3 @@ Every step you've made during the setup phase is smooth and clean. But you might
   <img src = "images/1.png" width = "750"> 
   <figcaption>Hello</figcaption>
 </figure>
-Feature 1. ssh_exchange_identifiaction: read: Connection reset by peer 
