@@ -5,8 +5,8 @@ Every step you've made during the setup phase is smooth and clean. But you might
 <feature>
   <table>
     <tr>
-      <td> <img align = "left" width = "750" src = "images/1.png"> </td>
+      <td> <img align = "left" width = "700" src = "images/1.png"> </td>
+      <td> <figcaption>Hello World</figcaption> </td>
     </tr>
   </table>
-  <figcaption>Hello World</figcaption>
 </feature>
