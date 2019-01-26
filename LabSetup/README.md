@@ -6,7 +6,7 @@ Every step you've made during the setup phase is smooth and clean. But you might
   <table>
     <tr>
       <td> <img align = "left" width = "700" src = "images/1.png"> </td>
-      <td> <figcaption>Hello World</figcaption> </td>
     </tr>
+    <figcaption>Hello World</figcaption>
   </table>
 </feature>
