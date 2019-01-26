@@ -1,9 +1,9 @@
 ## Trouble Shoot: ssh_exchange_identification: read: Connection reset by peer
 
-Every step you've made during the setup phase is smooth and clean. But you might run into a login issue at the end, which is "ssh_exchange identification: read: Connection reset by peer" (Feature 1)
+Every step you've made during the setup phase is smooth and clean. But you might run into a login issue at the end, which is "ssh_exchange identification: read: Connection reset by peer" (Figure 1)
 
 <figure>
-<p><img src = "images/1.png" width = "750"> 
-  <figcaption> Hello </figcaption>
+  <img src = "images/1.png" width = "750"> 
+  <figcaption>Hello</figcaption>
 </figure>
 Feature 1. ssh_exchange_identifiaction: read: Connection reset by peer 
