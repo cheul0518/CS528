@@ -6,7 +6,7 @@ Every step you've made during the setup phase is clean and smooth. But you might
 <feature>
   <table>
     <tr>
-      <td> <img align = "left" width = "700" src = "images/1.png" /> This is some text</td>
+      <img align = "left" width = "700" src = "images/1.png" /> This is some text
     </tr>
   </table>
   <figcaption>Figure1: ssh_exchange_identification: read: Connection reset by peer</figcaption>
