@@ -7,5 +7,3 @@ Every step you've made during the setup phase is clean and smooth. But you might
   <td> <img src = "images/1.png" width = "700"> </td>
   </tr>
 </table>
-<img src = "images/2.png" width = "700">
-<img src = "images/3.png" width = "700">
