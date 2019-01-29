@@ -8,6 +8,7 @@ Every step you've made during the setup phase is clean and smooth. But you might
   </tr>
 </table>
 
+It would happen when you are connecting to the wrong IP. 
 
 <table><tr>
   <td> <img src = "images/2.png" width = "700"> </td>
