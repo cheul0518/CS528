@@ -34,7 +34,7 @@ First of all, screenshot your virtual machine to see its current state.
     <td> <img src = "images/2.png" width = "700"> </td>
   </tr>
 </table>
-Open your img1.png by using a graphical tool on your server. To me, I downloaded the PNG file and opened it on local.
+Open your img1.png by using a graphical tool on your server. (I downloaded the PNG file and opened it on local)
 
 <table>
   <tr>
@@ -42,6 +42,8 @@ Open your img1.png by using a graphical tool on your server. To me, I downloaded
     <img1.png>
   </tr>
 </table>
+If your img1.png looks like mine above, then send your password in your virtual machine.
+> VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
 <table>
   <tr>
     <td> <img src = "images/img2.png" width = "700"> </td>
