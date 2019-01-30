@@ -26,7 +26,7 @@ If your server doens't provide the virtualbox GUI, then here are some tools for 
 
 And here are screenshots in using the tools.
 
-First of all, screenshot your virtual machine to see its current status.
+First of all, screenshot your virtual machine to see its current state.
 
 > VBoxManage controlvm [VMNAME] screenshotpng img1.png
 <table>
@@ -36,10 +36,10 @@ First of all, screenshot your virtual machine to see its current status.
 </table>
 Open your img1.png by using a graphical tool on your server. To me, I downloaded the PNG file and opened it on local.
 
-
 <table>
   <tr>
     <td> <img src = "images/img1.png" width = "700"> </td>
+    <img1.png>
   </tr>
 </table>
 <table>
