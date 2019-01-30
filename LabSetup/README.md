@@ -34,7 +34,7 @@ First of all, screenshot your virtual machine to see its current state.
     <td> <img src = "images/2.png" width = "700"> </td>
   </tr>
 </table>
-Open your img1.png by using a graphical tool on your server. (I downloaded the PNG file and opened it on local)
+Open your img1.png by using a graphical tool on your server; I downloaded the PNG file and opened it on local.
 
 <table>
   <tr>
