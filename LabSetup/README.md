@@ -41,7 +41,7 @@ Open img1.png by using a graphical tool on your server; I downloaded the PNG fil
 </table>
 
 
-If the opened img1.png looks like the above image, then send your password to your virtual machine.
+If the opened img1.png looks like the above image, then send your password to your virtual machine. Don't forget to screenshot your virtual machine as img2.png
 
 > VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
 
@@ -50,7 +50,7 @@ If the opened img1.png looks like the above image, then send your password to yo
     <td> <img src = "images/img2.png" width = "700"> </td>
   </tr>
 </table>
-
+If your password's typed in the password box (you can check it in your img2.png), 
 Send "enter" to your virtual machine so you're logged in.
 > VBoxManage controlvm [VMNAME] keyscancode 1c 9c
 
