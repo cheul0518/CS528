@@ -11,7 +11,9 @@ Every step you've made during the setup phase is clean and smooth. But you might
 Connecting to the wrong IP would be a reason. The IP leases do not start over from 192.168.15.4 when you create a new network for your virtual machine. This is because the VBox Manager DHCP server will continute assiging IP address in sequential ascending order. How can we find the address from 192.168.154.4 to 192.168.154.255?
 
 Try
+
   VBoxManage guestproperty get [VMNAME] "/VirtualBox/GuestInfo/Net/0/V4/IP" 
+
 to find your IP address of your virtual machine.
 
 
