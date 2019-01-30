@@ -8,9 +8,10 @@ Every step you've made during the setup phase is clean and smooth. But you might
   </tr>
 </table>
 
-It would happen when you are connecting to the wrong IP. 
+Connecting to the wrong IP would be a reason. The IP leases do not start over from 192.168.15.4 when you create a new network for your virtual machine. That is because the VBox Manager DHCP server will continute assiging IP address in sequential ascending order. 
 
-<table><tr>
+
+<table><tr>connecting
   <td> <img src = "images/2.png" width = "700"> </td>
   </tr>
 </table>
