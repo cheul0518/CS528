@@ -25,11 +25,17 @@ If your server doens't provide the virtualbox GUI, then here are some tools for 
 3. VBoxManage controlvm [VMNAME] keyboadputscancode [HEXCODE]
 
 And here are screenshots in using the tools.
+
+First of all, screenshot your virtual machine to see its current status.
+
+Type
+> VBoxManage controlvm [VMNAME] screenshotpng img1.png
 <table>
   <tr>
     <td> <img src = "images/2.png" width = "700"> </td>
   </tr>
 </table>
+
 <table>
   <tr>
     <td> <img src = "images/img1.png" width = "700"> </td>
