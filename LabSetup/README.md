@@ -52,8 +52,7 @@ If the opened img1.png looks like the above image, then send your password to yo
   </tr>
 </table>
 
-Count the number of asterisks in the password box to check if it matches the number of your password.
-If it's correct, then send "enter" to your virtual machine
+Send "enter" to your virtual machine so you're logged in.
 > VBoxManage controlvm [VMNAME] keyscancode 1c 9c
 
 "1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9C)" \
