@@ -28,13 +28,14 @@ And here are screenshots in using the tools.
 
 First of all, screenshot your virtual machine to see its current status.
 
-Type
 > VBoxManage controlvm [VMNAME] screenshotpng img1.png
 <table>
   <tr>
     <td> <img src = "images/2.png" width = "700"> </td>
   </tr>
 </table>
+Open your img1.png by using a graphical tool on your server. To me, I downloaded the PNG file and opened it on local.
+
 
 <table>
   <tr>
