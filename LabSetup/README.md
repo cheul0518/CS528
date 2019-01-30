@@ -22,8 +22,8 @@ If your server doens't provide the virtualbox GUI, then here are some tools for 
 1. VBoxManage controlvm [VMNAME] screenshotpng [IMGNAME]
 2. VBoxManage controlvm [VMNAME] keyboardputstring [STRING]
 3. VBoxManage controlvm [VMNAME] keyboadputscancode [HEXCODE]
-
-And here are screenshots in using the tools. 
+<br />
+And here are screenshots in using the tools. <br />
 First of all, screenshot your virtual machine to see its current state.
 > VBoxManage controlvm [VMNAME] screenshotpng img1.png
 <table>
@@ -31,8 +31,9 @@ First of all, screenshot your virtual machine to see its current state.
     <td> <img src = "images/2.png" width = "700"> </td>
   </tr>
 </table>
-----  
-  
+
+- - - -
+<br />
 Open img1.png by using a graphical tool on your server; I downloaded the PNG file and opened it on local.
 <table>
   <tr>
