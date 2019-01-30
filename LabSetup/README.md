@@ -42,8 +42,12 @@ Open your img1.png by using a graphical tool on your server. (I downloaded the P
     <img1.png>
   </tr>
 </table>
+
+
 If your img1.png looks like mine above, then send your password in your virtual machine.
+
 > VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
+
 <table>
   <tr>
     <td> <img src = "images/img2.png" width = "700"> </td>
