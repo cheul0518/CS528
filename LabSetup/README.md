@@ -55,3 +55,18 @@ And here are screenshots in using the tools.
     <td> <img src = "images/img5.png" width = "700"> </td>
   </tr>
 </table>
+<table>
+  <tr>
+    <td> <img src = "images/img6.png" width = "700"> </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td> <img src = "images/img7.png" width = "700"> </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td> <img src = "images/img8.png" width = "700"> </td>
+  </tr>
+</table>
