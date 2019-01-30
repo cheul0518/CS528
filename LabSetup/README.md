@@ -24,6 +24,8 @@ If your server doens't provide the virtualbox GUI, then here are some tools for 
 2. VBoxManage controlvm [VMNAME] keyboardputstring [STRING]
 3. VBoxManage controlvm [VMNAME] keyboadputscancode [HEXCODE]
 
+Reference: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
+
 And here are screenshots in using the tools.
 
 First of all, screenshot your virtual machine to see its current state.
@@ -34,7 +36,7 @@ First of all, screenshot your virtual machine to see its current state.
     <td> <img src = "images/2.png" width = "700"> </td>
   </tr>
 </table>
-Open your img1.png by using a graphical tool on your server; I downloaded the PNG file and opened it on local.
+Open img1.png by using a graphical tool on your server; I downloaded the PNG file and opened it on local.
 
 <table>
   <tr>
@@ -44,7 +46,7 @@ Open your img1.png by using a graphical tool on your server; I downloaded the PN
 </table>
 
 
-If your img1.png looks like the above image, then send your password to your virtual machine.
+If the opened img1.png looks like the above image, then send your password to your virtual machine.
 
 > VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
 
@@ -54,6 +56,7 @@ If your img1.png looks like the above image, then send your password to your vir
   </tr>
 </table>
 
+Count the number of asterisks in the password box to check if it matches the number of your password.
 
 <table>
   <tr>
