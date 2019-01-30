@@ -44,7 +44,7 @@ Open your img1.png by using a graphical tool on your server; I downloaded the PN
 </table>
 
 
-If your img1.png looks like mine above, then send your password to your virtual machine.
+If your img1.png looks like the above image, then send your password to your virtual machine.
 
 > VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
 
@@ -53,36 +53,50 @@ If your img1.png looks like mine above, then send your password to your virtual 
     <td> <img src = "images/img2.png" width = "700"> </td>
   </tr>
 </table>
+
+
 <table>
   <tr>
     <td> <img src = "images/img3.png" width = "700"> </td>
   </tr>
 </table>
+
+
 <table>
   <tr>
     <td> <img src = "images/img4.png" width = "700"> </td>
   </tr>
 </table>
+
+
 <table>
   <tr>
     <td> <img src = "images/img5.png" width = "700"> </td>
   </tr>
 </table>
+
+
 <table>
   <tr>
     <td> <img src = "images/img6.png" width = "700"> </td>
   </tr>
 </table>
+
+
 <table>
   <tr>
     <td> <img src = "images/img7.png" width = "700"> </td>
   </tr>
 </table>
+
+
 <table>
   <tr>
     <td> <img src = "images/img8.png" width = "700"> </td>
   </tr>
 </table>
+
+
 <table>
   <tr>
     <td> <img src = "images/3.png" width = "700"> </td>
