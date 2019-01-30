@@ -54,7 +54,7 @@ If the opened img1.png looks like the above image, then send your password to yo
 Send "enter" to your virtual machine so you're logged in.
 > VBoxManage controlvm [VMNAME] keyscancode 1c 9c
 
-"1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9C)" \
+"1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9c)" \
 For any further information, check this website: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
 
 
