@@ -24,11 +24,6 @@ If your server doens't provide the virtualbox GUI, then here are some tools for 
 2. VBoxManage controlvm [VMNAME] keyboardputstring [STRING]
 3. VBoxManage controlvm [VMNAME] keyboadputscancode [HEXCODE]
 
-Reference: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
-
-
-
-
 And here are screenshots in using the tools.\
 First of all, screenshot your virtual machine to see its current state.
 > VBoxManage controlvm [VMNAME] screenshotpng img1.png
@@ -58,6 +53,12 @@ If the opened img1.png looks like the above image, then send your password to yo
 </table>
 
 Count the number of asterisks in the password box to check if it matches the number of your password.
+If it's correct, then send "enter" to your virtual machine
+> VBoxManage controlvm [VMNAME] keyscancode 1c 9c
+
+"1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9C)" \
+For any further information, check this website: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
+
 
 <table>
   <tr>
