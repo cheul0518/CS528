@@ -44,7 +44,7 @@ Open your img1.png by using a graphical tool on your server. (I downloaded the P
 </table>
 
 
-If your img1.png looks like mine above, then send your password in your virtual machine.
+If your img1.png looks like mine above, then send your password to your virtual machine.
 
 > VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
 
