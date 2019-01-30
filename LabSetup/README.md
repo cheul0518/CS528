@@ -12,6 +12,7 @@ Connecting to the wrong IP would be a reason. The IP leases do not start over fr
 
 Try
 >VBoxManage guestproperty get [VMNAME] "/VirtualBox/GuestInfo/Net/0/V4/IP" 
+
 to find your IP address of your virtual machine.
 
 
