@@ -32,7 +32,26 @@ And here are screenshots in using the tools.
 </table>
 <table>
   <tr>
-    <td> <img src = "images/2.png" width = "700"> </td>
+    <td> <img src = "images/img1.png" width = "700"> </td>
   </tr>
 </table>
-
+<table>
+  <tr>
+    <td> <img src = "images/img2.png" width = "700"> </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td> <img src = "images/img3.png" width = "700"> </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td> <img src = "images/img4.png" width = "700"> </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td> <img src = "images/img5.png" width = "700"> </td>
+  </tr>
+</table>
