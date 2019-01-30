@@ -30,8 +30,8 @@ Reference: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
 
 
 And here are screenshots in using the tools.\
-First of all, screenshot your virtual machine to see its current state.\
-> VBoxManage controlvm [VMNAME] screenshotpng img1.png\
+First of all, screenshot your virtual machine to see its current state.
+> VBoxManage controlvm [VMNAME] screenshotpng img1.png
 <table>
   <tr>
     <td> <img src = "images/2.png" width = "700"> </td>
