@@ -70,3 +70,8 @@ And here are screenshots in using the tools.
     <td> <img src = "images/img8.png" width = "700"> </td>
   </tr>
 </table>
+<table>
+  <tr>
+    <td> <img src = "images/3.png" width = "700"> </td>
+  </tr>
+</table>
