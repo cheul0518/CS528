@@ -20,6 +20,7 @@ If you got a message: "No Value Set", chances are that your virtual machine neve
 
 <br>
 If your server doens't provide the virtualbox GUI, then here are some tools for troubleshooting.
+
 1. VBoxManage controlvm [VMNAME] screenshotpng [IMGNAME] 
 2. VBoxManage controlvm [VMNAME] keyboardputstring [STRING]
 3. VBoxManage controlvm [VMNAME] keyboadputscancode [HEXCODE]
@@ -33,6 +34,7 @@ First of all, screenshot your virtual machine to see its current state.<br/>
 </table>
 
 - - - -
+
 <br />
 Open img1.png by using a graphical tool on your server; I downloaded the PNG file and opened it on local.
 <table>
@@ -41,30 +43,41 @@ Open img1.png by using a graphical tool on your server; I downloaded the PNG fil
     <img1.png>
   </tr>
 </table>
+
+----
+<br />
+
 If the opened img1.png looks like the above image, then send your password to your virtual machine. Screenshot your virtual machine to see its state. (img2.png)
 
 > VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
 
-----
 <table>
   <tr>
     <td> <img src = "images/img2.png" width = "700"> </td>
   </tr>
 </table>
+
+----
+<br />
+
 If your password's typed in the password box (you can check it in your img2.png), 
 Send "enter" to your virtual machine so you can log into your virtual machine.
 > VBoxManage controlvm [VMNAME] keyscancode 1c 9c
 
-"1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9c)" \
+----
+<br />
+
+"1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9c)"
+
 For any further information, check this website: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
 
-----
 <table>
   <tr>
     <td> <img src = "images/img3.png" width = "700"> </td>
   </tr>
 </table>
 
+----
 
 <table>
   <tr>
