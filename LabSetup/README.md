@@ -100,6 +100,8 @@ Try
 
 >  VBoxManage controlvm [VMNAME] keyboardputstring "gnome-terminal"
 
+----
+<br />
 
 <table>
   <tr>
@@ -107,6 +109,8 @@ Try
   </tr>
 </table>
 
+----
+<br />
 
 <table>
   <tr>
@@ -114,6 +118,8 @@ Try
   </tr>
 </table>
 
+----
+<br />
 
 <table>
   <tr>
@@ -121,6 +127,8 @@ Try
   </tr>
 </table>
 
+----
+<br />
 
 <table>
   <tr>
@@ -128,6 +136,8 @@ Try
   </tr>
 </table>
 
+----
+<br />
 
 <table>
   <tr>
