@@ -1,4 +1,3 @@
-#EDITING...
 ## Trouble Shoot: ssh_exchange_identification: read: Connection reset by peer
 
 Every step you've made during the setup phase is clean and smooth. But you could run into a login issue at the end, which is "ssh_exchange identification: read: Connection reset by peer" (Image below)  
@@ -10,7 +9,6 @@ Every step you've made during the setup phase is clean and smooth. But you could
 Connecting to the wrong IP would be a reason. The IP leases do not start over from 192.168.15.4 when you create a new network for your virtual machine. This is because the VBox Manager DHCP server will continute assiging IP address in sequential ascending order. Then the next question will be "How can we find the address in the range from 192.168.154.4 to 192.168.154.255?"
 
 
-<br />
 <br />
 Try  
 <br />
