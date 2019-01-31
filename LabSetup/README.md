@@ -48,7 +48,7 @@ Open img1.png by using a graphical tool on your server; I downloaded the PNG fil
 ----
 <br />
 
-If the opened img1.png looks like the above image, then send your password to your virtual machine. Screenshot your virtual machine to see its state. (img2.png)
+If the opened img1.png looks like the above image, then send your password to your virtual machine. Screenshot your virtual machine to see its state. (screenshot img2.png)
 
 > VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
 
@@ -61,10 +61,10 @@ If the opened img1.png looks like the above image, then send your password to yo
 ----
 <br />
 
-If your password's typed in the password box (you can check it in your img2.png), 
-Send "enter" to your virtual machine so you can log into your virtual machine.
+If your passwords in the box appears typed(check your img2.png), 
+send "enter" to your virtual machine so you can actually log into your virtual machine. (screenshot img3.png)
 
-> VBoxManage controlvm [VMNAME] keyscancode 1c 9c
+> VBoxManage controlvm [VMNAME] keyboardputscancode 1c 9c
 
 "1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9c)"
 
@@ -79,11 +79,26 @@ For any further information, check this website: https://www.win.tue.nl/~aeb/lin
 ----
 <br />
 
+If you're successfully logged in (check your img3.png), then open a search box(left alt + f2). The command will be
+
+> VBoxManage controlvm [VMNAME] keyboardputscancode 38 3c b8 bc
+
+Don't forget to screenshot your virtual machine's state as img4.png
+
 <table>
   <tr>
     <td> <img src = "images/img4.png" width = "700"> </td>
   </tr>
 </table>
+
+----
+<br />
+
+The next thing will type "gnome-terminal" in the search box. 
+
+Try
+
+>  VBoxManage controlvm [VMNAME] keyboardputstring "gnome-terminal"
 
 
 <table>
