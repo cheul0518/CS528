@@ -11,6 +11,7 @@ Connecting to the wrong IP would be a reason. The IP leases do not start over fr
 
 <br>
 Try  
+
 > VBoxManage guestproperty get [VMNAME] "/VirtualBox/GuestInfo/Net/0/V4/IP"
 
 to find your IP address of your virtual machine.
@@ -62,10 +63,8 @@ If the opened img1.png looks like the above image, then send your password to yo
 
 If your password's typed in the password box (you can check it in your img2.png), 
 Send "enter" to your virtual machine so you can log into your virtual machine.
-> VBoxManage controlvm [VMNAME] keyscancode 1c 9c
 
-----
-<br />
+> VBoxManage controlvm [VMNAME] keyscancode 1c 9c
 
 "1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9c)"
 
@@ -78,6 +77,7 @@ For any further information, check this website: https://www.win.tue.nl/~aeb/lin
 </table>
 
 ----
+<br />
 
 <table>
   <tr>
