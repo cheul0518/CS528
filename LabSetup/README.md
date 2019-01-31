@@ -50,9 +50,10 @@ Open img1.png by using a graphical tool on your server; I downloaded the PNG fil
 ----
 <br />
 
-If the opened img1.png looks like the above image, then send your password to your virtual machine. Screenshot your virtual machine to see its state. (screenshot img2.png)
+If your img1.png looks like the above image, then send your password to your virtual machine. Screenshot your virtual machine to see its state. (screenshot img2.png)
 
 > VBoxManage controlvm [VMNAME] keyboardputstring [PASSWORD]
+> VBoxManage controlvm [VMNAME] screnshotpng img2.png
 
 <table>
   <tr>
@@ -67,6 +68,7 @@ If your passwords in the box appears typed(check your img2.png),
 send "enter" to your virtual machine so you can actually log into your virtual machine. (screenshot img3.png)
 
 > VBoxManage controlvm [VMNAME] keyboardputscancode 1c 9c
+> VBoxManage controlvm [VMNAME] screnshotpng img3.png
 
 "1c 9c" is equivalent to "Press and Hold Enter(1c), and Relase it(9c)"
 
