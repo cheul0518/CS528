@@ -100,9 +100,6 @@ Try
 
 >  VBoxManage controlvm [VMNAME] keyboardputstring "gnome-terminal"
 
-----
-<br />
-
 <table>
   <tr>
     <td> <img src = "images/img5.png" width = "700"> </td>
