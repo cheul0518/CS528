@@ -20,7 +20,8 @@ Try
 to find your IP address of your virtual machine.
 
 If you got a message: "No Value Set", chances are that your virtual machine never made it through boot. So your virtual machine has not done any DHCP requests/discovery, providing no IP number. Try to boot in display mode and see whether or not you get to the login prompt on your VM machine screen. If yes, then log in it, run Terimnal, and type "ifconfig" to find out the acutal IP address.
-<br>
+<br />
+
 If your server doens't provide the virtualbox GUI, then here are some tools for troubleshooting.
 
 1. VBoxManage controlvm [VMNAME] screenshotpng [IMGNAME] 
