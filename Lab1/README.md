@@ -45,6 +45,13 @@ int main(int argc, char *argv[]){
 ...
 pcap_t *handle;
 
+//pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
+//device is what you specified in the previous section
+//snalpen is an integer which defines the maximum number of bytes to be captured by pcap
+//pomisc, when set to true, brings the interface into promiscuous mode. In specific cases, promiscuous mode's forcefully on.
+//to_ms is the read time out in milliseconds (0 means no time out)
+//ebuf is a string you can store any error messages within.
+//Returns a session handler
 handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
 if (handle == NULL) {
   fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuff);
