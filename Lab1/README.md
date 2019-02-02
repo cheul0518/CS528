@@ -14,6 +14,7 @@ int main(int argc, char *argv[]){
   return(0);
 }
 ```
+
 ```c
 // Pcap sets the device on its own
 #include <stdio.h>
@@ -38,6 +39,7 @@ int main(int argc, char *argv[]){
 2. Opening the device for sniffing
 - Initialize pcap
 - Name your sniffing "session" you can tell it apart from other such sessions
+
 ```c
 #include <pcap.h>
 ...
