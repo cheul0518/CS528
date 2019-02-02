@@ -16,6 +16,13 @@ Try
 <br />
 It will show your IP address of your virtual machine. Use the IP address and set the SSH port forwarding for your VM. Then the issue will be resolved.
 <br />
+<br />
+or you can try
+> cat ~/.config/VirtualBox/USERNAME.leases
+<br />
+<br />
+You will see which IP has been leased. 
+<br />
 However,if you got a message: "No Value Set", chances are that your virtual machine never made it through boot. So your virtual machine has not done any DHCP requests/discovery, providing no IP number. Try to boot in display mode and see whether or not you get to the login prompt on your VM machine screen. If yes, then log in it, run Terimnal, and type "ifconfig" to find out the acutal IP address.
 <br />
 
