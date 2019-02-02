@@ -35,4 +35,17 @@ int main(int argc, char *argv[]){
 ```
 
 <br />
-2. 
+2. Opening the device for sniffing
+- Initialize pcap
+- Name your sniffing "session" you can tell it apart from other such sessions
+```c
+#include <pcap.h>
+...
+pcap_t *handle;
+
+handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
+if (handle == NULL) {
+  fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuff);
+  return(2);
+}
+```
