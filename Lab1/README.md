@@ -63,3 +63,13 @@ In standard, non-promiscuous sniffing, a host is sniffing only traffic that is d
 Only traffic to, from, or routed through the host will be picked up by the sniffer.
 <br />
 Promiscuous mode, on the other hand, sniffs all traffic on the wire. In a non-switched environment, this could be all network traffic. Promiscuous mode provides more packets for sniffing. However it is detectable so a host can test with strong reliability dtermine if another host is doing promiscuous sniffing. Second, it only works in a non-switched environment (such as a hub, or a switch that is being ARP flooded). Third, on high traffic networks, the host can become quite taxed for system resources.
+<br />
+
+- Not all devices provide the same type of link-layer headers in the pacekts. So you need to determine the type of link-layer headers the device provides, and use that type when processing the packet contents. If your program doesn't support the link-layer header type provided by the device, it has to give up
+```c
+//pcap_datalink() returns a value indicating the type of link-layer headers
+if (pcap_datalink(handle) != DLT_EN10MB){
+  fprintf(stderr, "Device %s doens't provide Ethernet headers -not supported\n", dev);
+  return(2);
+}
+```
