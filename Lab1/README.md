@@ -46,25 +46,26 @@ int main(int argc, char *argv[]){
 ...
 pcap_t *handle;
 
-//pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
-//device is what you specified in the previous section
-//snalpen is an integer which defines the maximum number of bytes to be captured by pcap
-//pomisc, when set to true, brings the interface into promiscuous mode. In specific cases, promiscuous mode's forcefully on.
-//to_ms is the read time out in milliseconds (0 means no time out)
-//ebuf is a string you can store any error messages within.
-//Returns a session handler
+// pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
+// device is what you specified in the previous section
+// snalpen is an integer which defines the maximum number of bytes to be captured by pcap
+// pomisc, when set to true, brings the interface into promiscuous mode. In specific cases, promiscuous mode's forcefully on.
+// to_ms is the read time out in milliseconds (0 means no time out)
+// ebuf is a string you can store any error messages within.
+// Returns a session handler
 handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
 if (handle == NULL) {
   fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuff);
   return(2);
 }
+// In standard, non-promiscuous sniffing, a host is sniffing only traffic that is directly related to it. 
+// Only traffic to, from, or routed through the host will be picked up by the sniffer.
+// Promiscuous mode, on the other hand, sniffs all traffic on the wire. In a non-switched environment, 
+// this could be all network traffic. Promiscuous mode provides more packets for sniffing. 
+// However it is detectable so a host can test with strong reliability determine if another host is doing promiscuous sniffing. 
+// Second, it only works in a non-switched environment (such as a hub, or a switch that is being ARP flooded). 
+// Third, on high traffic networks, the host can become quite taxed for system resources.
 ```
-In standard, non-promiscuous sniffing, a host is sniffing only traffic that is directly related to it. 
-Only traffic to, from, or routed through the host will be picked up by the sniffer.
-<br />
-Promiscuous mode, on the other hand, sniffs all traffic on the wire. In a non-switched environment, this could be all network traffic. Promiscuous mode provides more packets for sniffing. However it is detectable so a host can test with strong reliability dtermine if another host is doing promiscuous sniffing. Second, it only works in a non-switched environment (such as a hub, or a switch that is being ARP flooded). Third, on high traffic networks, the host can become quite taxed for system resources.
-<br />
-
 - Not all devices provide the same type of link-layer headers in the pacekts. So you need to determine the type of link-layer headers the device provides, and use that type when processing the packet contents. If your program doesn't support the link-layer header type provided by the device, it has to give up
 ```c
 //pcap_datalink() returns a value indicating the type of link-layer headers
