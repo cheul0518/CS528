@@ -62,4 +62,4 @@ if (handle == NULL) {
 In standard, non-promiscuous sniffing, a host is sniffing only traffic that is directly related to it. 
 Only traffic to, from, or routed through the host will be picked up by the sniffer.
 <br />
-Promiscuous mode, on the other hand, sniffs all traffic on the wire. In a non-switched environment, this could be all network traffic. Promiscuous mode provides more packets for sniffing. However it is detectable so a host can test with strong reliability dtermine if another host is doing promiscuous sniffing.
+Promiscuous mode, on the other hand, sniffs all traffic on the wire. In a non-switched environment, this could be all network traffic. Promiscuous mode provides more packets for sniffing. However it is detectable so a host can test with strong reliability dtermine if another host is doing promiscuous sniffing. Second, it only works in a non-switched environment (such as a bub, or a switch that is being ARP flooded). Third, on high traffic networks, the host can become quite taxed for system resources.
