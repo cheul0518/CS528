@@ -49,7 +49,8 @@ pcap_t *handle;
 // pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
 // device is what you specified in the previous section
 // snalpen is an integer which defines the maximum number of bytes to be captured by pcap
-// pomisc, when set to true, brings the interface into promiscuous mode. In specific cases, promiscuous mode's forcefully on.
+// pomisc, when set to true, brings the interface into promiscuous mode. 
+// (In specific cases, promiscuous mode's forcefully on.)
 // to_ms is the read time out in milliseconds (0 means no time out)
 // ebuf is a string you can store any error messages within.
 // Returns a session handler
@@ -60,8 +61,9 @@ if (handle == NULL) {
 }
 // In standard, non-promiscuous sniffing, a host is sniffing only traffic that is directly related to it. 
 // Only traffic to, from, or routed through the host will be picked up by the sniffer.
-// Promiscuous mode, on the other hand, sniffs all traffic on the wire. In a non-switched environment, 
-// this could be all network traffic. Promiscuous mode provides more packets for sniffing. 
+// Promiscuous mode, on the other hand, sniffs all traffic on the wire. 
+// In a non-switched environment, this could be all network traffic. 
+// Promiscuous mode provides more packets for sniffing. 
 // However it is detectable so a host can test with strong reliability determine if another host is doing promiscuous sniffing. 
 // Second, it only works in a non-switched environment (such as a hub, or a switch that is being ARP flooded). 
 // Third, on high traffic networks, the host can become quite taxed for system resources.
