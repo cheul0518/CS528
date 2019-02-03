@@ -67,10 +67,11 @@ if (handle == NULL) {
 // However it is detectable so a host can test with strong reliability determine if another host is doing promiscuous sniffing. 
 // Second, it only works in a non-switched environment (such as a hub, or a switch that is being ARP flooded). 
 // Third, on high traffic networks, the host can become quite taxed for system resources.
-"aaa
-aaaa
+/* aaa
 aaa
-"
+aaa
+aa
+*/
 ```
 - Not all devices provide the same type of link-layer headers in the pacekts. So you need to determine the type of link-layer headers the device provides, and use that type when processing the packet contents. If your program doesn't support the link-layer header type provided by the device, it has to give up
 ```c
