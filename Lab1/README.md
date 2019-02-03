@@ -68,6 +68,7 @@ int main(int argc, char *argv[]){
   Promiscuous mode, on the other hand, sniffs all traffic on the wire. 
   In a non-switched environment, this could be all network traffic. 
   Promiscuous mode provides more packets for sniffing. 
+  
   However it is detectable so a host can test with strong reliability determine if another host is doing promiscuous sniffing. 
   Second, it only works in a non-switched environment (such as a hub, or a switch that is being ARP flooded). 
   Third, on high traffic networks, the host can become quite taxed for system resources.
