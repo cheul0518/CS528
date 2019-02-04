@@ -104,7 +104,8 @@ bpf_u_int32 mask; // The netmask
 bpf_u_int32 net;  // The IP of our sniffing device
 
 // This function, given the name of a device, returns one of its IPv4 network numbers and corresponding network mask
-// 
+// The network number is the IPv4 address "AND"ed with the network mask, so it contains only the network part of the address.
+// This is essential because you need to know the network mask in order to apply the filter
 if(pcap_lookupnet(dev, &net, &mask, errbuf) == -1){
   fprintf(stderr, "Can't get netmask for device %s\n", dev);
   net = 0;
@@ -117,13 +118,29 @@ if (handle == NULL){
   fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
   return(2);
 }
+
+/*
+- int pcap_compile(pcap_t *p, struct bpf_program *fp, char *str, int optimize, bpf_u_int32 netmask)
+1. *p is your session handle from the previous section
+2. *fp is a reference to the place you will store the compiled version of your filter
+3. *str is the expression itself in regular string format
+4. optimize is an integer that decides if the expression should be "optimized"(0:false,1:true)
+5. netmask is the network mask of the network the filter applies to
+6. The function returns -1 on failure; all other values imply success
+*/
 if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1){
   fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
   return(2);
 }
+
+/*
+- int pcap_setfilter(pcap_t *p, struct bpf_program *fp)
+1. *p is your seesion handler
+2. *fp is a reference to the compiled version of the expression
+3. The function returns -1 on failure; all other values imply success
+*/
 if (pcap_setfilter(handle, &fp) == -1){
   fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
   return(2);
 }
-
 ```
