@@ -10,6 +10,7 @@
 
 int main(int argc, char *argv[]){
   char *dev = argv[1];
+  
   printf("Device: %s\n", dev);
   return(0);
 }
@@ -38,7 +39,6 @@ int main(int argc, char *argv[]){
 
 <br />
 2. Opening the device for sniffing
-
 - Initialize pcap
 - Name your sniffing "session" you can tell it apart from other such sessions
 
@@ -82,3 +82,9 @@ if(pcap_datalink(handle) != DLT_EN10MB){
   return(2);
 }
 ```
+
+<br />
+3. Filterting traffic
+- This is a three phase process
+- 1)Create a rule set (if you only want to sniff specific traffic. e.g.: only TCP/IP packets, only packets going to port 23, etc), 2)Compile it, and 3)Apply it
+- Specifically the rule set is kept in a string, and is converted into a format that pcap can read. The compilation is actually just done by calling a function within your program; it doesn't involve the use of an external application. Then you tell pcap to apply it to whichever session you wish for it to filter
