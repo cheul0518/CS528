@@ -91,3 +91,39 @@ if(pcap_datalink(handle) != DLT_EN10MB){
 - 1)Create a rule set (if you only want to sniff specific traffic. e.g.: only TCP/IP packets, only packets going to port 23, etc), 2)Compile it, and 3)Apply it
 
 - Specifically the rule set is kept in a string, and is converted into a format that pcap can read. The compilation is actually just done by calling a function within your program; it doesn't involve the use of an external application. Then you tell pcap to apply it to whichever session you wish for it to filter
+
+```c
+#include <pcap.h>
+...
+pcap_t *handle; // Session handle
+char dev[] = "r10"; // Device to sniff on
+char errbuf[PCAP_ERRBUF_SIZE];  // Error string
+struct bpf_program fp;  // The compiled filter expression
+char filter_exp[] = "port 23";  // The filter expression
+bpf_u_int32 mask; // The netmask
+bpf_u_int32 net;  // The IP of our sniffing device
+
+// This function, given the name of a device, returns one of its IPv4 network numbers and corresponding network mask
+// 
+if(pcap_lookupnet(dev, &net, &mask, errbuf) == -1){
+  fprintf(stderr, "Can't get netmask for device %s\n", dev);
+  net = 0;
+  mask = 0;
+}
+
+// Opening the device for sniffing
+handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
+if (handle == NULL){
+  fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
+  return(2);
+}
+if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1){
+  fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
+  return(2);
+}
+if (pcap_setfilter(handle, &fp) == -1){
+  fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
+  return(2);
+}
+
+```
