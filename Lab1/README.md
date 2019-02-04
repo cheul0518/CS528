@@ -85,6 +85,7 @@ if(pcap_datalink(handle) != DLT_EN10MB){
 
 <br />
 3. Filterting traffic
+
 - This is a three phase process
 
 - 1)Create a rule set (if you only want to sniff specific traffic. e.g.: only TCP/IP packets, only packets going to port 23, etc), 2)Compile it, and 3)Apply it
