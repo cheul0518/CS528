@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
   ...
   pcap_t *handle;
   /*
-  pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
+  - pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
   1. device is what you specified in the previous section
   2. snalpen is an integer which defines the maximum number of bytes to be captured by pcap
   3. pomisc, when set to true, brings the interface into promiscuous mode. 
