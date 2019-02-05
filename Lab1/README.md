@@ -1,6 +1,6 @@
 ### Summary: Programming with Pcap (Tim Carstens)
 
-1. Setting the Device
+**1. Setting the Device**
 - Determine which interface you want to sniff on.
 - You can either define this device in a strong, or you can ask pcap to provide you with the name of an interface.
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
 ```
 
 <br />
-2. Opening the device for sniffing
+**2. Opening the device for sniffing**
 - Initialize pcap
 - Name your sniffing "session" you can tell it apart from other such sessions
 
@@ -87,7 +87,7 @@ if(pcap_datalink(handle) != DLT_EN10MB){
 ```
 
 <br />
-3. Filterting traffic
+**3. Filterting traffic**
 
 - This is a three phase process
 
@@ -149,7 +149,7 @@ if (pcap_setfilter(handle, &fp) == -1){
 ```
 
 <br />
-4. The actual sniffing
+**4. The actual sniffing**
 
 - There are two main techniques for capturing packets: 1)caputre a single packet at a time or 2)enter a loop that waiys for n number of packets to be sniffed before being done.
 - Sniff a packet
@@ -173,6 +173,13 @@ int main(int argc, char *argv[]){
   if (dev == NULL){
     fprintf(stderr, "Couldn't get default device: %s\n", errbuf);
     return(2);
+  }
+  
+  // Find the properties for the device
+  if (pcap_lookupnet(dev, &net, &mask, errbuf) == -1) {
+    fprintf(stderr, "Couldn't get netmask for device %s: %s\n", dev, errbuf);
+    net = 0;
+    mask = 0;
   }
 }
 ```
