@@ -3,6 +3,7 @@
 1. Setting the Device
 - Determine which interface you want to sniff on.
 - You can either define this device in a strong, or you can ask pcap to provide you with the name of an interface.
+
 ```c
 // Specify the device by passing its name as the first argument to the program
 #include <stdio.h>
@@ -74,7 +75,9 @@ int main(int argc, char *argv[]){
   Third, on high traffic networks, the host can become quite taxed for system resources.
   */
 ```
+
 - Not all devices provide the same type of link-layer headers in the pacekts. So you need to determine the type of link-layer headers the device provides, and use that type when processing the packet contents. If your program doesn't support the link-layer header type provided by the device, it has to give up
+
 ```c
 // pcap_datalink() returns a value indicating the type of link-layer headers
 if(pcap_datalink(handle) != DLT_EN10MB){
@@ -148,4 +151,14 @@ if (pcap_setfilter(handle, &fp) == -1){
 <br />
 4. The actual sniffing
 
-- You tell pcap to enter it's primary execution loop. In this state, pcap waits until it has received however many packets you want it to. Every time it gets a new packet in, it calls another function that you've already defined. The function that it calls can do anything you want; it can dissect the packet and print it to the user, it can save it in a file, or it can do nothing at all. 
+- There are to main techniques for capturing packets: 1)caputre a single packet at a time or 2)enter a loop that waiys for n number of packets to be sniffed before being done.
+- Sniff a packet
+```c
+#include <pcap.h>
+#include <stdio.h>
+
+int main(int argc, char *argv[]){
+  pcap_t *handle; // Session handle
+  char *dev;  // The device to sniff on
+}
+```
