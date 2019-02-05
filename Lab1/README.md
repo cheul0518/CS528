@@ -151,7 +151,7 @@ if (pcap_setfilter(handle, &fp) == -1){
 <br />
 4. The actual sniffing
 
-- There are to main techniques for capturing packets: 1)caputre a single packet at a time or 2)enter a loop that waiys for n number of packets to be sniffed before being done.
+- There are two main techniques for capturing packets: 1)caputre a single packet at a time or 2)enter a loop that waiys for n number of packets to be sniffed before being done.
 - Sniff a packet
 ```c
 #include <pcap.h>
