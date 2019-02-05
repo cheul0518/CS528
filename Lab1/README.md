@@ -160,5 +160,19 @@ if (pcap_setfilter(handle, &fp) == -1){
 int main(int argc, char *argv[]){
   pcap_t *handle; // Session handle
   char *dev;  // The device to sniff on
+  char errbuf[PCAP_ERRBUF_SIZE];  // Error string
+  struct bpf_program fp;  // The compiled filter
+  char filter_exp[] = "port 23" // The filter expression
+  bpf_u_int32 mask; // Our netmask
+  bpf_u_int32 net;  // Out IP
+  struct pcap_phthdr header;  // The header that pcap gives us
+  const u_char *packet; // The actual packet
+  
+  // Define the device
+  dev = pcap_lookupdev(errbuf);
+  if (dev == NULL){
+    fprintf(stderr, "Couldn't get default device: %s\n", errbuf);
+    return(2);
+  }
 }
 ```
