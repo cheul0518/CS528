@@ -145,8 +145,7 @@ if (pcap_setfilter(handle, &fp) == -1){
 }
 ```
 
-
 <br />
 4. The actual sniffing
-
+<br />
 - You tell pcap to enter it's primary execution loop. In this state, pcap waits until it has received however many packets you want it to. Every time it gets a new packet in, it calls another function that you've already defined. The function that it calls can do anything you want; it can dissect the packet and print it to the user, it can save it in a file, or it can do nothing at all. 
