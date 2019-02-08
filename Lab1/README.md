@@ -261,7 +261,11 @@ Both functions call a callback function every time a pcket is sniffed that meets
 3. const u_char *packet: another pointer to a u_char, pointing to the first byte of a chunk of data 
                         containing the entire packet, as sniffed by pcap_loop()
 
-Next question will be "How do you make use of this variable?" A packet contains many attributes. It is not really a string but a collection of structures. This u_char pointer points to the serialized version of these strcutures. To make any use of it, you must do typecasting.
+Next question will be "How do you make use of this variable?" A packet contains many attributes. 
+It is not really a string but a collection of structures. This u_char pointer points to the serialized version 
+of these strcutures. To make any use of it, you must do typecasting.
+
+*/
 
 // Etherenet addresss are 6 bytes
 # define ETHER_ADDR_LEN 6
