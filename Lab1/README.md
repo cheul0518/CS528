@@ -156,7 +156,7 @@ if (pcap_setfilter(handle, &fp) == -1){
 
 **4. The actual sniffing**
 
-- There are two main techniques for capturing packets: 1)caputre a single packet at a time or 2)enter a loop that waiys for n number of packets to be sniffed before being done.
+- There are two main techniques for capturing packets: 1)caputre a single packet at a time or 2)enter a loop that waits for n number of packets to be sniffed before being done.
 - Sniff a packet
 ```c
 #include <pcap.h>
@@ -221,4 +221,19 @@ int main(int argc, char *argv[]){
   pcap_close(handle);
   return(0);
 }
+```
+
+<br />
+
+- Using loops to catpchutre multiple packets at a time
+
+```c
+/* 
+Few sniffers actually use pcap_next(). They use pcap_loop() and pcap_dispatch().
+Both pcap_loop() and pcap_dispatch() call a callback function every time a pcket is sniffed that meets your filter requriements (if any filter exists, of course. If not, then all packets that are sniffed are sent to the callback)
+
+- int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
+1. pcap_t *p: session handle
+2. int cnt: an integer that tells pcap_loop() how many packets it should sniff for before returning
+
 ```
