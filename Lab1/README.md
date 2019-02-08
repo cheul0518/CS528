@@ -230,10 +230,36 @@ int main(int argc, char *argv[]){
 ```c
 /* 
 Few sniffers actually use pcap_next(). They use pcap_loop() and pcap_dispatch().
-Both pcap_loop() and pcap_dispatch() call a callback function every time a pcket is sniffed that meets your filter requriements (if any filter exists, of course. If not, then all packets that are sniffed are sent to the callback)
+Both functions call a callback function every time a pcket is sniffed that meets your filter requriements 
+(if any filter exists, of course. If not, then all packets that are sniffed are sent to the callback)
 
 - int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
 1. pcap_t *p: session handle
 2. int cnt: an integer that tells pcap_loop() how many packets it should sniff for before returning
+  (a negativ value means it should sniff until an error occurs)
+3. pcap_handler callback: the number of the callback function (no parentheses needed)
+4. u_char *user -> useful in some applications but many times is simply set as NULL.
+
+- Difference between pcap_dispatch() and pcap_loop()
+  1) pcap_dispatch() will only process the filter batch of packets that it receives from the system
+  2) pcap_loop() will continute processing pacekts or batches of packets until the count of packets runs out
+
+- The format of your callback function must be examined before using pcap_loop().
+  This is because you cannot arbitarily define your callback's prototype   
+  
+- void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
+1. u_char *args: it corresponds to the last argument of pcap_loop(). Whatever value is passed as the last
+                argument to pcap_loop() is passed to the first argument of your callback function everytime
+                the function is called
+2. const struct pcap_pkthdr *header: it contains information about when the packet was sniffed.
+  - The pcap_pkthd structure is as follow:
+  struct pcap_pkthdr {
+    struct timeval ts;  // time stamp
+    bpf_u_int32 caplen; // length of portion present
+    bpf_u_int32 len;    // length this packet (off wire)
+  };
+3. const u_char *packet: another pointer to a u_char, pointing to the first byte of a chunk of data 
+                        containing the entire packet, as sniffed by pcap_loop()
+
 
 ```
