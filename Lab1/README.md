@@ -6,32 +6,29 @@
 - You can either define this device in a strong, or you can ask pcap to provide you with the name of an interface.
 
 ```c
-// Specify the device by passing its name as the first argument to the program
+// Define the device in a string
 #include <stdio.h>
-#include <pcap.h>
+#incoude <pcap.h>
 
 int main(int argc, char *argv[]){
   char *dev = argv[1];
   
-  printf("Device: %s\n", dev);
+  print("Device: %s\n", dev);
   return(0);
 }
 ```
 
 ```c
-// Pcap sets the device on its own
+// PCAP sets the device on its own
 #include <stdio.h>
 #include <pcap.h>
 
 int main(int argc, char *argv[]){
   char *dev, errbuf[PCAP_ERRBUF_SIZE];
-  /*
-  pcap_lookupdev() returns a pointer to a string giving the name of a network device.
-  If there is an error, NULL is returned and errbuf is filled in with an appropriate error message
-  */
-  dev = pcap_lookupdev(errbuf);
+  
+  dev = pcap_lookupdev(errbuf);  // if pcap_lookupdev() fails, it will store an error msg in errbuf
   if (dev == NULL){
-    fprintf(stderr, "Couldn't find default device: $s\n", errbuf);
+    fprintf(stderr, "Couldn't find default device; %s\n", errbuf);
     return(2);
   }
   printf("Device: %s\n", dev);
@@ -44,49 +41,44 @@ int main(int argc, char *argv[]){
 **2. Opening the device for sniffing**
 
 - Initialize pcap
-- Name your sniffing "session" you can tell it apart from other such sessions
+- Sniffing on multiple devices, name your sniffing "session" so you can tell it apart from other such sessions
 
 ```c
+- pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
+  0. Returns pcap_t * on success, NULL on failure. In other words, it returns your session handler
+  1. char *device: the device you speficied
+  2. int snaplen: an interger that defines the maximum number of bytes to be captured by pcap
+  3. int promisc: promiscuous mode (set to ture). Sometimes, under specific cases, promiscuous mode's forced to set true
+  4. to_ms: the read time out in milliseconds (0: no time out)
+  5. ebuf: a string you can store any error messages within
+  
 #include <pcap.h>
-  ...
-  pcap_t *handle;
-  /*
-  - pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
-  1. device is what you specified in the previous section
-  2. snalpen is an integer which defines the maximum number of bytes to be captured by pcap
-  3. pomisc, when set to true, brings the interface into promiscuous mode. 
-    (In specific cases, promiscuous mode's forcefully on.)
-  4. to_ms is the read time out in milliseconds (0 means no time out)
-  5. ebuf is a string you can store any error messages within.
-  6. Returns a session handler
-  */
-  handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
-  if (handle == NULL) {
-    fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuff);
-    return(2);
-  }
-  /*
-  In standard, non-promiscuous sniffing, a host is sniffing only traffic that is directly related to it. 
-  Only traffic to, from, or routed through the host will be picked up by the sniffer.
-  
-  Promiscuous mode, on the other hand, sniffs all traffic on the wire. 
-  In a non-switched environment, this could be all network traffic. 
-  Promiscuous mode provides more packets for sniffing. 
-  
-  However it is detectable so a host can test with strong reliability determine if another host is doing promiscuous sniffing. 
-  Second, it only works in a non-switched environment (such as a hub, or a switch that is being ARP flooded). 
-  Third, on high traffic networks, the host can become quite taxed for system resources.
-  */
-```
+...
+pcap_t *handle;
 
-- Not all devices provide the same type of link-layer headers in the pacekts. So you need to determine the type of link-layer headers the device provides, and use that type when processing the packet contents. If your program doesn't support the link-layer header type provided by the device, it has to give up
+handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
+if(handle == NULL){
+  fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
+  return(2);
+}
+
+```
+<br />
+
+- Non-promiscuous sniffing: a host is sniffing only traffic that is directly related to it so only traffic to, from, or routed through the host will be picked up by the sniffer
+- Promiscuous sniffing: it sniffs all traffic on the wire. However it has regressions. First of all, promiscuous mode sniffing is dtectable; a host can test with strong reliability to determine if another host is doing promiscuous sniffing. Secondly it only works in a non-switched environment such as hub, or a switch that is being ARP flooded. Third, on high traffix networks, the host can become quite taxed for system resources
+
+<br />
+
+- Not all devices provide the same type of link-layer headers in the pacekts you read. Etherenet devices, and some non-Ethernet devices, might provide Ethernet headers, but other devices such as loopback devices in BSD and OS X,PPP interfaces, and Wi-Fi interfaces when capturing in monitor mode, don't
+- You need to determine the type of link-layer headers the device provides, and use that type when processing the packet contents. If your program doesn't support the link-layer header type provided by the device, it has to give up; this would be done with code such as
 
 ```c
 // pcap_datalink() returns a value indicating the type of link-layer headers
-if(pcap_datalink(handle) != DLT_EN10MB){
-  fprintf(stderr, "Device %s doens't provide Ethernet headers - not supported\n", dev);
+if (pcap_datalink(handle) != DLT_EN10MB){
+  fprintf(stderr, "Device %s doesn't provide Ethernet headers - not supported\n", dev);
   return(2);
-}
+}  // which fails if the device doesn't supply Ethernet headers
 ```
 
 <br />
