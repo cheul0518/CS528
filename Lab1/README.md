@@ -87,57 +87,61 @@ if (pcap_datalink(handle) != DLT_EN10MB){
 
 - This is a three phase process
 
-- 1)Create a rule set (if you only want to sniff specific traffic. e.g.: only TCP/IP packets, only packets going to port 23, etc), 2)Compile it, and 3)Apply it
+- Create a rule set (if you only want to sniff specific traffic. e.g.: only TCP/IP packets, only packets going to port 23, etc)
+- Compile it
+
+- Apply it
 
 - Specifically the rule set is kept in a string, and is converted into a format that pcap can read. The compilation is actually just done by calling a function within your program; it doesn't involve the use of an external application. Then you tell pcap to apply it to whichever session you wish for it to filter
 
+
 ```c
+// Before applying your filter, you must "compile" it
+- int pcap_compile(pcap_t *p, struct bpf_program *fp, char *str, int optimize, bpf_u_int32 netmask)
+0. It returns -1 on failure; all other values imply success
+1. pcap_t *p: your session handle
+2. struct bpf_program *fp: a reference to the place you will store the compiled version of your filter
+3. char *str: the expression itself
+4. int optimize: an integer thar decides if the expression should be "optimized" or not (0: false, 1: true)
+5. bpf_u_int32 netmask: the network mask of the network the filter applies to
+
+// Apply it
+- int pcap_setfilter(pcap_t *p, struct bpf_program *fp)
+0. It returns -1 on failure, o on success
+1. pcap_t *p: your session handle
+2. struct bpf_program *fp: a reference to the compiled version of the expression (presumably the same variable as the second argument to pcap_compile())
+```
+
+```c
+// This program preps the sniffer to sniff all traffic coming from or going to port 23, in promiscuous mode, on the device r10
 #include <pcap.h>
 ...
-pcap_t *handle; // Session handle
-char dev[] = "r10"; // Device to sniff on
-char errbuf[PCAP_ERRBUF_SIZE];  // Error string
-struct bpf_program fp;  // The compiled filter expression
+pcap_h *handle                   // Session handle
+char dev[] = "r10";             // Device to sniff on
+char errbuf[PCAP_ERRBUF_SIZE]   // Error string
+struct bpf_program fp;          // The compiled filter expression
 char filter_exp[] = "port 23";  // The filter expression
-bpf_u_int32 mask; // The netmask
-bpf_u_int32 net;  // The IP of our sniffing device
+bpf_u_int32 mask;               // The netmask of our sniffing device
+bpf_u_int32 net;                // The IP of your sniffing device
 
-// This function, given the name of a device, returns one of its IPv4 network numbers and corresponding network mask
-// The network number is the IPv4 address "AND"ed with the network mask, so it contains only the network part of the address.
-// This is essential because you need to know the network mask in order to apply the filter
-if(pcap_lookupnet(dev, &net, &mask, errbuf) == -1){
+// This function is for finding the IPv4 network and netmask for a device. It returns -1 on failture 0 on success
+// The network number is the IPv4 address ANDed with the network mask, so it contains only the network part of the address
+// This process is essential because you need to know the network mask in order to apply the filter
+if (pcap_lookupnet(dev, &net, &mask, errbuf) == -1){
   fprintf(stderr, "Can't get netmask for device %s\n", dev);
   net = 0;
   mask = 0;
 }
 
-// Opening the device for sniffing
 handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
-if (handle == NULL){
+if (handle == NULL) {
   fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
   return(2);
 }
-
-/*
-- int pcap_compile(pcap_t *p, struct bpf_program *fp, char *str, int optimize, bpf_u_int32 netmask)
-1. *p is your session handle from the previous section
-2. *fp is a reference to the place you will store the compiled version of your filter
-3. *str is the expression itself in regular string format
-4. optimize is an integer that decides if the expression should be "optimized"(0:false,1:true)
-5. netmask is the network mask of the network the filter applies to
-6. The function returns -1 on failure; all other values imply success
-*/
 if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1){
   fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
   return(2);
 }
-
-/*
-- int pcap_setfilter(pcap_t *p, struct bpf_program *fp)
-1. *p is your seesion handler
-2. *fp is a reference to the compiled version of the expression
-3. The function returns -1 on failure; all other values imply success
-*/
 if (pcap_setfilter(handle, &fp) == -1){
   fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
   return(2);
