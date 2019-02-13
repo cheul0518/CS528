@@ -235,36 +235,37 @@ int main(int argc, char *argv[]){
 
 ```c
 - int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user)
-  0. It returns 0 if cnt is exhausted. -1 on failure, -2 if the loop terminated due to a call to pcap_breakloop()
-     before any packets were processed. It does not return when live read timeouts occur
+  0. It returns 0 if cnt is exhausted. -1 on failure, -2 if the loop terminated due to a call to 
+     pcap_breakloop() before any packets were processed. No return when live read timeouts occur
   1. pcap_t *p: session handler
-  2. int cnt: an integer that tells pcap_loop() how many packets it should sniff for before returning
-             (a negative value means it should sniff until an error occurs)
+  2. int cnt: an integer that tells pcap_loop() how many packets it should sniff for before 
+              returning (a negative value means it should sniff until an error occurs)
   3. pcap_handler callback: the name of the callback function (its idenfier, no parenthesis)
   4. u_char *user: NULL
-  * Suppose you have arguments of your own that you wish to send to your callback function, in addition to
-    the arguments that pcap_loop() sends. You must typecast to a u_char pointer to ensure the reuslt make it
-    there correctly. pcap passes information in the form of a u_char pointer.
-  * pcap_dispatch* is almost identical in usage. The only difference between pcap_dispatch() and pcap_loop() is
-    that pcap_dispatch() will only process the first batch of packets that it receives from the system, while
-    pcap_loop() will continute processing packets or atches of packets until the count of pacekts runs out
+  * Suppose you have arguments of your own that you wish to send to your callback function, in 
+    addition to the arguments that pcap_loop() sends. You must typecast to a u_char pointer to 
+    ensure the reuslt make it there correctly. pcap passes information in the form of a u_char pointer.
+  * pcap_dispatch* is almost identical in usage. The only difference between pcap_dispatch() and 
+    pcap_loop() is that pcap_dispatch() will only process the first batch of packets that it receives 
+    from the system, while pcap_loop() will continute processing packets or atches of packets until 
+    the count of pacekts runs out
 
 // The prototype for a callback function
 - void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
   0. No return since it's void (because pcap_loop() wouldn't know how to handle a return value anyways)
   1. u_char *args: it corresponds to the last argument of pcap_loop(). Whatever value is passed as the
-     last argument to pcap_loop() is passed to the first argument of your callback function everytime
-     the function is called
-  2. const struct pcap_pkthdr *header: the pcap header, which contains information about when the packet
-     was sniffed, how large it is, etc
+                   last argument to pcap_loop() is passed to the first argument of your callback function 
+                   every time the function is called
+  2. const struct pcap_pkthdr *header: the pcap header, which contains information about when the 
+                                       packet was sniffed, how large it is, etc
      // pacp_pkthdr strcuture is defined as
        struct pcap_pkthdr{
         struct timeval ts;    // time stamp
         bpf_u_int32 caplen;   // length of portion present
         bpf_u_int32 len;      // length this apcket (off wire)
        };
-  3. const u_char *packet: it points to the first byte of a chunk of data containing entire packet, as sniffed
-     by pcap_loop()
+  3. const u_char *packet: it points to the first byte of a chunk of data containing entire packet, 
+                           as sniffed by pcap_loop()
      
      
 
