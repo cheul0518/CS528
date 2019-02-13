@@ -155,65 +155,68 @@ if (pcap_setfilter(handle, &fp) == -1){
 - There are two main techniques for capturing packets: 1)caputre a single packet at a time or 2)enter a loop that waits for n number of packets to be sniffed before being done.
 - Sniff a packet
 ```c
+
+- u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h)
+  0. It returns a u_char pointer to the packet that is described this structure
+  1. pcap_t *p: your session handler
+  2. struct pcap_pkthdr *h: a pointer to a structure that holds general information about the packet
+     specifically the time in which it was sniffed, the length of this packet, and the length of its
+     specific ortion (in case it is fragmentised)
+ 
 #include <pcap.h>
 #include <stdio.h>
 
 int main(int argc, char *argv[]){
-  pcap_t *handle; // Session handle
-  char *dev;  // The device to sniff on
+  pcap_t *handle;                 // Session handle
+  char *dev;                      // The device to sniff on
   char errbuf[PCAP_ERRBUF_SIZE];  // Error string
-  struct bpf_program fp;  // The compiled filter
-  char filter_exp[] = "port 23" // The filter expression
-  bpf_u_int32 mask; // Our netmask
-  bpf_u_int32 net;  // Out IP
-  struct pcap_phthdr header;  // The header that pcap gives us
-  const u_char *packet; // The actual packet
+  struct bpf_program fp;          // The compiled filter
+  char filter_exp[] = "port 23";  // The filter expression
+  bpf_u_int32 mask;               // Your netmask
+  bpf_u_int32 net;                // Your IP
+  struct pcap_pkthdr header;      // the header that pcap gives us
+  const u_char *packet;           // The actual packet
   
   // Define the device
   dev = pcap_lookupdev(errbuf);
   if (dev == NULL){
-    fprintf(stderr, "Couldn't get default device: %s\n", errbuf);
+    fprintf(stderr, "Couldn't find default device: %s\n", errbuf);
     return(2);
   }
   
   // Find the properties for the device
-  if (pcap_lookupnet(dev, &net, &mask, errbuf) == -1) {
+  if (pcap_lookupnet(Dev, &net, &mask, errbuff) == -1){
     fprintf(stderr, "Couldn't get netmask for device %s: %s\n", dev, errbuf);
     net = 0;
     mask = 0;
   }
   
-  // Open the session in promiscuous mode
-  handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
+  // Open the session in promiscous mode
+  handle = pcap_open_live(dev, BUFFSIZ, 1, 1000, errbuf);
   if (handle == NULL){
     fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
     return(2);
   }
   
-  // Compile and apply the filter
+  // Compile the filter
   if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1){
     fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
     return(2);
   }
-  
-  if (pcap_setfilter(handle, &fp) == -1) {
+
+  // Apply the filter
+  if (pcap_setfilter(handle, &fp) == -1){
     fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
     return(2);
   }
   
   // Grab a packet
-  /*
-  - u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h)
-  1. *p is your session handler
-  2. *h is a pointter to a structure that holds general information about the packet
-  3. It returns a u_char pointer to the packet
-  */
   packet = pcap_next(handle, &header);
-
+  
   // Print its length
   printf("Jacked a packet with length of [%d]\n", header.len);
   
-  // Close the session
+  // And close the session
   pcap_close(handle);
   return(0);
 }
