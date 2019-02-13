@@ -154,8 +154,8 @@ if (pcap_setfilter(handle, &fp) == -1){
 
 - There are two main techniques for capturing packets: 1)caputre a single packet at a time or 2)enter a loop that waits for n number of packets to be sniffed before being done.
 - Sniff a packet
-```c
 
+```c
 - u_char *pcap_next(pcap_t *p, struct pcap_pkthdr *h)
   0. It returns a u_char pointer to the packet that is described this structure
   1. pcap_t *p: your session handler
@@ -271,9 +271,11 @@ int main(int argc, char *argv[]){
     (for instance, a TCP/IP packet would have an Ethernet header, an IP header, a TCP header, and lastly,
     the packet's payload). This u_char pointer points to the serialized version of these structures.
     To make any use of it, you must do some interesting typecasting
-     
+```
+
+```c
 /*
-You must havfe the actual structues define before you can typecast to them. The following are the 
+You must have the actual structues define before you can typecast to them. The following are the 
 structure definitions that Tim Carstens use to describe a TCP/IP packet over Ethernet
 */
 
