@@ -163,6 +163,11 @@ if (pcap_setfilter(handle, &fp) == -1){
      specifically the time in which it was sniffed, the length of this packet, and the length of its
      specific ortion (in case it is fragmentised)
  
+/*
+This application sniffs on a device. It finds the first packet to come across a certain port 
+and tells the user the size of the packet
+*/
+
 #include <pcap.h>
 #include <stdio.h>
 
