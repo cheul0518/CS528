@@ -336,3 +336,32 @@ struct sniff_tcp{
 };
 
 ```
+- Assuming you're dealing with a TCP/IP packet over Ethernet. This same technique applies to any packet; the only difference is the structure typs that you actually use
+
+```c
+// ethernet headers are always exactly 14 bytes
+#define SIZE_ETHERNET 14
+  const struct sniff_ethernet *ethernet;  // The ethernet header
+  const struct sniff_ip *ip;  // The IP header
+  constt struct sniff_tcp *tcp; // The TCP header
+  const char *payload;  // Packet payload
+  
+  u_int size_ip;
+  u_int size_tcp;
+  
+// Typecasting
+  ethernet = (struct sniff_ethernet*)(packet);
+  ip = (struct sniff_ip*)(packet + SIZE_ETHERNET);
+  size_ip = IP_HL(ip)*4;
+  if (size_ip < 20){
+    printf("*Invalid IP header length: %u bytes\n", size_ip);
+    return;
+  }
+  tcp = (structt sniff_tcp*)(packet + SIZE_ETHERNET + size_ip);
+  size_tcp = TH_OFF(tcp)*4;
+  if(size_tcp < 20){
+    printf("*Invalid TCP header length: %u bytes\n", size_tcp);
+    return;
+  }
+  payload = (u_char *)(packet +SIZE_ETHERNET +size_ip + size_tcp);
+```
