@@ -272,8 +272,10 @@ int main(int argc, char *argv[]){
     the packet's payload). This u_char pointer points to the serialized version of these structures.
     To make any use of it, you must do some interesting typecasting
      
-
-You must havfe the actual structues define before you can typecast to them. the following are the structure definitions that Tim Carstens use to describe a TCP/IP packet over Ethernet
+/*
+You must havfe the actual structues define before you can typecast to them. The following are the 
+structure definitions that Tim Carstens use to describe a TCP/IP packet over Ethernet
+*/
 
 // Ethernet address are 6 bytes
 #define ETHER_ADDR_LEN 6
@@ -333,3 +335,4 @@ struct sniff_tcp{
 
 
 }
+```
