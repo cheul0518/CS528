@@ -266,6 +266,11 @@ int main(int argc, char *argv[]){
        };
   3. const u_char *packet: it points to the first byte of a chunk of data containing entire packet, 
                            as sniffed by pcap_loop()
+  * How do you make use of this variable? ("packet")
+    A packet contains many attributes, it is not really string, but actually a collection of structures
+    (for instance, a TCP/IP packet would have an Ethernet header, an IP header, a TCP header, and lastly,
+    the packet's payload). This u_char pointer points to the serialized version of these structures.
+    To make any use of it, you must do some interesting typecasting
      
      
 
