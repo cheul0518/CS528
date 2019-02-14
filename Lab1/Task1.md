@@ -26,3 +26,8 @@ if (dev == NULL) {
 
 3. Problem 3: Please turn on and turn off the promiscuous mode in the sniffer program. Can you demonstrate the difference when this mode is on and off? Please describe how you demonstrate this.
 
+
+### Task1.b: Wriiting Filters
+1. Capture the ICMP packets between two specific hosts
+
+2. Capture the TCP packets that have a destination port range from to port 50-100
