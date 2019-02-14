@@ -1,6 +1,7 @@
 ### Task1.a: Understanding
 
-1. Problem 1
+1. Problem 1: Please use your own words to describe the sequence of the library calls that are essential for sniffer programs. This is meant to be a summary, not detailed explanation like the one in the tutorial.
+- aha
 
 2. Problem 2: Why do you need the root privilege to run sniffex? Where does the program fail if executed without the root privilege?
  
