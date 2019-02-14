@@ -4,7 +4,12 @@
 	- pcap_lookupdev(): find a device on which to capture
 	- pcap_lookupnet(): find the network number and netmask for the deivce
 	- pcap_open_live(): open the deive for sniffing/capturing (obtain a packet capture handle to look at packets on the network)
-	- pcap_datalink(): 
+	- pcap_datalink(): get the link-layer header type. For this program, make sure we're capturing an Ethernet device
+	- pcap_compile(): compile a filter expression
+	- pcap_setfilter(): apply/set the filter
+	- pcap_loop(): process packets until the count of packets runs out
+	- pcap_freecode(): free up allocated memory pointed by a bpf_program struct
+	- pcap_close(): close the capture device
 
 2. Problem 2: Why do you need the root privilege to run sniffex? Where does the program fail if executed without the root privilege?
  
