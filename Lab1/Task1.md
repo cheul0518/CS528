@@ -54,3 +54,6 @@ if (dev == NULL) {
 
 - Below is the result of capturing TCP packets with destination port 50 - 100
 <img src = "images/part1/tcpport50_100.png">
+
+### Task1.c: Sniffing Passwords
+
