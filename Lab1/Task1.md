@@ -44,7 +44,7 @@ if (dev == NULL) {
 	- I manually set a filter expression in a sniff program as follows: char filter_exp[] = "icmp and (src host 192.168.15.17 and dst host google.com) or (src host google.com and dst host 192.168.15.17)";
 	- I have two virtual machines run at a time. Let one VM ping google.com while another VM run the sniff program.
 	
-- Below is the result
-<img src = "images/part1/Nonpromiscuous.png" width = "550">
+- Below is the result (Sniff 192.168.15.17 at 192.168.15.16)
+<img src = "images/part1/icmp.png">
 
 2. Capture the TCP packets that have a destination port range from to port 50-100
