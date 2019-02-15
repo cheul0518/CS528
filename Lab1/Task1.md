@@ -34,8 +34,6 @@ if (dev == NULL) {
 - Below image is a result in Promiscuous mode. You can see traffic not related to the host such as a packet from 193.0.14.129 to 192.168.15.17
 <img src = "images/part1/Promiscuous.png" width ="550">
 
-<br />
-
 - Below image is a result in Non-Promiscuous mode. You cannot see any traffic nothing to do with the host
 <img src = "images/part1/Nonpromiscuous.png" width = "550">
 
