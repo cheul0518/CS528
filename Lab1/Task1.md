@@ -32,7 +32,10 @@ if (dev == NULL) {
 
 - Here is an example showing the difference between sniffing in promisc mode and in non-promisc mode. The host IP is 192.168.15.16
 - Below image is a result in Promiscuous mode. You can see traffic not related to the host such as a packet from 193.0.14.129 to 192.168.15.17
-<img src = "images/part1/Promiscuous.png" width = "700">
+<br />
+<center><img src = "images/part1/Promiscuous.png" width = "700"></center>
+
+<br />
 
 - Below image is a result in Non-Promiscuous mode. You cannot see any traffic nothing to do with the host
 <img src = "images/part1/Nonpromiscuous.png" width = "700">
