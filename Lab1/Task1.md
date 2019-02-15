@@ -56,6 +56,7 @@ if (dev == NULL) {
 <img src = "images/part1/tcpport50_100.png">
 
 <br />
+
 ### Task1.c: Sniffing Passwords
 
 - I set a filter expression in a sniff program as follows: char filter_exp[] = "tcp port 23";
