@@ -55,5 +55,12 @@ if (dev == NULL) {
 - Below is the result of capturing TCP packets with destination port 50 - 100
 <img src = "images/part1/tcpport50_100.png">
 
+<br />
 ### Task1.c: Sniffing Passwords
 
+- I set a filter expression in a sniff program as follows: char filter_exp[] = "tcp port 23";
+- I increase num_packets by 70 in order to make sure the whole password's being captured during the sniffing time.
+- I have two viirtual machine run at a time. Let one VM "tellnet 192.168.15.16" while another VM run the sniffing program.
+- Below is the result of caputring the password
+<img src = "images/part1/telnet.png">
+<img src = "images/part1/password.png", width = 700>
