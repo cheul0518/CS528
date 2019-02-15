@@ -37,6 +37,7 @@ if (dev == NULL) {
 - Below image is a result in Non-Promiscuous mode. You cannot see any traffic nothing to do with the host
 <img src = "images/part1/Nonpromiscuous.png" width = "550">
 
+<br />
 
 ### Task1.b: Wriiting Filters
 
