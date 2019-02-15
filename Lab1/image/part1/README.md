@@ -1,1 +1,1 @@
-## This directory is for storing images
+### This directory is for storing images
