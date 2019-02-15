@@ -52,5 +52,5 @@ if (dev == NULL) {
 	- I have two virtual machines run at a time. Let one VM "sudo apt-get install curl" while another VM run the sniffing program.
 	- The traffic is over HTTP which is assigned port 80 so that the sniffing program successfuly capture them all	
 
-- Below is the result of capturing TCP packets wist destination port 50 - 100
+- Below is the result of capturing TCP packets with destination port 50 - 100
 <img src = "images/part1/tcpport50_100.png">
