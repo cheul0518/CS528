@@ -25,6 +25,10 @@ if (dev == NULL) {
 
 
 3. Problem 3: Please turn on and turn off the promiscuous mode in the sniffer program. Can you demonstrate the difference when this mode is on and off? Please describe how you demonstrate this.
+	- The sniffing program in the promiscuous mode sniffs all traffic on the wire while in the non-promiscuous mode the program sniffs only traffic directly related to it (that is, only traffic to, from, or routed through the host will be observed)
+	- Promiscuous mode: pcap_open_live(dev, SNAP_LEN, 1, 1000, errbuf);
+	- Non-promiscuous mode: handle = pcap_open_live(dev, SNAP_LEN, 0, 1000, errbuf);
+	- If you'd like to run your sniff program in promiscuous mode, then set 1 to "the third argument in pcap_open_live". Otherwise 0 to it for non-promiscuous mode
 
 
 ### Task1.b: Wriiting Filters
