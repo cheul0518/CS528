@@ -29,7 +29,18 @@ if (dev == NULL) {
 	- Promiscuous mode: pcap_open_live(dev, SNAP_LEN, 1, 1000, errbuf);
 	- Non-promiscuous mode: handle = pcap_open_live(dev, SNAP_LEN, 0, 1000, errbuf);
 	- If you'd like to run your sniff program in promiscuous mode, then set 1 to the third argument in "pcap_open_live". Otherwise 0 to it for non-promiscuous mode
+	
+<table>
+  <tr>
+    <td> <img src = "image/part1/promiscuous.png" width = "450"> </td>
+  </tr>
+</table>
 
+<table>
+  <tr>
+    <td> <img src = "image/part1/nonpromiscuous.png" width = "450"> </td>
+  </tr>
+</table>
 
 ### Task1.b: Wriiting Filters
 
