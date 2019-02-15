@@ -36,3 +36,24 @@ if(sendto(sd, buffer, ip_len, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0) {
     perror("sendto() error"); exit(-1);
 }
 ```
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <netdb.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/stocket.h>
+
+#include <netinet/in_systm.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <netinet/udp.h>
+#include <netinet/ip_icmp.h>
+#include <netinet/tcp.h>
+
+#include <arpa/inet.h>
+```
