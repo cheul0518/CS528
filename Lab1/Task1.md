@@ -60,7 +60,7 @@ if (dev == NULL) {
 
 - I set a filter expression in a sniff program as follows: char filter_exp[] = "tcp port 23";
 - I increase num_packets by 70 in order to make sure the whole password's being captured during the sniffing time.
-- I have two viirtual machine run at a time. Let one VM "tellnet 192.168.15.16" while another VM run the sniffing program.
-- Below is the result of caputring the password
+- I have two viirtual machine run at a time. Let one VM "telnet 192.168.15.16" while another VM run the sniffing program.
+- Below is the result of caputring the password (Left is a VM sniffing, Right is a VM telnetting)
 <img src = "images/part1/telnet.png">
 <img src = "images/part1/password.png", width = 700>
