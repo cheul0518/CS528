@@ -30,10 +30,11 @@ if (dev == NULL) {
 	- Non-promiscuous mode: handle = pcap_open_live(dev, SNAP_LEN, 0, 1000, errbuf);
 	- If you'd like to run your sniff program in promiscuous mode, then set 1 to the third argument in "pcap_open_live". Otherwise 0 to it for non-promiscuous mode
 
-- Below image is a result in Promiscuous mode. You can see traffic not related to the host (
+- The host IP is 192.168.15.16
+- Below image is a result in Promiscuous mode. You can see traffic not related to the host such as a packet from to
 <img src = "images/part1/Promiscuous.png" width = "700">
 
-- Below image is a result in Non-Promiscuous mode. You cannot see any traffic not related to the host
+- Below image is a result in Non-Promiscuous mode. You cannot see any traffic nothing to do with the host
 <img src = "images/part1/Nonpromiscuous.png" width = "700">
 
 
