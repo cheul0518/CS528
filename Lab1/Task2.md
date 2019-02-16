@@ -131,7 +131,8 @@ int main(int argc, char **argv){
  memcpy(packet +20, &icmp, 8);
  
   
-/* Create a raw socket with IP protocol. The IPPROTO_RAW parameter
+/* 
+ * Create a raw socket with IP protocol. The IPPROTO_RAW parameter
  * tells the sytem that the IP header is already included;
  * this prevents the OS from adding another IP header.  
  */
@@ -147,7 +148,8 @@ int main(int argc, char **argv){
   exit(1);
  }
 
-/* The kernel is going to prepare Link layer data. For that, 
+/* 
+ * The kernel is going to prepare Link layer data. For that, 
  * there is need to specify a destination for the kernel in order for it
  * to decide where to send the raw datagram.
  * I fill in a structt in_addr with the desired destination IP address,
@@ -157,7 +159,8 @@ int main(int argc, char **argv){
  sin.sin_family = AF_INET;
  sin.sin_addr.s_addr = ip.ip_dst.s_addr;
  
-/* As for writing the packet. I cannot use send(2) system call for this,
+/* 
+ * As for writing the packet. I cannot use send(2) system call for this,
  * since the socket is not a "connected" type of socket.
  * There's need to tell where to send the raw IP datagram.
  */
