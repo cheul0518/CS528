@@ -7,6 +7,9 @@
  - I have two virtual machines run at at time. Let one VM ping google.com while another VM spoofing ICMP echo requests and replies
  - The following is the result of spooing ICMP echo requests and replies followed by my spoofing code
  <img src = "images/part2/task2b.png">
+
+<br />
+
 ```c
 /* I'm going to create my ICMP packet, which is type echo-request,
  * and hand it over to the raw sockets API to deliver it to the network
