@@ -24,7 +24,7 @@
 
 #include <arpa/inet.h>
 
-// Internet checksum function. This function is for calculating checksum for ICMP protocol
+// Internet checksum function. This function is used for calculating checksum for ICMP protocol
 unsigned short chksum(unsigned short *addr, int len){
  int nleft = len;
  int sum = 0;
@@ -61,8 +61,7 @@ int main(int argc, char **argv){
  packet = (u_char *)malloc(60);
  
  /* Fill Network layer fields. Header length in units of 32bits.
-  * Assuming any OP options not sending,
-  * IP header length is 20 bytes, so 20/4 = 5
+  * Assuming any OP options not sending, IP header length is 20 bytes, so 20/4 = 5
   */
  ip.ip_hl = 0x5;
  // IPv4
