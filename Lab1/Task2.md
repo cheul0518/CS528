@@ -1,4 +1,4 @@
-o### Task2.a Write a spoofing program
+### Task2.a Write a spoofing program
 - Write your own packet spoofing program. Using this program to perform the following tasks. You will need to submit this program along with your report
 
 ```c
