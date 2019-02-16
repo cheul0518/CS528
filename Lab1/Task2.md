@@ -113,17 +113,29 @@ int main(int argc, char **argv){
  // ICMP sequence number
  icmp.icmp_seq = 0;
  
+ // Set the ICMP header checksum to 0 and pass the ICMP packet into the checksum function
+ icmp.icmp_cksum = 0;
+ icmp.icmp_cksum = chksum((unsigned short *)&icmp, 8);
  
+ // Append the ICMP header to the packet at offest 20
+ memcpy(packet +20, &icmp, 8);
  
+  
 /* Create a raw socket with IP protocol. The IPPROTO_RAW parameter
  * tells the sytem that the IP header is already included;
  * this prevents the OS from adding another IP header.  
  */
+ sd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
+ if(sd < 0) {
+  perror("socket() error"); 
+  exit(-1);
+ }
  
-sd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
-if(sd < 0) {
-    perror("socket() error"); exit(-1);
-}
+ // Tell kernel that the IP header's prepared
+ if (setsockopt(sd, IPPROTO_IP, IP_HDRINCL, &on, sizeof(on)) < 0){
+  perror("setsockopt");
+  exit(-1);
+ }
 
 /* This data structure is needed when sending the packets
  * using sockets. Normally, we need to fill out several
