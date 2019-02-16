@@ -4,7 +4,7 @@
 
 #### Task2.b Spoof an ICMP Echo Request
 - Spoof an ICMP echo request packet on behalf of another machine (i.e., using another machine's IP address as its source IP address). This packet should be sent to a remote machine on the Internet (the machine must be alive)
-- I have two virtual machines run at at time. Let one VM ping google.com while another VM spoofing ICMP echo requests and replies
+- I have two virtual machines run at a time. Let one VM ping google.com while another VM spoofing ICMP echo requests and replies
 - Below is the result of spoofing ICMP echo requests and replies, followed by the spoofing code
  <img src = "images/part2/task2b.png">
 
