@@ -59,13 +59,26 @@ int main(int argc, char **argv){
  
  // Grab some space for my packet
  packet = (u_char *)malloc(60);
- 
- /* Fill Network layer fields. Header length in units of 32bits.
-  * Assuming any OP options not sending, IP header length is 20 bytes, so 20/4 = 5
-  */
+
+ // Fill Network layer fields. Header length in units of 32bits.
+ // Assuming any OP options not sending, IP header length is 20 bytes, so 20/4 = 5
  ip.ip_hl = 0x5;
  // IPv4
  ip.ip_v = 0x4;
+ // Type of Service. Packet precedence
+ ip.ip_tos = 0x0;
+ // Total length for the packet. It's converted to the network byte-order
+ ip.ip_len = htons(60);
+ // ID field uniquely identfies each datagram sent by this host
+ ip.ip_id = htons(12830);
+ // Fragment offset for the packet. Set it to 0x0 due to no need for any fragmentation
+ ip.ip_off = 0x0;
+ // Time to live. Maximum number of hops that the packet can pass while travelling through its destination
+ ip.ip_ttl = 64;
+ // Transport Layer protocol number
+ ip.ip_p = IPPROTO_ICMP;
+ // Set the checksum value to 0 before passing the packet into the checksum function
+ ip.ip_sum = 0x0;
 
 /* Create a raw socket with IP protocol. The IPPROTO_RAW parameter
  * tells the sytem that the IP header is already included;
