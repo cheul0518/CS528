@@ -176,12 +176,13 @@ int main(int argc, char **argv){
 
 #### Questions
 
-- Question 4: Can you set the IP packet length field to an arbitary value, regardless of how big the actual packet is? 
+- Question 4: Can you set the IP packet length field to an arbitary value, regardless of how big the actual packet is?
+  - No I cannot. The IP packet length field should be the length of the actual IP packet. If it's not, then you will get the invalid argument error from sendto().
 
 - Question 5: Using the raw socket programming, do you have to calculate the checksum for the IP header?
+  - The system will do the job so you don't have to caculate the checksum for the IP header.
 
 - Question 6: Why do you need the root priviledge to run the programs that use raw sockets? Where does the program fail if executed without the root privilege?
-
   - Raw sockets offer the capability to manipulate the underlying transport, so they can be used for malicious purposes that pose a security threat. Therefore, only members of the Administrators group can create sockets of type SOCK_RAW
    
 - Qeustion 7: Please use your own words to describe the sequence of the library calls that are essential for packet spoofing. This is meant to be a summary
