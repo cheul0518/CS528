@@ -174,10 +174,8 @@ int main(int argc, char **argv){
 #### Task2.c Spoof an Ethernet Frame
 - Spoof an Ethernet Frame. Set 01:02:03:04:05:06 as the source address. To tell the system that the packet you construct already includes the Ethernet header, you need to create the raw socket using the following parameters: **sd = socket (AF_PACKET, SOCK_RAW, htons(ETH_P_IP));** When constructing the packets, the beginning of the buffer[] array should now be the Ethernet header.
 
-
-
-
-
+#### Questions
+1.
+2. 
 3. Question 6: Why do you need the root priviledge to run the programs that use raw sockets? Where does the program fail if executed without the root privilege?
-
    - Raw sockets offer the capability to manipulate the underlying transport, so they can be used for malicious purposes that pose a security threat. Therefore, only members of the Administrators group can create sockets of type SOCK_RAW
