@@ -265,7 +265,7 @@ int main(int argc, char **argv){
   - No I cannot. The IP packet length field should be the actual size of the IP packet. If it's not, then the IP packet will not be formed properly. When the packet is sent, it will be truncated because it is too big and is dropped.
 
 - Question 5: Using the raw socket programming, do you have to calculate the checksum for the IP header?
-  - The system will do the job so you don't have to caculate the checksum for the IP header.
+  - The OS will do the job before transmitting the packet over the network. So you don't have to caculate the checksum for the IP header.
 
 - Question 6: Why do you need the root priviledge to run the programs that use raw sockets? Where does the program fail if executed without the root privilege?
   - Raw sockets offer the capability to manipulate the underlying transport, so they can be used for malicious purposes that pose a security threat. Therefore, only members of the Administrators group can create sockets of type SOCK_RAW. In other words the program will fail to run without the root privilege at ***sd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW); if(sd < 0) { perror("socket() error"); exit(-1); }***
