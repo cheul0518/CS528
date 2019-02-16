@@ -56,4 +56,25 @@ if(sendto(sd, buffer, ip_len, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0) {
 #include <netinet/tcp.h>
 
 #include <arpa/inet.h>
+
+/* Internet checksum function. This is for calculating checksums for all layers.
+ * ICMP protocol mandates checksum, so you have to calculate it
+ */
+unsigned short in_cksum(unsigned short *addr, int len){
+ int nleft = len;
+ int sum = 0;
+ unsigned short *w = addr;
+ unsigned short answer = 0;
+ 
+ while (nleft > 1){
+  sum += *w++;
+  nleft -= 2;
+ }
+ if (nleft == 1){
+  *(unsigned char *)(&answer) = *(unsigned char *) w;
+  sum += answer;
+ }
+  
+ }
+}
 ```
