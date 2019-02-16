@@ -262,7 +262,7 @@ int main(int argc, char **argv){
 #### Questions
 
 - Question 4: Can you set the IP packet length field to an arbitary value, regardless of how big the actual packet is?
-  - No I cannot. The IP packet length field should be the sum of the IP header size and ICMP header size. If it's not, then you will get the invalid argument error from sendto().
+  - No I cannot. The IP packet length field should be the actual size of the IP packet. If it's not, then sendto() will alert the invalid argument error.
 
 - Question 5: Using the raw socket programming, do you have to calculate the checksum for the IP header?
   - The system will do the job so you don't have to caculate the checksum for the IP header.
