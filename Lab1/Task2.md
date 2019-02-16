@@ -176,7 +176,7 @@ int main(int argc, char **argv){
 ```c
 sd = socket (AF_PACKET, SOCK_RAW, htons(ETH_P_IP));
 ```
-When constructing the packets, the beginning of the buffer[] array should now be the Ethernet header.
+  When constructing the packets, the beginning of the buffer[] array should now be the Ethernet header.
 
 
 
