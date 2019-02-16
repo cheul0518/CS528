@@ -171,8 +171,12 @@ int main(int argc, char **argv){
 }
 ```
 
-#### Task2.c Spoof an ICMP Echo Request
-- Hello wrold
+#### Task2.c Spoof an Ethernet Frame
+- Spoof an Ethernet Frame. Set 01:02:03:04:05:06 as the source address. To tell the system that the packet you construct already includes the Ethernet header, you need to create the raw socket using the following parameters:
+```c
+sd = socket (AF_PACKET, SOCK_RAW, htons(ETH_P_IP));
+```
+When constructing the packets, the beginning of the buffer[] array should now be the Ethernet header.
 
 
 
