@@ -74,7 +74,22 @@ unsigned short in_cksum(unsigned short *addr, int len){
   *(unsigned char *)(&answer) = *(unsigned char *) w;
   sum += answer;
  }
-  
- }
+ sum = (sum >> 16) + (sum & 0xFFFF);
+ sum += (sum >> 16);
+ answer = ~sum;
+ return (answer);  
+}
+
+int main(int argc, char **arv){
+ struct ip ip;
+ struct udphdr udp;
+ struct icmp icmp;
+ int sd;
+ const int on = 1;
+ struct sockaddr_in sin;
+ u_char *packet;
+ 
+ packet = (u_char *)malloc(60);
+ 
 }
 ```
