@@ -183,11 +183,8 @@ int main(int argc, char **argv){
 #include <stdlib.h>
 
 int main(int argc, char **argv){
- // Socket Descriptor
- int sd;
- 
- // Target Address
- struct sockaddr_ll target_address
+ int sd; 
+ struct sockaddr_ll socket_address
  
  // Ethernet Frame Buffer
  void* buffer = (void*)malloc(ETH_FRAME_LEN);
@@ -236,7 +233,7 @@ int main(int argc, char **argv){
  // Set the frame header
  memcpy((void*)buffer, (void*)dst_mac, ETH_ALEN);
  memcpy((void*)(buffer+ETH_ALEN), (void*)src_mac, ETH_ALEN);
- eh->h_proto = 0x00;
+ eth_header2->h_proto = 0x00;
  
  // Fill the frame with data
  int i = 0;
