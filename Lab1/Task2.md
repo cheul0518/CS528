@@ -46,7 +46,7 @@ if(sendto(sd, buffer, ip_len, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0) {
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/stocket.h>
+#include <sys/socket.h>
 
 #include <netinet/in_systm.h>
 #include <netinet/in.h>
@@ -89,7 +89,82 @@ int main(int argc, char **arv){
  struct sockaddr_in sin;
  u_char *packet;
  
+ // Grab space for a packet
  packet = (u_char *)malloc(60);
  
+ // Fill IP protocol fields. Header length in iunits of 32bits (4bytes).
+ // IP header length is 20 bytes, so you need to stuff (20/4 = 5)
+ ip.ip_hl = 0x5;
+ 
+ // Protocol Version is 4, meaning IPv4
+ ip.ip_v = 0x4;
+ 
+ // Packet precedence
+ ip.ip_tos = 0x0;
+ 
+ // All multibyte fields require to be converted to the network byte-order when the fields bigger than 8 bits
+ ip.ip_len = htons(60);
+ 
+ // ID field uniquely identifies each datagram sent by this host
+ ip.ip_ip = htons(12830);
+ 
+ // Fragment offset for the packet. I set this to 0x0 since i don't desire any fragmentation
+ ip.ip_off =0x0;
+ 
+ // Time to live. Maximum number of hops that the packet can pass while travelling through its destination
+ ip.ip_ttl = 64;
+ 
+ // Upper layer protocol number
+ ip.ip_p = IPPROTO_ICMP;
+ 
+ // I set the checksum value to zero before passing the packet into the checksum function.
+ ip.ip_sum = 0x0;
+ 
+ // Source IP address, any IP address that may or may not be one of the assigned address to one of my interfaces
+ ip.ip_src.s_addr = inet_addr("192.168.15.16");
+ 
+ // Destiination IP address
+ ip.ip_dst.s_addr = inet_addr("192.168.15.17");
+ 
+ // Pass the IP header and itis length into the Internet checksum function
+ ip.ip_sum = in_cksum((unsigned short *)&ip, sizeof(ip));
+ 
+ // copy it into the very beginning of the packet
+ memcpy(packet, &ip, sizeof(ip));
+ 
+ // As for ICMP, 
+ icmp.icmp_type = ICMP_ECHO;
+ 
+ // Code 0. Echo Request
+ icmp.icmp_code = 0;
+ 
+ // ID. random number
+ icmp.icmp_id = 1000;
+ 
+ // ICMP sequence number
+ icmp.icmp_seq = 0;
+ 
+ icmp.icmp_cksum = 0;
+ icmp.icmp_cksum = in_cksum((unsigned short *)&icmp, 8);
+ 
+ memcpy(packet + 20, &icmp, 8);
+ 
+ if ((sd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) < 0){
+  perror("raw socket");
+  exit(1);
+ }
+ if (setsockopt(sd, IPPROTO_IP, IP_HDRINCL, &on, sizeof(on)) < 0){
+  perror("setsockopt");
+  exit(1);
+ }
+ memset(&sin, 0, sizeof(sin));
+ sin.sin_family = AF_INET;
+ sin.sin_addr.s_addr = ip.ip_dst.s_addr
+ 
+ if (sendto(sd, packet, 60, 0, (struct sockaddr *)&sin, sizeof(struct sockaddr)) < 0){
+  perror("sendto");
+  exit(1);
+ }
+ return 0;
 }
 ```
