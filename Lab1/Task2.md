@@ -175,7 +175,7 @@ int main(int argc, char **argv){
 - Spoof an Ethernet Frame. Set 01:02:03:04:05:06 as the source address. To tell the system that the packet you construct already includes the Ethernet header, you need to create the raw socket using the following parameters: **sd = socket (AF_PACKET, SOCK_RAW, htons(ETH_P_IP));** When constructing the packets, the beginning of the buffer[] array should now be the Ethernet header.
 
 ```c
-#include <sys/scoket.h>
+#include <sys/socket.h>
 #include <linux/if_packet.h>
 #include <linux/if_ether.h>
 #include <linux/if_arp.h>
@@ -184,7 +184,7 @@ int main(int argc, char **argv){
 
 int main(int argc, char **argv){
  int sd; 
- struct sockaddr_ll socket_address
+ struct sockaddr_ll socket_address;
  
  // Ethernet Frame Buffer
  void* buffer = (void*)malloc(ETH_FRAME_LEN);
@@ -215,7 +215,7 @@ int main(int argc, char **argv){
  socket_address.sll_hatype = ARPHRD_ETHER;
  
  // Target is another host
- socket_address.sll_pkktype = PACKET_OTHERHOST;
+ socket_address.sll_pkttype = PACKET_OTHERHOST;
  
  // address length
  socket_address.sll_halen = ETH_ALEN;
