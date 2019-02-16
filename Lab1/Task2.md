@@ -63,23 +63,58 @@ int main(int argc, char **argv){
  // Fill Network layer fields. Header length in units of 32bits.
  // Assuming any OP options not sending, IP header length is 20 bytes, so 20/4 = 5
  ip.ip_hl = 0x5;
+
  // IPv4
  ip.ip_v = 0x4;
+
  // Type of Service. Packet precedence
  ip.ip_tos = 0x0;
+ 
  // Total length for the packet. It's converted to the network byte-order
  ip.ip_len = htons(60);
+ 
  // ID field uniquely identfies each datagram sent by this host
  ip.ip_id = htons(12830);
+ 
  // Fragment offset for the packet. Set it to 0x0 due to no need for any fragmentation
  ip.ip_off = 0x0;
+ 
  // Time to live. Maximum number of hops that the packet can pass while travelling through its destination
  ip.ip_ttl = 64;
+ 
  // Transport Layer protocol number
  ip.ip_p = IPPROTO_ICMP;
+ 
  // Set the checksum value to 0 before passing the packet into the checksum function
  ip.ip_sum = 0x0;
 
+ // Source IP address
+ ip.ip_src.s_addr = inet_addr("192.168.15.17");
+ 
+ // Destination IP address
+ ip.ip_dst.s_addr = inet_addr("google.com");
+ 
+ // Pass the IP header and its length into the checksum function.
+ // The function returns a 16-bit checksum value for the header
+ ip.ip_sum = chksum((unsigned short *)&ip, sizeof(ip));
+ 
+ // Copy the IP header into the very beginning of the packet
+ memcpy(packet, &ip, sizeof(ip));
+ 
+ // ICMP type
+ icmp.icmp_type = ICMP_ECHO;
+ 
+ // Code: Echo Request
+ icmp.icmp_code = 0;
+ 
+ // ID: Random number
+ icmp.icmp_id = 1000;
+ 
+ // ICMP sequence number
+ icmp.icmp_seq = 0;
+ 
+ 
+ 
 /* Create a raw socket with IP protocol. The IPPROTO_RAW parameter
  * tells the sytem that the IP header is already included;
  * this prevents the OS from adding another IP header.  
