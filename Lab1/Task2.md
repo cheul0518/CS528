@@ -134,27 +134,28 @@ int main(int argc, char **argv){
  // Tell kernel that the IP header's prepared
  if (setsockopt(sd, IPPROTO_IP, IP_HDRINCL, &on, sizeof(on)) < 0){
   perror("setsockopt");
-  exit(-1);
+  exit(1);
  }
 
-/* This data structure is needed when sending the packets
- * using sockets. Normally, we need to fill out several
- * fields, but for raw sockets, we only need to fill out
- * this one field 
+/* The kernel is going to prepare Link layer data. For that, 
+ * there is need to specify a destination for the kernel in order for it
+ * to decide where to send the raw datagram.
+ * I fill in a structt in_addr with the desired destination IP address,
+ * and pass this structue to the sendto(2) or sendmsg(2) system calls
  */
+ memset(&sin, 0, sizeof(sin)); 
+ sin.sin_family = AF_INET;
+ sin.sin_addr.s_addr = ip.ip_dst.s_addr;
  
-sin.sin_family = AF_INET;
-// Here you can construct the IP packet using buffer[]
-//    - construct the IP header ...
-//    - construct the TCP/UDP/ICMP header ...
-//    - fill in the data part if needed ...
-// Note: you should pay attention to the network/host byte order.
-/* Send out the IP packet.
- * ip_len is the actual size of the packet. 
+/* As for writing the packet. I cannot use send(2) system call for this,
+ * since the socket is not a "connected" type of socket.
+ * There's need to tell where to send the raw IP datagram.
  */
-
-if(sendto(sd, buffer, ip_len, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0) {
-    perror("sendto() error"); exit(-1);
+ if(sendto(sd, buffer, 60, 0, (struct sockaddr *)&sin, sizeof(struct sockaddr)) < 0) {
+    perror("sendto()"); 
+    exit(1);
+ }
+ return 0;
 }
 ```
  
