@@ -174,6 +174,91 @@ int main(int argc, char **argv){
 #### Task2.c Spoof an Ethernet Frame
 - Spoof an Ethernet Frame. Set 01:02:03:04:05:06 as the source address. To tell the system that the packet you construct already includes the Ethernet header, you need to create the raw socket using the following parameters: **sd = socket (AF_PACKET, SOCK_RAW, htons(ETH_P_IP));** When constructing the packets, the beginning of the buffer[] array should now be the Ethernet header.
 
+```c
+#include <sys/scoket.h>
+#include <linux/if_packet.h>
+#include <linux/if_ether.h>
+#include <linux/if_arp.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv){
+ // Socket Descriptor
+ int sd;
+ 
+ // Target Address
+ struct sockaddr_ll target_address
+ 
+ // Ethernet Frame Buffer
+ void* buffer = (void*)malloc(ETH_FRAME_LEN);
+ 
+ // Pointer to Ethernet Header
+ unsigned char* eth_header1 = buffer;
+ 
+ // Userdata in Ethernet frame
+ unsigned char* u_data = buffer + 14;
+ 
+ // Pointer to Ethernet Header
+ struct ethhdr *eth_header2 = (struct ethhdr *)eth_header1;
+
+ // Mac Address
+ unsigned char src_mac[6] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06};
+ 
+ // Dst Mac address 08:00:27:6a:a8:52
+ unsigned char dst_mac[6] = {0x08, 0x00, 0x27, 0x6a, 0xa8, 0x52};
+ 
+ // RAW communication
+ socket_address.sll_family = PF_PACKET;
+ socket_address.sll_protocol = htons(ETH_P_IP);
+ 
+ // Index
+ socket_address.sll_ifindex = 2;
+ 
+ // ARP identifier => ethernet
+ socket_address.sll_hatype = ARPHRD_ETHER;
+ 
+ // Target is another host
+ socket_address.sll_pkktype = PACKET_OTHERHOST;
+ 
+ // address length
+ socket_address.sll_halen = ETH_ALEN;
+ 
+ // MAC
+ socket_address.sll_addr[0] = 0x08;
+ socket_address.sll_addr[1] = 0x00;
+ socket_address.sll_addr[2] = 0x27;
+ socket_address.sll_addr[3] = 0x6a;
+ socket_address.sll_addr[4] = 0xa8;
+ socket_address.sll_addr[5] = 0x52; 
+ socket_address.sll_addr[6] = 0x00;
+ socket_address.sll_addr[7] = 0x00;
+ 
+ // Set the frame header
+ memcpy((void*)buffer, (void*)dst_mac, ETH_ALEN);
+ memcpy((void*)(buffer+ETH_ALEN), (void*)src_mac, ETH_ALEN);
+ eh->h_proto = 0x00;
+ 
+ // Fill the frame with data
+ int i = 0;
+ int j = 0;
+ for (j=0; j< 1500; j++){
+  data[j] = (unsigned char)((int)(255.0*rand()/(RAND_MAX+1.0)));
+ }
+ 
+ sd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+ if (sd < 0){
+  perror("Socket() error");
+  exit(-1);
+ }
+ 
+ // Send out the packet
+ if (sendto(sd, buffer, ETH_FRAME_LEN, 0, (struct sockaddr *)&socket_address, sizeof(socket_address)) < 0){
+  perror("sendto() error");
+  exit(-1);
+ }  
+}
+```
+
 #### Questions
 
 - Question 4: Can you set the IP packet length field to an arbitary value, regardless of how big the actual packet is?
