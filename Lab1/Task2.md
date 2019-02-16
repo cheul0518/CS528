@@ -1,11 +1,11 @@
 ### Task2: Spoofing
-1. Task2.a Write a spoofing program
- - Write your own packet spoofing program. Using this program to perform the following tasks. You will need to submit this program along with your report
+#### Task2.a Write a spoofing program
+- Write your own packet spoofing program. Using this program to perform the following tasks. You will need to submit this program along with your report
 
-2. Task2.b Spoof an ICMP Echo Request
- - Spoof an ICMP echo request packet on behalf of another machine (i.e., using another machine's IP address as its source IP address). This packet should be sent to a remote machine on the Internet (the machine must be alive)
- - I have two virtual machines run at at time. Let one VM ping google.com while another VM spoofing ICMP echo requests and replies
- - Below is the result of spoofing ICMP echo requests and replies followed by my spoofing code
+#### Task2.b Spoof an ICMP Echo Request
+- Spoof an ICMP echo request packet on behalf of another machine (i.e., using another machine's IP address as its source IP address). This packet should be sent to a remote machine on the Internet (the machine must be alive)
+- I have two virtual machines run at at time. Let one VM ping google.com while another VM spoofing ICMP echo requests and replies
+- Below is the result of spoofing ICMP echo requests and replies followed by my spoofing code
  <img src = "images/part2/task2b.png">
 
 
