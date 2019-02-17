@@ -276,4 +276,4 @@ int main(int argc, char **argv){
   
   - Constructing the header for the different protocols such as IP, ICMP, TCP, and UDP. The structures of the protocol need to be included before injecting packets. Headers for all the layers protocol are used to create packets and then injected into the network with the purpose of spoofing. 
   
-  - Building and injecting datagrams: sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr **dest_addr*, socklen_t addrlen)
+  - Building and injecting datagrams: sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr &ast dest_addr, socklen_t addrlen). 
