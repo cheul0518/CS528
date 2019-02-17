@@ -271,9 +271,9 @@ int main(int argc, char **argv){
   - Raw sockets offer the capability to manipulate the underlying transport, so they can be used for malicious purposes that pose a security threat. Therefore, only members of the Administrators group can create sockets of type SOCK_RAW. In other words the program will fail to run without the root privilege at ***sd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW); if(sd < 0) { perror("socket() error"); exit(-1); }***
    
 - Qeustion 7: Please use your own words to describe the sequence of the library calls that are essential for packet spoofing. This is meant to be a summary
-
-  - Essential library calls in spoofing are equivalent to steps in using raw sockets
   
-  - socket(int domain, **SOCK_RAW**, int protocol): Create a raw socket. SOCK_RAW includes the IP headers and all subsequent protocol headers and data. The Raw Socket provides the functionality to directly access raw protocol which enables to desgin and develop new propriatery protocol on top of existing protocol layering.
+  - Creating Raw socekts is the first and most important step for spoofing: socket(int domain, **SOCK_RAW**, int protocol). Raw sockets provides the functionality to directly access raw protocol, which enable them to design and evelop new propriatery protocol on top of existing protocol layering (e.g socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
   
-  - 
+  - Constructing the header for the different protocols such as IP, ICMP, TCP, and UDP. The structures of the protocol need to be included before injecting packets. Headers for all the layers protocol are used to create packets and then injected into the network with the purpose of spoofing. 
+  
+  - Building and injecting datagrams: sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr **dest_addr*, socklen_t addrlen)
