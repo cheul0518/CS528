@@ -271,3 +271,6 @@ int main(int argc, char **argv){
   - Raw sockets offer the capability to manipulate the underlying transport, so they can be used for malicious purposes that pose a security threat. Therefore, only members of the Administrators group can create sockets of type SOCK_RAW. In other words the program will fail to run without the root privilege at ***sd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW); if(sd < 0) { perror("socket() error"); exit(-1); }***
    
 - Qeustion 7: Please use your own words to describe the sequence of the library calls that are essential for packet spoofing. This is meant to be a summary
+ - Essential library calls in spoofing are equivalent to steps in using raw sockets
+ - socket(int domain, **SOCK_RAW**, int protocol): Create a raw socket. SOCK_RAW includes the IP headers and all subsequent protocol headers and data. The Raw Socket provides the functionality to directly access raw protocol which enables to desgin and develop new propriatery protocol on top of existing protocol layering.
+ - 
