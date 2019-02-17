@@ -1,4 +1,5 @@
-### Task1.a: Understanding
+### Task1: Writing a packet sniffing program
+#### Task1.a: Understanding
 
 1. Problem 1: Please use your own words to describe the sequence of the library calls that are essential for sniffer programs. This is meant to be a summary, not detailed explanation like the one in the tutorial.
 	- pcap_lookupdev(): find a device on which to capture
@@ -39,7 +40,7 @@ if (dev == NULL) {
 
 <br />
 
-### Task1.b: Wriiting Filters
+#### Task1.b: Wriiting Filters
 
 1. Capture the ICMP packets between two specific hosts
 	- I manually set a filter expression in a sniff program as follows: char filter_exp[] = "icmp and (src host 192.168.15.17 and dst host google.com) or (src host google.com and dst host 192.168.15.17)";
@@ -58,7 +59,7 @@ if (dev == NULL) {
 
 <br />
 
-### Task1.c: Sniffing Passwords
+#### Task1.c: Sniffing Passwords
 
 - I set a filter expression in a sniff program as follows: char filter_exp[] = "tcp port 23";
 - I increase num_packets by 70 in order to make sure the whole password's being captured during the sniffing time.
