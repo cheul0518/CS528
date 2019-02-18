@@ -1295,15 +1295,15 @@ Please read this section before mailing me.
 
 1. My named wants a named.boot file
 
-           - You are reading the wrong HOWTO. Please see the old version of this HOWTO, which covers BIND 4, at http://langfeldt.net/DNS-HOWTO/
+        - You are reading the wrong HOWTO. Please see the old version of this HOWTO, which covers BIND 4, at http://langfeldt.net/DNS-HOWTO/
 
 2. How do use DNS from inside a firewall? 
 
-          - A hint: forward only;. You might also need query-source port 53; inside the ``options'' part of the named.conf file as suggested in the example caching section. http://www.tldp.org/HOWTO/DNS-HOWTO-3.html#caching
+        - A hint: forward only;. You might also need query-source port 53; inside the ``options'' part of the named.conf file as suggested in the example caching section. http://www.tldp.org/HOWTO/DNS-HOWTO-3.html#caching
 
 3. How do I make DNS rotate through the available addresses for a service, say www.busy.site to obtain a load balancing effect, or similar?
 
-          - Make several A records for www.busy.site and use BIND 4.9.3 or later. Then BIND will round-robin the answers. It will not work with earlier versions of BIND.
+        - Make several A records for www.busy.site and use BIND 4.9.3 or later. Then BIND will round-robin the answers. It will not work with earlier versions of BIND.
 
 4. I want to set up DNS on a (closed) intranet. What do I do?
 
