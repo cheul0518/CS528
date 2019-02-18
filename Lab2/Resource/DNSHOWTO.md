@@ -1,4 +1,7 @@
-1. Preamble
+**The following content entirely belongs to Nicolai Langfeldt (dns-howto(at)langfeldt.net), Jamie Norrish and others (http://www.tldp.org/HOWTO/DNS-HOWTO.html)**
+
+
+###1. Preamble###
 
 Keywords: DNS, BIND, BIND 4, BIND 8, BIND 9, named, dialup, PPP, slip, ISDN, Internet, domain, name, resolution, hosts, caching.
 
