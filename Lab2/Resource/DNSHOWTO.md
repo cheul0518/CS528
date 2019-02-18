@@ -26,3 +26,41 @@ This HOWTO is dedicated to Anne Line Norheim Langfeldt. Though she will probably
 ### 1.4 Updated versions
 
 You should be able to find updated versions of this HOWTO both at http://langfeldt.net/DNS-HOWTO/ and on http://www.linuxdoc.org/. Go there if this document is dated more than 9 months ago.
+
+
+
+## 2. Introduction.
+
+**What this is and isn't.
+
+DNS is the Domain Name System. DNS converts machine names to the IP addresses that all machines on the net have. It translates (or "maps" as the jargon would have it) from name to address and from address to name, and some other things. This HOWTO documents how to define such mappings using Unix system, with a few things specific to Linux.
+
+A mapping is simply an association between two things, in this case a machine name, like ftp.linux.org, and the machine's IP number (or address) 199.249.150.4. DNS also contains mappings the other way, from the IP number to the machine name; this is called a "reverse mapping".
+
+DNS is, to the uninitiated (you ;-), one of the more opaque areas of network administration. Fortunately DNS isn't really that hard. This HOWTO will try to make a few things clearer. It describes how to set up a simple DNS name server, starting with a caching only server and going on to setting up a primary DNS server for a domain. For more complex setups you can check the qanda section of this document. If it's not described there you will need to read the Real Documentation. I'll get back to what this Real Documentation consists of in the last chapter.
+
+Before you start on this you should configure your machine so that you can telnet in and out of it, and successfully make all kinds of connections to the net, and you should especially be able to do telnet 127.0.0.1 and get your own machine (test it now!). You also need good /etc/nsswitch.conf, /etc/resolv.conf and /etc/hosts files as a starting point, since I will not explain their function here. If you don't already have all this set up and working the Networking-HOWTO and/or the Networking-Overview-HOWTO explains how to set it up. Read them.
+
+When I say `your machine' I mean the machine you are trying to set up DNS on, not any other machine you might have that's involved in your networking effort.
+
+I assume you're not behind any kind of firewall that blocks name queries. If you are you will need a special configuration --- see the section on qanda.
+
+Name serving on Unix is done by a program called named. This is a part of the ``BIND'' package which is coordinated by The Internet Software Consortium. Named is included in most Linux distributions and is usually installed as /usr/sbin/named, usually from a package called BIND, in upper or lower case depending on the whim of the packager.
+
+If you have a named you can probably use it; if you don't have one you can get a binary off a Linux ftp site, or get the latest and greatest source from ftp://ftp.isc.org/isc/bind9/. This HOWTO is about BIND version 9. The old versions of the HOWTO, about BIND 4 and 8, is still available at http://langfeldt.net/DNS-HOWTO/ in case you use BIND 4 or 8 (incidentally, you will find this HOWTO there too). If the named man page talks about (at the very end, in the FILES section) named.conf you have BIND 8; if it talks about named.boot you have BIND 4. If you have 4 and are security conscious you really ought to upgrade to the latest version of BIND 8. Now.
+
+DNS is a net-wide database. Take care about what you put into it. If you put junk into it, you, and others, will get junk out of it. Keep your DNS tidy and consistent and you will get good service from it. Learn to use it, admin it, debug it and you will be another good admin keeping the net from falling to its knees by mismanagement.
+
+Tip: Make backup copies of all the files I instruct you to change if you already have them, so that if after going through this nothing works you can get it back to your old, working state.
+
+2.1 Other nameserver implementations.
+
+This section was written by Joost van Baal.
+
+Various packages exist for getting a DNS server on your box. There is the BIND package ( http://www.isc.org/products/BIND/); the implementation this HOWTO is about. It's the most popular nameserver around and it's used on the vast majority of name serving machines on the Internet, around and being deployed since the 1980's. It's available under a BSD license. Since it's the most popular package, loads of documentation and knowledge about BIND is around. However, there have been security problems with BIND.
+
+Then there is djbdns ( http://djbdns.org/), a relatively new DNS package written by Daniel J. Bernstein, who also wrote qmail. It's a very modular suite: various small programs take care of the different jobs a nameserver is supposed to handle. It's designed with security in mind. It uses a simpler zone-file format, and is generally easier to configure. However, since it's less well known, your local guru might not be able to help you with this. Unfortunately, this software is not Open Source. The author's advertisement is on http://cr.yp.to/djbdns/ad.html.
+
+Whether DJBs software is really an improvement over the older alternatives is a subject of much debate. A discussion (or is it a flame-war?) of BIND vs djbdns, joined by ISC people, is on http://www.isc.org/ml-archives/bind-users/2000/08/msg01075.html
+
+
