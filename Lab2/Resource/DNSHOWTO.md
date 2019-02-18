@@ -1,4 +1,4 @@
-**The following content entirely belongs to Nicolai Langfeldt (dns-howto(at)langfeldt.net), Jamie Norrish and others (http://www.tldp.org/HOWTO/DNS-HOWTO.html)**
+**The following content belongs to Nicolai Langfeldt (dns-howto(at)langfeldt.net), Jamie Norrish and others (http://www.tldp.org/HOWTO/DNS-HOWTO.html)**
 
 
 ###1. Preamble###
