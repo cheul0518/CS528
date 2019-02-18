@@ -1321,7 +1321,8 @@ Please read this section before mailing me.
 
 6. I want BIND running when I'm disconnected from the net.
         - There are four items regarding this:
-                - Specific to BIND 8/9, Adam L Rice has sent me this e-mail, about how to run DNS painlessly on a dialup machine:
+```c
+1) Specific to BIND 8/9, Adam L Rice has sent me this e-mail, about how to run DNS painlessly on a dialup machine:
 
 
 I have discovered with newer versions of BIND that this
@@ -1347,7 +1348,9 @@ sophisticated piece of DNS software to the status of a dumb cache. To
 some extent, I would just like to run a dumb cache for DNS instead,
 but there doesn't seem to be such a piece of software available for
 Linux.
-I have received this mail from Ian Clark <ic@deakin.edu.au> where he explains his way of doing this:
+
+
+2) I have received this mail from Ian Clark <ic@deakin.edu.au> where he explains his way of doing this:
  I run named on my 'Masquerading' machine here. I have 
 two root.hints files, one called root.hints.real which contains 
 the real root server names and the other called root.hints.fake 
@@ -1377,7 +1380,9 @@ It certainly seems to work for me. I can use the nameserver for
 local machines while off the 'net without the timeout delay for
 external domain names and I while on the 'net queries for external
 domains work normally
-Peter Denison thought that Ian does not go far enough though. He writes:
+
+
+3) Peter Denison thought that Ian does not go far enough though. He writes:
 
  When connected) serve all cached (and local network) entries immediately
                 for non-cached entries, forward to my ISPs nameserver
@@ -1409,7 +1414,9 @@ Note that this won't quite work out-of-the-box, as there's a slight bug in
 BIND 8.2, which I have logged wth the developers, preventing a slave
 having a master on the same IP address (even if a different port). It's a
 trivial patch, and should go in soon I hope.
-I have also received information about how BIND interacts with NFS and the portmapper on a mostly offline machine from Karl-Max Wanger:
+
+
+4) I have also received information about how BIND interacts with NFS and the portmapper on a mostly offline machine from Karl-Max Wanger:
  
 I use to run my own named on all my machines which are only
 occasionally connected to the Internet by modem. The nameserver only
@@ -1432,6 +1439,7 @@ mountd eliminated this problem completely.
 As there are no disadvantages to expect from such a modified boot
 sequence I'd advise everybody to do it that way to prevent potential
 trouble.
+```
 
 7. Where does the caching name server store its cache? Is there any way I can control the size of the cache?
         - The cache is completely stored in memory, it is not written to disk at any time. Every time you kill named the cache is lost. The cache is not controllable in any way. named manages it according to some simple rules and that is it. You cannot control the cache or the cache size in any way for any reason. If you want to you can ``fix'' this by hacking named. This is however not recommended.
