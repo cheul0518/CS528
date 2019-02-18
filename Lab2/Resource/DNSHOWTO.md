@@ -28,8 +28,6 @@ This HOWTO is dedicated to Anne Line Norheim Langfeldt. Though she will probably
 You should be able to find updated versions of this HOWTO both at http://langfeldt.net/DNS-HOWTO/ and on http://www.linuxdoc.org/. Go there if this document is dated more than 9 months ago.
 
 <br />
-<br />
-<br />
 
 ## 2. Introduction.
 
@@ -67,9 +65,6 @@ Then there is djbdns ( http://djbdns.org/), a relatively new DNS package written
 Whether DJBs software is really an improvement over the older alternatives is a subject of much debate. A discussion (or is it a flame-war?) of BIND vs djbdns, joined by ISC people, is on http://www.isc.org/ml-archives/bind-users/2000/08/msg01075.html
 
 <br />
-<br />
-<br />
-
 
 ## 3. A resolving, caching name server.
 
