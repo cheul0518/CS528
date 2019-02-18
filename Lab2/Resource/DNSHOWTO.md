@@ -942,8 +942,10 @@ It is a good idea to run named as a user other than root, so that if it is compr
 
 For example, in Debian GNU/Linux 2.2 you might modify your /etc/init.d/bind script to have the following line (where user named have been created):
 
+```c
 start-stop-daemon --start --quiet --exec /usr/sbin/named -- -u named 
 The same can be done with Red Hat and the other distributions.
+```
 
 Dave Lugo has described a secure dual chroot setup http://www.etherboy.com/dns/chrootdns.html which you may find interesting to read, it makes the host your run your named on even more secure.
 
