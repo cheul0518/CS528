@@ -116,7 +116,6 @@ zone "0.0.127.in-addr.arpa" {
 };
 ```
 
-<br />
 
 The Linux distribution packages may use different file names for each kind of file mentioned here; they will still contain about the same things.
 
@@ -190,4 +189,138 @@ options {
 };
 ```
 
+As you see the secret is identical. If you want to use rndc from other machines their times need to be within 5 minutes of eachother. I recommend using the ntp (xntpd and ntpdate) software to do this.
 
+Next, you need a /etc/resolv.conf looking something like this: (Again: Remove spaces!)
+
+```c
+search subdomain.your-domain.edu your-domain.edu
+nameserver 127.0.0.1
+```
+
+The `search' line specifies what domains should be searched for any host names you want to connect to. The `nameserver' line specifies the address of your nameserver, in this case your own machine since that is where your named runs (127.0.0.1 is right, no matter if your machine has another address too). If you want to list several name servers put in one `nameserver' line for each. (Note: Named never reads this file, the resolver that uses named does. Note 2: In some resolv.conf files you find a line saying "domain". That's fine, but don't use both "search" and "domain", only one of them will work).
+
+To illustrate what this file does: If a client tries to look up foo, then foo.subdomain.your-domain.edu is tried first, then foo.your-domain.edu, and finally foo. You may not want to put in too many domains in the search line, as it takes time to search them all.
+
+The example assumes you belong in the domain subdomain.your-domain.edu; your machine, then, is probably called your-machine.subdomain.your-domain.edu. The search line should not contain your TLD (Top Level Domain, `edu' in this case). If you frequently need to connect to hosts in another domain you can add that domain to the search line like this: (Remember to remove the leading spaces, if any)
+
+```c
+search subdomain.your-domain.edu your-domain.edu other-domain.com
+```
+
+and so on. Obviously you need to put real domain names in instead. Please note the lack of periods at the end of the domain names. This is important; please note the lack of periods at the end of the domain names.
+
+
+### 3.1 Starting named
+
+After all this it's time to start named. If you're using a dialup connection connect first. Now run named, either by running the boot script: /etc/init.d/named start or named directly: /usr/sbin/named. If you have tried previous versions of BIND you're probably used to ndc. I BIND 9 it has been replaced with rndc, which can controll your named remotely, but it can't start named anymore. If you view your syslog message file (usually called /var/log/messages, Debian calls it /var/log/daemon, another directory to look is the other files /var/log) while starting named (do tail -f /var/log/messages) you should see something like:
+
+(the lines ending in \ continues on the next line)
+
+Dec 23 02:21:12 lookfar named[11031]: starting BIND 9.1.3
+Dec 23 02:21:12 lookfar named[11031]: using 1 CPU
+Dec 23 02:21:12 lookfar named[11034]: loading configuration from \
+    '/etc/named.conf'
+Dec 23 02:21:12 lookfar named[11034]: the default for the \
+    'auth-nxdomain' option is now 'no'
+Dec 23 02:21:12 lookfar named[11034]: no IPv6 interfaces found
+Dec 23 02:21:12 lookfar named[11034]: listening on IPv4 interface lo, \
+    127.0.0.1#53
+Dec 23 02:21:12 lookfar named[11034]: listening on IPv4 interface eth0, \
+    10.0.0.129#53
+Dec 23 02:21:12 lookfar named[11034]: command channel listening on \
+    127.0.0.1#953
+Dec 23 02:21:13 lookfar named[11034]: running
+If there are any messages about errors then there is a mistake. Named will name the file it is reading. Go back and check the file. Start named over when it is fixed.
+
+Now you can test your setup. Traditionally a program called nslookup is used for this. These days dig is recommended:
+
+ $ dig -x 127.0.0.1
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 26669
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;1.0.0.127.in-addr.arpa.                IN      PTR
+
+;; ANSWER SECTION:
+1.0.0.127.in-addr.arpa. 259200  IN      PTR     localhost.
+
+;; AUTHORITY SECTION:
+0.0.127.in-addr.arpa.   259200  IN      NS      ns.linux.bogus.
+
+;; Query time: 3 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Sun Dec 23 02:26:17 2001
+;; MSG SIZE  rcvd: 91
+If that's what you get it's working. We hope. Anything very different, go back and check everything. Each time you change a file you need to run rndc reload.
+
+Now you can enter a query. Try looking up some machine close to you. pat.uio.no is close to me, at the University of Oslo:
+
+ $ dig pat.uio.no
+; <<>> DiG 9.1.3 <<>> pat.uio.no
+;; global options:  printcmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 15574
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 3, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;pat.uio.no.                    IN      A
+
+;; ANSWER SECTION:
+pat.uio.no.             86400   IN      A       129.240.130.16
+
+;; AUTHORITY SECTION:
+uio.no.                 86400   IN      NS      nissen.uio.no.
+uio.no.                 86400   IN      NS      nn.uninett.no.
+uio.no.                 86400   IN      NS      ifi.uio.no.
+
+;; Query time: 651 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Sun Dec 23 02:28:35 2001
+;; MSG SIZE  rcvd: 108
+This time dig asked your named to look for the machine pat.uio.no. It then contacted one of the name server machines named in your root.hints file, and asked its way from there. It might take tiny while before you get the result as it may need to search all the domains you named in /etc/resolv.conf.
+
+If you ask the same again you get this:
+
+ $ dig pat.uio.no
+
+; <<>> DiG 8.2 <<>> pat.uio.no 
+;; res options: init recurs defnam dnsrch
+;; got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 3, ADDITIONAL: 3
+;; QUERY SECTION:
+;;      pat.uio.no, type = A, class = IN
+
+;; ANSWER SECTION:
+pat.uio.no.             23h59m58s IN A  129.240.130.16
+
+;; AUTHORITY SECTION:
+UIO.NO.                 23h59m58s IN NS  nissen.UIO.NO.
+UIO.NO.                 23h59m58s IN NS  ifi.UIO.NO.
+UIO.NO.                 23h59m58s IN NS  nn.uninett.NO.
+
+;; ADDITIONAL SECTION:
+nissen.UIO.NO.          23h59m58s IN A  129.240.2.3
+ifi.UIO.NO.             1d23h59m58s IN A  129.240.64.2
+nn.uninett.NO.          1d23h59m58s IN A  158.38.0.181
+
+;; Total query time: 4 msec
+;; FROM: lookfar to SERVER: default -- 127.0.0.1
+;; WHEN: Sat Dec 16 00:23:09 2000
+;; MSG SIZE  sent: 28  rcvd: 162
+As you can plainly see this time it was much faster, 4ms versus more than half a second earlier. The answer was cached. With cached answers there is the possibility that the answer is out of date, but the origin servers can control the time cached answers should be considered valid, so there is a high probability that the answer you get is valid.
+
+### 3.2 Resolvers
+
+All OSes implementing the standard C API has the calls gethostbyname and gethostbyaddr. These can get information from several different sources. Which sources it gets it from is configured in /etc/nsswitch.conf on Linux (and some other Unixes). This is a long file specifying from which file or database to get different kinds of data types. It usually contains helpful comments at the top, which you should consider reading. After that find the line starting with `hosts:'; it should read:
+
+hosts:      files dns
+(You remembered about the leading spaces, right? I won't mention them again.)
+
+If there is no line starting with `hosts:' then put in the one above. It says that programs should first look in the /etc/hosts file, then check DNS according to resolv.conf.
+
+### 3.3 Congratulations
+
+Now you know how to set up a caching named. Take a beer, milk, or whatever you prefer to celebrate it.
