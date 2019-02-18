@@ -1294,18 +1294,23 @@ If you're running BIND 4, you may find a document called migration-4to9 in the s
 Please read this section before mailing me.
 
 1. My named wants a named.boot file
-        - You are reading the wrong HOWTO. Please see the old version of this HOWTO, which covers BIND 4, at http://langfeldt.net/DNS-HOWTO/
+
+           - You are reading the wrong HOWTO. Please see the old version of this HOWTO, which covers BIND 4, at http://langfeldt.net/DNS-HOWTO/
 
 2. How do use DNS from inside a firewall? 
-        - A hint: forward only;. You might also need query-source port 53; inside the ``options'' part of the named.conf file as suggested in the example caching section. http://www.tldp.org/HOWTO/DNS-HOWTO-3.html#caching
+
+          - A hint: forward only;. You might also need query-source port 53; inside the ``options'' part of the named.conf file as suggested in the example caching section. http://www.tldp.org/HOWTO/DNS-HOWTO-3.html#caching
 
 3. How do I make DNS rotate through the available addresses for a service, say www.busy.site to obtain a load balancing effect, or similar?
-        - Make several A records for www.busy.site and use BIND 4.9.3 or later. Then BIND will round-robin the answers. It will not work with earlier versions of BIND.
+
+          - Make several A records for www.busy.site and use BIND 4.9.3 or later. Then BIND will round-robin the answers. It will not work with earlier versions of BIND.
 
 4. I want to set up DNS on a (closed) intranet. What do I do?
+
         - You drop the root.hints file and just do zone files. That also means you don't have to get new hint files all the time.
 
 5. How do I set up a secondary (slave) name server?
+
         - If the primary/master server has address 127.0.0.1 you put a line like this in the named.conf file of your secondary:
 
 ```c
@@ -1442,13 +1447,17 @@ trouble.
 ```
 
 7. Where does the caching name server store its cache? Is there any way I can control the size of the cache?
+
         - The cache is completely stored in memory, it is not written to disk at any time. Every time you kill named the cache is lost. The cache is not controllable in any way. named manages it according to some simple rules and that is it. You cannot control the cache or the cache size in any way for any reason. If you want to you can ``fix'' this by hacking named. This is however not recommended.
 
 8. Does named save the cache between restarts? Can I make it save it?
+
         - No, named does not save the cache when it dies. That means that the cache must be built anew each time you kill and restart named. There is no way to make named save the cache in a file. If you want you can ``fix'' this by hacking named. This is however not recommended.
 
 9. How can I get a domain? I want to set up my own domain called (for example) linux-rules.net. How can I get the domain I want assigned to me?
+
         - Please contact your network service provider. They will be able to help you with this. Please note that in most parts of the world you need to pay money to get a domain.
 
 10. How can I secure my DNS server? How do I set up split DNS?
+
         - Both of these are advanced topics. They are both covered in http://www.etherboy.com/dns/chrootdns.html. I will not explain the topics further here.
