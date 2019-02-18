@@ -1278,3 +1278,169 @@ exit 0
 ```
 
 Some of you might have picked up that the root.hints file is also available by ftp from Internic. Please don't use ftp to update root.hints, the above method is much more friendly to the net, and Internic.
+
+<br />
+
+## 9. Migrating to BIND 9
+
+The BIND 9 distribution, and the prepackaged versions too, contains a document called migration that contains notes about how to migrate from BIND 8 to BIND 9. The document is very straight forward. If you installed binary packages it's likely stored in /usr/share/doc/bind* or /usr/doc/bind* somewhere.
+
+If you're running BIND 4, you may find a document called migration-4to9 in the same place.
+
+<br />
+
+## 10. Questions and Answers
+
+Please read this section before mailing me.
+
+1. My named wants a named.boot file
+        - You are reading the wrong HOWTO. Please see the old version of this HOWTO, which covers BIND 4, at http://langfeldt.net/DNS-HOWTO/
+
+2. How do use DNS from inside a firewall? 
+        - A hint: forward only;. You might also need query-source port 53; inside the ``options'' part of the named.conf file as suggested in the example caching section. http://www.tldp.org/HOWTO/DNS-HOWTO-3.html#caching
+
+3. How do I make DNS rotate through the available addresses for a service, say www.busy.site to obtain a load balancing effect, or similar?
+        - Make several A records for www.busy.site and use BIND 4.9.3 or later. Then BIND will round-robin the answers. It will not work with earlier versions of BIND.
+
+4. I want to set up DNS on a (closed) intranet. What do I do?
+        - You drop the root.hints file and just do zone files. That also means you don't have to get new hint files all the time.
+
+5. How do I set up a secondary (slave) name server?
+        - If the primary/master server has address 127.0.0.1 you put a line like this in the named.conf file of your secondary:
+
+```c
+  zone "linux.bogus" {
+        type slave;
+        file "sz/linux.bogus";
+        masters { 127.0.0.1; };
+  };
+
+  
+// You may list several alternate master servers the zone can be copied from inside the masters list, separated by ';' (semicolon).
+```
+
+6. I want BIND running when I'm disconnected from the net.
+        - There are four items regarding this:
+                - Specific to BIND 8/9, Adam L Rice has sent me this e-mail, about how to run DNS painlessly on a dialup machine:
+
+
+I have discovered with newer versions of BIND that this
+[<em/shuffeling files, -ed/] is no longer necessary.  There is a
+"forward" directive in addition to the "forwarders" directive that
+controls how they are used.  The default setting is "forward first",
+which first asks each of the forwarders, and then tries the normal
+approach of doing the legwork itself if that fails.  This gives the
+familiar behaviour of gethostbyname() taking an inordinately long time
+when the link is not up.  But if "forward only" is set, then BIND
+gives up when it doesn't get a response from the forwarders, and
+gethostbyname() returns immediately.  Hence there is no need to
+perform sleight-of-hand with files in /etc and restart the server.
+
+In my case, I just added the lines
+
+forward only;
+forwarders { 193.133.58.5; };
+
+to the options { } section of my named.conf file. It works very
+nicely. The only disadvantage of this is that it reduces an incredibly
+sophisticated piece of DNS software to the status of a dumb cache. To
+some extent, I would just like to run a dumb cache for DNS instead,
+but there doesn't seem to be such a piece of software available for
+Linux.
+I have received this mail from Ian Clark <ic@deakin.edu.au> where he explains his way of doing this:
+ I run named on my 'Masquerading' machine here. I have 
+two root.hints files, one called root.hints.real which contains 
+the real root server names and the other called root.hints.fake 
+which contains...
+
+----
+; root.hints.fake
+; this file contains no information
+----
+
+When I go off line I copy the root.hints.fake file to root.hints and
+restart named.
+
+When I go online I copy root.hints.real to root.hints and restart
+named.
+
+This is done from ip-down & ip-up respectively.
+
+The first time I do a query off line on a domain name named doesn't
+have details for it puts an entry like this in messages..
+
+Jan 28 20:10:11 hazchem named[10147]: No root nameserver for class IN
+
+which I can live with.
+         
+It certainly seems to work for me. I can use the nameserver for
+local machines while off the 'net without the timeout delay for
+external domain names and I while on the 'net queries for external
+domains work normally
+Peter Denison thought that Ian does not go far enough though. He writes:
+
+ When connected) serve all cached (and local network) entries immediately
+                for non-cached entries, forward to my ISPs nameserver
+When off-line)  serve local network queries immediately
+                fail all other queries **immediately**
+
+The combination of changing the root cache file and forwarding queries
+doesn't work.
+
+So, I've set up (with some discussion of this on the local LUG) two nameds
+as follows:
+
+named-online:   forwards to ISPs nameserver
+                master for localnet zone
+                master for localnet reverse zone (1.168.192.in-addr.arpa)
+                master for 0.0.127.in-addr.arpa
+                listens on port 60053
+
+named-offline:  no forwarding
+                "fake" root cache file
+                slave for 3 local zones (master is 127.0.0.1:60053)
+                listens on port 61053
+
+And combined this with port forwarding, to send port 53 to 61053 when
+off-line, and to port 60053 when online. (I'm using the new netfilter
+package under 2.3.18, but the old (ipchains) mechanism should work.)
+
+Note that this won't quite work out-of-the-box, as there's a slight bug in
+BIND 8.2, which I have logged wth the developers, preventing a slave
+having a master on the same IP address (even if a different port). It's a
+trivial patch, and should go in soon I hope.
+I have also received information about how BIND interacts with NFS and the portmapper on a mostly offline machine from Karl-Max Wanger:
+ 
+I use to run my own named on all my machines which are only
+occasionally connected to the Internet by modem. The nameserver only
+acts as a cache, it has no area of authority and asks back for
+everything at the name servers in the root.cache file. As is usual
+with Slackware, it is started before nfsd and mountd.
+
+With one of my machines (a Libretto 30 notebook) I had the problem
+that sometimes I could mount it from another system connected to my
+local LAN, but most of the time it didn't work.  I had the same effect
+regardless of using PLIP, a PCMCIA ethernet card or PPP over a serial
+interface.
+
+After some time of guessing and experimenting I found out that
+apparently named messed with the process of registration nfsd and
+mountd have to carry out with the portmapper upon startup (I start
+these daemons at boot time as usual). Starting named after nfsd and
+mountd eliminated this problem completely.
+
+As there are no disadvantages to expect from such a modified boot
+sequence I'd advise everybody to do it that way to prevent potential
+trouble.
+
+7. Where does the caching name server store its cache? Is there any way I can control the size of the cache?
+        - The cache is completely stored in memory, it is not written to disk at any time. Every time you kill named the cache is lost. The cache is not controllable in any way. named manages it according to some simple rules and that is it. You cannot control the cache or the cache size in any way for any reason. If you want to you can ``fix'' this by hacking named. This is however not recommended.
+
+8. Does named save the cache between restarts? Can I make it save it?
+        - No, named does not save the cache when it dies. That means that the cache must be built anew each time you kill and restart named. There is no way to make named save the cache in a file. If you want you can ``fix'' this by hacking named. This is however not recommended.
+
+9. How can I get a domain? I want to set up my own domain called (for example) linux-rules.net. How can I get the domain I want assigned to me?
+        - Please contact your network service provider. They will be able to help you with this. Please note that in most parts of the world you need to pay money to get a domain.
+
+10. How can I secure my DNS server? How do I set up split DNS?
+        - Both of these are advanced topics. They are both covered in http://www.etherboy.com/dns/chrootdns.html. I will not explain the topics further here.
