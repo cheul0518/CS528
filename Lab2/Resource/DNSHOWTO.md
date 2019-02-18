@@ -27,7 +27,9 @@ This HOWTO is dedicated to Anne Line Norheim Langfeldt. Though she will probably
 
 You should be able to find updated versions of this HOWTO both at http://langfeldt.net/DNS-HOWTO/ and on http://www.linuxdoc.org/. Go there if this document is dated more than 9 months ago.
 
-
+<br />
+<br />
+<br />
 
 ## 2. Introduction.
 
@@ -63,5 +65,134 @@ Various packages exist for getting a DNS server on your box. There is the BIND p
 Then there is djbdns ( http://djbdns.org/), a relatively new DNS package written by Daniel J. Bernstein, who also wrote qmail. It's a very modular suite: various small programs take care of the different jobs a nameserver is supposed to handle. It's designed with security in mind. It uses a simpler zone-file format, and is generally easier to configure. However, since it's less well known, your local guru might not be able to help you with this. Unfortunately, this software is not Open Source. The author's advertisement is on http://cr.yp.to/djbdns/ad.html.
 
 Whether DJBs software is really an improvement over the older alternatives is a subject of much debate. A discussion (or is it a flame-war?) of BIND vs djbdns, joined by ISC people, is on http://www.isc.org/ml-archives/bind-users/2000/08/msg01075.html
+
+<br />
+<br />
+<br />
+
+
+## 3. A resolving, caching name server.
+
+A first stab at DNS config, very useful for dialup, cable-modem, ADSL and similar users.
+
+On Red Hat and Red Hat related distributions you can achieve the same practical result as this HOWTO's first section by installing the packages bind, bind-utils and caching-nameserver. If you use Debian simply install bind (or bind9, as of this writing, BIND 9 is not supported by Debian Stable (potato)) and bind-doc. Of course just installing those packages won't teach you as much as reading this HOWTO. So install the packages, and then read along verifying the files they installed.
+
+A caching only name server will find the answer to name queries and remember the answer the next time you need it. This will shorten the waiting time the next time significantly, especially if you're on a slow connection.
+
+First you need a file called /etc/named.conf (Debian: /etc/bind/named.conf). This is read when named starts. For now it should simply contain:
+
+```c
+// Config file for caching only name server
+//
+// The version of the HOWTO you read may contain leading spaces
+// (spaces in front of the characters on these lines ) in this and
+// other files.  You must remove them for things to work.
+//
+// Note that the filenames and directory names may differ, the
+// ultimate contents of should be quite similar though.
+
+options {
+        directory "/var/named";
+
+        // Uncommenting this might help if you have to go through a
+        // firewall and things are not working out.  But you probably
+        // need to talk to your firewall admin.
+
+        // query-source port 53;
+};
+
+controls {
+        inet 127.0.0.1 allow { localhost; } keys { rndc_key; };
+};
+
+key "rndc_key" {
+        algorithm hmac-md5;
+        secret "c3Ryb25nIGVub3VnaCBmb3IgYSBtYW4gYnV0IG1hZGUgZm9yIGEgd29tYW4K";
+};
+
+zone "." {
+        type hint;
+        file "root.hints";
+};
+
+zone "0.0.127.in-addr.arpa" {
+        type master;
+        file "pz/127.0.0";
+};
+```
+
+<br />
+
+The Linux distribution packages may use different file names for each kind of file mentioned here; they will still contain about the same things.
+
+The `directory' line tells named where to look for files. All files named subsequently will be relative to this. Thus pz is a directory under /var/named, i.e., /var/named/pz. /var/named is the right directory according to the Linux File system Standard.
+
+The file named /var/named/root.hints is named in this. /var/named/root.hints should contain this:
+
+```c
+;
+; There might be opening comments here if you already have this file.
+; If not don't worry.
+;
+; About any leading spaces in front of the lines here: remove them!
+; Lines should start in a ;, . or character, not blanks.
+;
+.                       6D  IN      NS      A.ROOT-SERVERS.NET.
+.                       6D  IN      NS      B.ROOT-SERVERS.NET.
+.                       6D  IN      NS      C.ROOT-SERVERS.NET.
+.                       6D  IN      NS      D.ROOT-SERVERS.NET.
+.                       6D  IN      NS      E.ROOT-SERVERS.NET.
+.                       6D  IN      NS      F.ROOT-SERVERS.NET.
+.                       6D  IN      NS      G.ROOT-SERVERS.NET.
+.                       6D  IN      NS      H.ROOT-SERVERS.NET.
+.                       6D  IN      NS      I.ROOT-SERVERS.NET.
+.                       6D  IN      NS      J.ROOT-SERVERS.NET.
+.                       6D  IN      NS      K.ROOT-SERVERS.NET.
+.                       6D  IN      NS      L.ROOT-SERVERS.NET.
+.                       6D  IN      NS      M.ROOT-SERVERS.NET.
+A.ROOT-SERVERS.NET.     6D  IN      A       198.41.0.4
+B.ROOT-SERVERS.NET.     6D  IN      A       128.9.0.107
+C.ROOT-SERVERS.NET.     6D  IN      A       192.33.4.12
+D.ROOT-SERVERS.NET.     6D  IN      A       128.8.10.90
+E.ROOT-SERVERS.NET.     6D  IN      A       192.203.230.10
+F.ROOT-SERVERS.NET.     6D  IN      A       192.5.5.241
+G.ROOT-SERVERS.NET.     6D  IN      A       192.112.36.4
+H.ROOT-SERVERS.NET.     6D  IN      A       128.63.2.53
+I.ROOT-SERVERS.NET.     6D  IN      A       192.36.148.17
+J.ROOT-SERVERS.NET.     6D  IN      A       198.41.0.10
+K.ROOT-SERVERS.NET.     6D  IN      A       193.0.14.129
+L.ROOT-SERVERS.NET.     6D  IN      A       198.32.64.12
+M.ROOT-SERVERS.NET.     6D  IN      A       202.12.27.33
+```
+
+The file describes the root name servers in the world. The servers change over time and must be maintained now and then. See the maintenance section for how to keep it up to date.
+
+The next section in named.conf is the last zone. I will explain its use in a later chapter; for now just make this a file named 127.0.0 in the subdirectory pz: (Again, please remove leading spaces if you cut and paste this)
+
+```c
+$TTL 3D
+@               IN      SOA     ns.linux.bogus. hostmaster.linux.bogus. (
+                                1       ; Serial
+                                8H      ; Refresh
+                                2H      ; Retry
+                                4W      ; Expire
+                                1D)     ; Minimum TTL
+                        NS      ns.linux.bogus.
+1                       PTR     localhost.
+```
+
+The sections called key and controls together specify that your named can be remotely controlled by a program called rndc if it connects from the local host, and identifis itself with the encoded secret key. This key is like a password. For rndc to work you need /etc/rndc.conf to match this:
+
+```c
+key rndc_key {
+    algorithm "hmac-md5";
+    secret "c3Ryb25nIGVub3VnaCBmb3IgYSBtYW4gYnV0IG1hZGUgZm9yIGEgd29tYW4K";
+};
+
+options {
+    default-server localhost;
+    default-key    rndc_key;
+};
+```
 
 
