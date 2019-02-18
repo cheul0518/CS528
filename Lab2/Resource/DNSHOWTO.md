@@ -1180,3 +1180,101 @@ The reverse zone is the bit of the setup that seems to cause the most grief. It 
 The FTP server prioritizes connections from the Scandinavian countries, i.e., *.no, *.se, *.dk, the name ws-177200.land-5.com clearly does not match any of those, and the server will put the connection in a connection class with less bandwidth and fewer clients allowed. If there was no reverse mapping of 206.2.177.200 through the in-addr.arpa zone the server would have been unable to find the name at all and would have to settle to comparing 206.2.177.200 with *.no, *.se and *.dk, none of which will match at all, it may even deny the connection for lack of classification.
 
 Some people will tell you that reverse lookup mappings are only important for servers, or not important at all. Not so: Many ftp, news, IRC and even some http (WWW) servers will not accept connections from machines of which they are not able to find the name. So reverse mappings for machines are in fact mandatory.
+
+<br />
+
+## 8. Maintenance
+
+Keeping it working.
+
+There is one maintenance task you have to do on nameds, other than keeping them running. That's keeping the root.hints file updated. The easiest way is using dig. First run dig with no arguments you will get the root.hints according to your own server. Then ask one of the listed root servers with dig @rootserver. You will note that the output looks terribly like a root.hints file. Save it to a file (dig @e.root-servers.net . ns >root.hints.new) and replace the old root.hints with it.
+
+Remember to reload named after replacing the cache file.
+
+Al Longyear sent me this script that can be run automatically to update root.hints. Install a crontab entry to run it once a month and forget it. The script assumes you have mail working and that the mail-alias `hostmaster' is defined. You must hack it to suit your setup.
+
+```c
+#!/bin/sh
+#
+# Update the nameserver cache information file once per month.
+# This is run automatically by a cron entry.
+#
+# Original by Al Longyear
+# Updated for BIND 8 by Nicolai Langfeldt
+# Miscelanious error-conditions reported by David A. Ranch
+# Ping test suggested by Martin Foster
+# named up-test suggested by Erik Bryer.
+#
+(
+ echo "To: hostmaster <hostmaster>"
+ echo "From: system <root>"
+
+ # Is named up? Check the status of named.
+ case `rndc status 2>&1` in
+    *refused*)
+        echo "named is DOWN. root.hints was NOT updated"
+        echo
+        exit 0
+        ;;
+ esac
+
+ PATH=/sbin:/usr/sbin:/bin:/usr/bin:
+ export PATH
+ # NOTE: /var/named must be writable only by trusted users or this script 
+ # will cause root compromise/denial of service opportunities.
+ cd /var/named 2>/dev/null || {
+    echo "Subject: Cannot cd to /var/named, error $?"
+    echo
+    echo "The subject says it all"
+    exit 1
+ }
+
+ # Are we online?  Ping a server at your ISP
+ case `ping -qnc 1 some.machine.net 2>&1` in
+   *'100% packet loss'*)
+        echo "Subject: root.hints NOT updated.  The network is DOWN."
+        echo
+        echo "The subject says it all"
+        exit 1
+        ;;
+ esac
+
+ dig @e.root-servers.net . ns >root.hints.new 2> errors
+
+ case `cat root.hints.new` in
+   *NOERROR*)
+        # It worked
+        :;;
+   *)
+        echo "Subject: The root.hints file update has FAILED."
+        echo
+        echo "The root.hints update has failed"
+        echo "This is the dig output reported:"
+        echo
+        cat root.hints.new errors
+        exit 1
+        ;;
+ esac
+
+ echo "Subject: The root.hints file has been updated"
+ echo
+ echo "The root.hints file has been updated to contain the following   
+information:"
+ echo
+ cat root.hints.new
+
+ chown root.root root.hints.new
+ chmod 444 root.hints.new
+ rm -f root.hints.old errors
+ mv root.hints root.hints.old
+ mv root.hints.new root.hints
+ rndc restart
+ echo
+ echo "The nameserver has been restarted to ensure that the update is complete."
+ echo "The previous root.hints file is now called   
+/var/named/root.hints.old."
+) 2>&1 | /usr/lib/sendmail -t
+exit 0
+```
+
+Some of you might have picked up that the root.hints file is also available by ftp from Internic. Please don't use ftp to update root.hints, the above method is much more friendly to the net, and Internic.
