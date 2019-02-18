@@ -31,8 +31,10 @@ You should be able to find updated versions of this HOWTO both at http://langfel
 
 ## 2. Introduction.
 
-**What this is and isn't.
+<br />
+**What this is and isn't.**
 
+<br />
 DNS is the Domain Name System. DNS converts machine names to the IP addresses that all machines on the net have. It translates (or "maps" as the jargon would have it) from name to address and from address to name, and some other things. This HOWTO documents how to define such mappings using Unix system, with a few things specific to Linux.
 
 A mapping is simply an association between two things, in this case a machine name, like ftp.linux.org, and the machine's IP number (or address) 199.249.150.4. DNS also contains mappings the other way, from the IP number to the machine name; this is called a "reverse mapping".
@@ -53,7 +55,7 @@ DNS is a net-wide database. Take care about what you put into it. If you put jun
 
 Tip: Make backup copies of all the files I instruct you to change if you already have them, so that if after going through this nothing works you can get it back to your old, working state.
 
-2.1 Other nameserver implementations.
+## 2.1 Other nameserver implementations.
 
 This section was written by Joost van Baal.
 
