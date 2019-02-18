@@ -215,8 +215,10 @@ and so on. Obviously you need to put real domain names in instead. Please note t
 
 After all this it's time to start named. If you're using a dialup connection connect first. Now run named, either by running the boot script: /etc/init.d/named start or named directly: /usr/sbin/named. If you have tried previous versions of BIND you're probably used to ndc. I BIND 9 it has been replaced with rndc, which can controll your named remotely, but it can't start named anymore. If you view your syslog message file (usually called /var/log/messages, Debian calls it /var/log/daemon, another directory to look is the other files /var/log) while starting named (do tail -f /var/log/messages) you should see something like:
 
+
 (the lines ending in \ continues on the next line)
 
+```c
 Dec 23 02:21:12 lookfar named[11031]: starting BIND 9.1.3
 Dec 23 02:21:12 lookfar named[11031]: using 1 CPU
 Dec 23 02:21:12 lookfar named[11034]: loading configuration from \
@@ -231,10 +233,13 @@ Dec 23 02:21:12 lookfar named[11034]: listening on IPv4 interface eth0, \
 Dec 23 02:21:12 lookfar named[11034]: command channel listening on \
     127.0.0.1#953
 Dec 23 02:21:13 lookfar named[11034]: running
+```
+
 If there are any messages about errors then there is a mistake. Named will name the file it is reading. Go back and check the file. Start named over when it is fixed.
 
 Now you can test your setup. Traditionally a program called nslookup is used for this. These days dig is recommended:
 
+```c
  $ dig -x 127.0.0.1
 ;; Got answer:
 ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 26669
@@ -253,10 +258,13 @@ Now you can test your setup. Traditionally a program called nslookup is used for
 ;; SERVER: 127.0.0.1#53(127.0.0.1)
 ;; WHEN: Sun Dec 23 02:26:17 2001
 ;; MSG SIZE  rcvd: 91
+```
+
 If that's what you get it's working. We hope. Anything very different, go back and check everything. Each time you change a file you need to run rndc reload.
 
 Now you can enter a query. Try looking up some machine close to you. pat.uio.no is close to me, at the University of Oslo:
 
+```c
  $ dig pat.uio.no
 ; <<>> DiG 9.1.3 <<>> pat.uio.no
 ;; global options:  printcmd
@@ -279,10 +287,13 @@ uio.no.                 86400   IN      NS      ifi.uio.no.
 ;; SERVER: 127.0.0.1#53(127.0.0.1)
 ;; WHEN: Sun Dec 23 02:28:35 2001
 ;; MSG SIZE  rcvd: 108
+```
+
 This time dig asked your named to look for the machine pat.uio.no. It then contacted one of the name server machines named in your root.hints file, and asked its way from there. It might take tiny while before you get the result as it may need to search all the domains you named in /etc/resolv.conf.
 
 If you ask the same again you get this:
 
+```c
  $ dig pat.uio.no
 
 ; <<>> DiG 8.2 <<>> pat.uio.no 
@@ -310,13 +321,18 @@ nn.uninett.NO.          1d23h59m58s IN A  158.38.0.181
 ;; FROM: lookfar to SERVER: default -- 127.0.0.1
 ;; WHEN: Sat Dec 16 00:23:09 2000
 ;; MSG SIZE  sent: 28  rcvd: 162
+```
+
 As you can plainly see this time it was much faster, 4ms versus more than half a second earlier. The answer was cached. With cached answers there is the possibility that the answer is out of date, but the origin servers can control the time cached answers should be considered valid, so there is a high probability that the answer you get is valid.
 
 ### 3.2 Resolvers
 
 All OSes implementing the standard C API has the calls gethostbyname and gethostbyaddr. These can get information from several different sources. Which sources it gets it from is configured in /etc/nsswitch.conf on Linux (and some other Unixes). This is a long file specifying from which file or database to get different kinds of data types. It usually contains helpful comments at the top, which you should consider reading. After that find the line starting with `hosts:'; it should read:
 
+```c
 hosts:      files dns
+```
+
 (You remembered about the leading spaces, right? I won't mention them again.)
 
 If there is no line starting with `hosts:' then put in the one above. It says that programs should first look in the /etc/hosts file, then check DNS according to resolv.conf.
