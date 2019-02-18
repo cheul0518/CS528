@@ -886,3 +886,65 @@ A mechanism called zone-transfer is used to copy the data. The zone transfer is 
                         1D )            ; minimum, seconds
 ```
 A zone is only transferred if the serial number on the master is larger than on the slave. Every refresh interval the slave will check if the master has been updated. If the check fails (because the master is unavailable) it will retry the check every retry interval. If it continues to fail as long as the expire interval the slave will remove the zone from it's filesystem and no longer be a server for it.
+
+
+## 6. Basic security options.
+
+By Jamie Norrish
+
+Setting configuration options to reduce the possibility of problems.
+
+There are a few simple steps that you can take which will both make your server more secure and potentially reduce its load. The material presented here is nothing more than a starting point; if you are concerned about security (and you should be), please consult other resources on the net (see the last chapter).
+
+The following configuration directives occur in named.conf. If a directive occurs in the options section of the file, it applies to all zones listed in that file. If it occurs within a zone entry, it applies only to that zone. A zone entry overrides an options entry.
+
+### 6.1 Restricting zone transfers
+
+In order for your slave server(s) to be able to answer queries about your domain, they must be able to transfer the zone information from your primary server. Very few others have a need to do so. Therefore restrict zone transfers using the allow-transfer option, assuming 192.168.1.4 is the IP address of ns.friend.bogus and adding yourself for debugging purposes:
+
+```c
+zone "linux.bogus" {
+      allow-transfer { 192.168.1.4; localhost; };
+};
+```
+
+By restricting zone transfers you ensure that the only information available to people is that which they ask for directly - no one can just ask for all the details about your set-up.
+
+### 6.2 Protecting against spoofing
+
+Firstly, disable any queries for domains you don't own, except from your internal/local machines. This not only helps prevent malicious use of your DNS server, but also reduces unnecessary use of your server.
+
+```c
+options {
+      allow-query { 192.168.196.0/24; localhost; };
+};
+
+zone "linux.bogus" {
+      allow-query { any; };
+};
+
+zone "196.168.192.in-addr.arpa" {
+      allow-query { any; };
+};
+```
+
+Further, disable recursive queries except from internal/local sources. This reduces the risk of cache poisoning attacks (where false data is fed to your server).
+
+```c
+options {
+        allow-recursion { 192.168.196.0/24; localhost; };
+};
+```
+
+### 6.3 Running named as non-root
+
+It is a good idea to run named as a user other than root, so that if it is compromised the privileges gained by the cracker are as limited as possible. You first have to create a user for named to run under, and then modify whatever init script you use that starts named. Pass the new user name and group to named using the -u and -g flags.
+
+For example, in Debian GNU/Linux 2.2 you might modify your /etc/init.d/bind script to have the following line (where user named have been created):
+
+start-stop-daemon --start --quiet --exec /usr/sbin/named -- -u named 
+The same can be done with Red Hat and the other distributions.
+
+Dave Lugo has described a secure dual chroot setup http://www.etherboy.com/dns/chrootdns.html which you may find interesting to read, it makes the host your run your named on even more secure.
+
+
