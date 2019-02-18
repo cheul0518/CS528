@@ -340,3 +340,20 @@ If there is no line starting with `hosts:' then put in the one above. It says th
 ### 3.3 Congratulations
 
 Now you know how to set up a caching named. Take a beer, milk, or whatever you prefer to celebrate it.
+
+<br />
+
+## 4. Forwarding
+
+In large, well organized, academic or ISP (Internet Service Provider) networks you will sometimes find that the network people have set up a forwarder hierarchy of DNS servers which helps lighten the internal network load and the load on the outside servers as well. It's not easy to know if you're inside such a network or not. But by using the DNS server of your network provider as a ``forwarder'' you can make the responses to queries faster and less of a load on your network. This works by your nameserver forwarding queries to your ISP nameserver. Each time this happens you will dip into the big cache of your ISPs nameserver, thus speeding your queries up, your nameserver does not have to do all the work itself. If you use a modem this can be quite a win. For the sake of this example we assume that your network provider has two name servers they want you to use, with IP numbers 10.0.0.1 and 10.1.0.1. Then, in your named.conf file, inside the opening section called ``options'', insert these lines:
+
+```c
+           forward first;
+           forwarders {
+                10.0.0.1;
+                10.1.0.1;
+            };
+```
+There is also a nice trick for dialup machines using forwarders, it is described in the qanda section.
+
+Restart your nameserver and test it with dig. Should still work fine.
