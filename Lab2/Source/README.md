@@ -1,6 +1,6 @@
-### This directory is for keeping references for better readability
+### This directory is for keeping references
 
-1. D. Schneider. Fresh Phish, How a recently discovered flaw in the Internet’s Domain Name Sys- tem makes it easy for scammers to lure you to fake Web sites. IEEE Spectrum, 2008 http: //spectrum.ieee.org/computing/software/fresh-phish
+1. D. Schneider. Fresh Phish, How a recently discovered flaw in the Internet’s Domain Name Sys- tem makes it easy for scammers to lure you to fake Web sites. IEEE Spectrum, 2008 : http://spectrum.ieee.org/computing/software/fresh-phish
 
 <br />
 
@@ -9,7 +9,6 @@
 <br />
 
 3. DNS HOWTO : http://www.tldp.org/HOWTO/DNS-HOWTO.html
-
 
 <br />
 
