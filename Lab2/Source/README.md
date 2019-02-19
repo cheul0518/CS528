@@ -4,7 +4,7 @@
 
 <br />
 
-2. RFC 1035 Domain Names - Implementation and Specification : http://www.rfc-base.org/rfc-1035.html
+2. RFC 1035 Domain Names - Implementation and Specification : https://tools.ietf.org/html/rfc1035
 
 <br />
 
@@ -16,7 +16,7 @@
 
 <br />
 
-5. DNS Cache Poisoning: http://www.secureworks.com/resources/articles/other_articles/dns-cache- poisoning/
+5. DNS Cache Poisoning: https://www.secureworks.com/blog/dns-cache-poisoning
 
 <br />
 
