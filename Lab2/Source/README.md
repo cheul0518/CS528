@@ -16,8 +16,12 @@
 
 <br />
 
-5. DNS Cache Poisoning: https://www.secureworks.com/blog/dns-cache-poisoning
+5. DNS Cache Poisoning : https://www.secureworks.com/blog/dns-cache-poisoning
 
 <br />
 
-6. DNS Client Spoof: http://evan.stasis.org/odds/dns-client_spoofing.txt
+6. DNS Client Spoof : http://evan.stasis.org/odds/dns-client_spoofing.txt
+
+<br />
+
+7. An Illustrated Guide to the Kaminsky DNS Vulnerability : http://unixwiz.net/techtips/iguide-kaminsky-dns-vuln.html
