@@ -295,6 +295,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     // Additional Record count should be 1 for an additional info
     dns->ARCOUNT=htons(1);    
     
+    // Query String
     strncpy(data, dns_data, strlen(dns_data));
     int length = strlen(data) + 1;
 
@@ -302,6 +303,25 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     struct dataEnd * end=(struct dataEnd *)(data+length);
     end->type=htons(1);
     end->class=htons(1);
+    
+    // Answer Section
+    char *ans = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length);
+    
+    strncpy(ans, dns_data, strlen(dns_data));
+    int ansLength = strlen(ans) + 1;
+    
+    struct ansEnd *ansend = (struct ansEnd *)(ans + anslength);
+    ansend->type = htons(1);
+    ansend->class = htons(1);
+    ansend->ttl_l = htons(0x00);
+    ansend->ttl_h = htons(0xD0);
+    ansend->datalen = htons(4);
+    
+    char *ansaddr = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength);
+    
+    strcpy(ansaddr, "\1\1\1\1");
+    int addrlen = strlen(ansaddr);
+    
     
 }
 ```
