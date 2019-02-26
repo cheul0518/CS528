@@ -26,8 +26,7 @@
 #include <stdlib.h>
 
 // The packet length
-//#define PCKT_LEN 8192
-#define PCKT_LEN 4096
+#define PCKT_LEN 8192
 #define FLAG_R 0x8400   // DNS response packet: QR:1(Server) AA:1(Authorative)
 #define FLAG_Q 0x0100   // DNS question packet: QR:0(Client) RD:1(Recursion desired)
 
@@ -279,6 +278,23 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
 
     // data is the pointer points to the first byte of the dns payload  
     char *data=(buffer +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));
+    
+    
+    // The flag you need to set
+    dns->flags=htons(FLAG_R);
+    
+    // Question count: the server repeats the question in the response packet so the question count is almost always 1
+    dns->QDCOUNT=htons(1);
+
+    // Authoritative Answer count should be 1 as the final answer
+    dns->ANCOUNT=htons(1);
+    
+    // Name Server count, or Authority count, should be 1 for an authority info
+    dns->NSCOUNT=htons(1);    
+    
+    // Additional Record count should be 1 for an additional info
+    dns->ARCOUNT=htons(1);    
+    
     
 }
 ```
