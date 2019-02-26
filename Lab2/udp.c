@@ -54,7 +54,7 @@ struct udpheader {
 };
 struct dnsheader {
     unsigned short int query_id;
-    unsigned short int flags;
+    unsigned short int flags;   // QR(1) Opcode(4) AA(1) TC(1) RD(1) RA(1) Z(3) rcode(4)
     unsigned short int QDCOUNT;
     unsigned short int ANCOUNT;
     unsigned short int NSCOUNT;
