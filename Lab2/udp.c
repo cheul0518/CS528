@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
      ***************************************************************************************/
     
     // Source and destination addresses: IP and port
-//    struct sockaddr_in sin, din;
+//  struct sockaddr_in sin, din;
     struct sockaddr_in sin;
     int one = 1;
     const int *val = &one;
@@ -181,15 +181,15 @@ int main(int argc, char *argv[])
     // The source is redundant, may be used later if needed
     // The address family
     sin.sin_family = AF_INET;
-//    din.sin_family = AF_INET;
+//  din.sin_family = AF_INET;
 
     // Port numbers
     sin.sin_port = htons(33333);
-//    din.sin_port = htons(53);
+//  din.sin_port = htons(53);
 
     // IP addresses
     sin.sin_addr.s_addr = inet_addr(argv[2]); // this is the second argument we input into the program
-//    din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
+//  din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
 
     // Fabricate the IP header or we can use the
     // standard header structures but assign our own values.
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
     while(1)
     {	
         // This is to generate a different query in xxxxx.example.edu
-        //   NOTE: this will have to be updated to only include printable characters
+        // NOTE: this will have to be updated to only include printable characters
         int charnumber;
         charnumber=1+rand()%5;
         *(data+charnumber)+=1;
