@@ -26,7 +26,8 @@
 #include <stdlib.h>
 
 // The packet length
-#define PCKT_LEN 8192
+//#define PCKT_LEN 8192
+#define PCKT_LEN 4096
 #define FLAG_R 0x8400   // DNS response packet: QR:1(Server) AA:1(Authorative)
 #define FLAG_Q 0x0100   // DNS question packet: QR:0(Client) RD:1(Recursion desired)
 
