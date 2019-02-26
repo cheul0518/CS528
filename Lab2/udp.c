@@ -296,7 +296,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     dns->ARCOUNT=htons(1);    
     
     // Query String
-    strncpy(data, dns_data, strlen(dns_data));
+    strcpy(data, dns_data);
     int length = strlen(data) + 1;
 
     // this is for convenience to get the struct type write the 4bytes in a more organized way.
@@ -307,7 +307,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     // Answer Section
     char *ans = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length);
     
-    strncpy(ans, dns_data, strlen(dns_data));
+    strcpy(ans, dns_data);
     int ansLength = strlen(ans) + 1;
     
     struct ansEnd *ansend = (struct ansEnd *)(ans + anslength);
@@ -322,6 +322,17 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     strcpy(ansaddr, "\1\1\1\1");
     int addrlen = strlen(ansaddr);
     
+    // Authorization section
+    char *ns = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen);
+    strcpy(ns, "\7example\3com");
+    int nslength = strlen(ns) + 1;
+    
+    struct ansEnd *nsend = (struct ansEnd *)(ns + nslength);
+    nssend->type = htons(2);
+    nssend->class = htons(1);
+    nssend->ttl_l = htons(0x00);
+    nssend->ttl_h = htons(0xD0);
+    nssend->datalen = htons(23);
     
 }
 ```
