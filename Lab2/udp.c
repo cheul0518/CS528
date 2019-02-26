@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     strcpy(data,"\5aaaaa\7example\3edu");
     int length= strlen(data)+1;
 
-    //this is for convinience to get the struct type write the 4bytes in a more organized way.
+    //this is for convenience to get the struct type write the 4bytes in a more organized way.
     struct dataEnd * end=(struct dataEnd *)(data+length);
     end->type=htons(1);
     end->class=htons(1);
@@ -295,6 +295,13 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     // Additional Record count should be 1 for an additional info
     dns->ARCOUNT=htons(1);    
     
+    strncpy(data, dns_data, strlen(dns_data));
+    int length = strlen(data) + 1;
+
+    // this is for convenience to get the struct type write the 4bytes in a more organized way.
+    struct dataEnd * end=(struct dataEnd *)(data+length);
+    end->type=htons(1);
+    end->class=htons(1);
     
 }
 ```
