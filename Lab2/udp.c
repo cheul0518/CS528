@@ -266,4 +266,18 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+void responsePacket(char *dns_data, char *src_addr, char *dest_add){
+    int sd;
+    char buffer[PCKT_LEN];
+    memset(buffer, 0 ,PCKT_LEN);
+    
+    // Our own headers' structures
+    struct ipheader *ip = (struct ipheader *)buffer;
+    struct udpheader *udp = (struct udpheader *)(buffer + sizeof(struct ipheader));
+    struct dnsheader *dns=(struct dnsheader*)(buffer +sizeof(struct ipheader)+sizeof(struct udpheader));
+
+    // data is the pointer points to the first byte of the dns payload  
+    char *data=(buffer +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));
+    
+}
 ```
