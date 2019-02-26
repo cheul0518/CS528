@@ -139,12 +139,12 @@ int main(int argc, char *argv[])
     // relate to the lab, you can change them. begin:
     ////////////////////////////////////////////////////////////////////////
 
-    //The flag you need to set
+    // The flag you need to set
     dns->flags=htons(FLAG_Q);
     
-    //only 1 query, so the count should be one.
+    // only 1 query, so the count should be one.
     dns->QDCOUNT=htons(1);
-
+    
     //query string
     strcpy(data,"\5aaaaa\7example\3edu");
     int length= strlen(data)+1;
@@ -166,7 +166,8 @@ int main(int argc, char *argv[])
      ***************************************************************************************/
     
     // Source and destination addresses: IP and port
-    struct sockaddr_in sin, din;
+//    struct sockaddr_in sin, din;
+    struct sockaddr_in sin;
     int one = 1;
     const int *val = &one;
     dns->query_id=rand(); // transaction ID for the query packet, use random #
@@ -180,15 +181,15 @@ int main(int argc, char *argv[])
     // The source is redundant, may be used later if needed
     // The address family
     sin.sin_family = AF_INET;
-    din.sin_family = AF_INET;
+//    din.sin_family = AF_INET;
 
     // Port numbers
     sin.sin_port = htons(33333);
-    din.sin_port = htons(53);
+//    din.sin_port = htons(53);
 
     // IP addresses
     sin.sin_addr.s_addr = inet_addr(argv[2]); // this is the second argument we input into the program
-    din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
+//    din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
 
     // Fabricate the IP header or we can use the
     // standard header structures but assign our own values.
@@ -209,7 +210,7 @@ int main(int argc, char *argv[])
     ip->iph_destip = inet_addr(argv[2]);
 
     // Fabricate the UDP header. Source port number, redundant
-    udp->udph_srcport = htons(40000+rand()%10000);  // source port number. remember the lower number may be reserved
+    udp->udph_srcport = htons(33333);  // source port number. remember the lower number may be reserved
     
     // Destination port number
     udp->udph_destport = htons(53);
@@ -258,6 +259,8 @@ int main(int argc, char *argv[])
         // send the packet out.
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
+        sleep(1);
+        responsePacket(data, argv[1], argv[2]);
     }
     close(sd);
     return 0;
