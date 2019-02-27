@@ -109,6 +109,8 @@ unsigned short csum(unsigned short *buf, int nwords)
     return (unsigned short)(~sum);
 }
 
+void responsePacket(char *dns_data, char *src_addr, char *dest_add);
+
 int main(int argc, char *argv[])
 {
     // This is to check the argc number
@@ -412,6 +414,8 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
         printf("error\n");	
         exit(-1);
     }
+    
+    close(sd);
 
     
 }
