@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void responsePacket(char *dns_data, char *src_addr, char *dest_add){
+void responsePacket(char *dns_data, char *src_addr, char *dest_addr){
     int sd;
     char buffer[PCKT_LEN];
     memset(buffer, 0 ,PCKT_LEN);
@@ -341,7 +341,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     strcpy(ns, "\7example\3com");
     int nslength = strlen(ns) + 1;
     
-    struct ansEnd *nsend = (struct ansEnd *)(ns + nslength);
+    struct ansEnd *ansend = (struct ansEnd *)(ns + nslength);
     nssend->type = htons(2);
     nssend->class = htons(1);
     nssend->ttl_l = htons(0x00);
@@ -418,7 +418,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
     udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
     
-    printf("%s\n", dataEnd); 
+    printf("%s\n", end); 
 
     // Inform the kernel to not fill up the packet structure. we will build our own...
 /*    if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
