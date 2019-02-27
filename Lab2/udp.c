@@ -259,8 +259,8 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
-    while(1)
-    {	
+//    while(1)
+//    {	
         // This is to generate a different query in xxxxx.example.edu
         // NOTE: this will have to be updated to only include printable characters
         int charnumber;
@@ -270,11 +270,12 @@ int main(int argc, char *argv[])
         udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader)); // recalculate the checksum for the UDP packet
 
         // send the packet out.
-        if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+/*        if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
         sleep(1);
+        */
         responsePacket(data, argv[1], argv[2]);
-    }
+//    }
     close(sd);
     return 0;
 }
@@ -417,15 +418,15 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
     udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
     
-   
+    printf("%s\n", dataEnd); 
 
     // Inform the kernel to not fill up the packet structure. we will build our own...
-    if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
+/*    if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
     {
         printf("error\n");	
         exit(-1);
     }
-    
+*/    
     close(sd);
 
     
