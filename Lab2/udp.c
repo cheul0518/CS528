@@ -51,6 +51,7 @@ struct udpheader {
     unsigned short int udph_chksum;
 
 };
+
 struct dnsheader {
     unsigned short int query_id;
     unsigned short int flags;   // QR(1) Opcode(4) AA(1) TC(1) RD(1) RA(1) Z(3) rcode(4)
@@ -59,12 +60,23 @@ struct dnsheader {
     unsigned short int NSCOUNT;
     unsigned short int ARCOUNT;
 };
+
 // This structure just for convinience in the DNS packet, because such 4 byte data often appears. 
 struct dataEnd{
     unsigned short int  type;
     unsigned short int  class;
 };
 // total udp header length: 8 bytes (=64 bits)
+
+// Section's end structure
+struct ansEnd
+{
+    unsigned short int type;
+    unsigned short int class;
+    unsigned short int ttl_l;   // lower bits
+    unsigned short int ttl_u;   // upper bits
+    unsigned short int datelen;    
+};
 
 unsigned int checksum(uint16_t *usBuff, int isize)
 {
@@ -315,7 +327,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     ansend->type = htons(1);
     ansend->class = htons(1);
     ansend->ttl_l = htons(0x00);
-    ansend->ttl_h = htons(0xD0);
+    ansend->ttl_u = htons(0xD0);
     ansend->datalen = htons(4);
     
     char *ansaddr = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength);
@@ -332,7 +344,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     nssend->type = htons(2);
     nssend->class = htons(1);
     nssend->ttl_l = htons(0x00);
-    nssend->ttl_h = htons(0xD0);
+    nssend->ttl_u = htons(0xD0);
     nssend->datalen = htons(23);
     
     char *nsname = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength);
@@ -347,7 +359,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     arend->type = htons(1);
     arend->class = htons(1);
     arend->ttl_l = htons(0x00);
-    arend->ttl_h = htons(0xD0);
+    arend->ttl_u = htons(0xD0);
     arend->datalen = htons(4);
     char *araddr = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen + arlength + sizeof(struct ansEnd));
     strcpy(araddr, "\1\1\1\1");
