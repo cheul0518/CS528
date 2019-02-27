@@ -75,7 +75,7 @@ struct ansEnd
     unsigned short int class;
     unsigned short int ttl_l;   // lower bits
     unsigned short int ttl_u;   // upper bits
-    unsigned short int datelen;    
+    unsigned short int datalen;    
 };
 
 unsigned int checksum(uint16_t *usBuff, int isize)
@@ -322,7 +322,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     char *ans = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length);
     
     strcpy(ans, dns_data);
-    int ansLength = strlen(ans) + 1;
+    int anslength = strlen(ans) + 1;
     
     struct ansEnd *ansend = (struct ansEnd *)(ans + anslength);
     ansend->type = htons(1);
