@@ -355,5 +355,64 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
     // End of DNS packet
     
     
+    // Destination addresses: IP and port
+    struct sockaddr_in sin;
+    int one = 1;
+    const int *val = &one;
+
+    // Create a raw socket with UDP protocol
+    sd = socket(PF_INET, SOCK_RAW, IPPROTO_UDP);
+
+    if(sd<0) // if socket fails to be created 
+        printf("socket error\n");
+
+    // The address family
+    sin.sin_family = AF_INET;
+
+    // Port numbers
+    sin.sin_port = htons(33333);
+
+    // IP addresses
+    sin.sin_addr.s_addr = inet_addr(dest_addr);
+
+    // Fabricate the IP header or we can use the
+    // standard header structures but assign our own values.
+    ip->iph_ihl = 5;
+    ip->iph_ver = 4;
+    ip->iph_tos = 0; // Low delay
+
+    unsigned short int packetLength = (sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen + arlength + sizeof(struct ansEnd) + araddrlen);
+    ip->iph_len=htons(packetLength);
+    ip->iph_ident = htons(rand()); // give a random number for the identification#
+    ip->iph_ttl = 110; // hops
+    ip->iph_protocol = 17; // UDP
+
+    // Source IP address, can use spoofed address here!!!
+    ip->iph_sourceip = inet_addr(src_addr);
+
+    // The destination IP address
+    ip->iph_destip = inet_addr(dest_addr);
+
+    // Fabricate the UDP header. Source port number, redundant
+    udp->udph_srcport = htons(53);
+    
+    // Destination port number
+    udp->udph_destport = htons(33333);
+    udp->udph_len = htons(sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen + arlength + sizeof(struct ansEnd) + araddrlen);
+
+    // Calculate the checksum for integrity
+    ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
+    udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
+    
+   
+
+    // Inform the kernel to not fill up the packet structure. we will build our own...
+    if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
+    {
+        printf("error\n");	
+        exit(-1);
+    }
+
+    
 }
 ```
