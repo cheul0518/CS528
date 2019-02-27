@@ -1,5 +1,3 @@
-```
-
 // ----udp.c------
 // For use with the Remote DNS Cache Poisoning Attack Lab
 // Sample program used to spoof lots of different DNS queries to the victim.
@@ -420,5 +418,3 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_add){
 
     
 }
-
-```
