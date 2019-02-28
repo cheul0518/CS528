@@ -242,8 +242,15 @@ int main(int argc, char *argv[])
     length_res+=10; 
     strcpy(data_res+length_res, "\1\1\1\1");
     length_res+=5;
-    strcpy(data_res+length_res, "\0\41\16\0\0\0\136\0\0\0");
-    length_res+=10;        
+    
+    struct dataEnd *end_res_end = (struct dataEnd *)(data_res+length_res);
+    end_res_end->type = htons(41);
+    end_res_end->class = htons(4096);
+    length_res+=6;
+
+    struct dataEnd *end_res_end2 = (struct dataEnd *)(data_res+length_res);
+    end_res_end2->type = htons(34816);
+    end_res_end2->class = htons(0);
     
 
     /////////////////////////////////////////////////////////////////////
