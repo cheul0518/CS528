@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     strcpy(data_res+length_res, "\1\1\1\1");
     length_res+=4;
     
-    strcpy(data_res+length_res, "\xc0\x12");
+    strcpy(data_res+length_res, "\xC0\x12");
     length_res+=2;
     
     struct sesEnd * end_res_ns = (struct sesEnd *)(data_res+length_res);
