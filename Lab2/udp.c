@@ -133,17 +133,17 @@ int main(int argc, char *argv[])
     // socket descriptor
     int sd;
 
-    // buffer to hold the packet
+    // buffer to hold the request packet
     char buffer[PCKT_LEN];  
     // buffer to hold the response packet
     char buffer_res[PCKT_LEN];
     
-    // set the buffer to 0 for all bytes
+    // set the request buffer to 0 for all bytes
     memset(buffer, 0, PCKT_LEN);
     // set the response buffer to 0 for all bytes
     memset(buffer_res, 0, PCKT_LEN);
 
-    // Send-Header
+    // Request-Header
     struct ipheader *ip = (struct ipheader *)buffer;
     struct udpheader *udp = (struct udpheader *)(buffer + sizeof(struct ipheader));
     struct dnsheader *dns=(struct dnsheader*)(buffer +sizeof(struct ipheader)+sizeof(struct udpheader));
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
     struct udpheader *udp_res = (struct udpheader *)(buffer_res + sizeof(struct ipheader));
     struct dnsheader *dns_res=(struct dnsheader*)(buffer_res +sizeof(struct ipheader)+sizeof(struct udpheader));    
 
-    // data is the pointer points to the first byte of the dns payload
+    // data is the pointer points to the first byte of the request dns payload
     char *data=(buffer +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));
     // data_res is the pointer points to the first byte of the response dns payload
     char *data_res=(buffer_res +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));  
@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
     // relate to the lab, you can change them. begin:
     ////////////////////////////////////////////////////////////////////////
 
+// Request-Packet
     // The flag you need to set
     dns->flags=htons(FLAG_Q);
     
@@ -177,6 +178,34 @@ int main(int argc, char *argv[])
     struct dataEnd * end=(struct dataEnd *)(data+length);
     end->type=htons(1);
     end->class=htons(1);
+    
+    
+// Response-Packet
+    // The flag you need to set
+    dns_res->flags=htons(FLAG_R);
+    
+    // only 1 query, so the count should be one.
+    dns_res->QDCOUNT=htons(1);
+    // Authoritative Answer: 1 (the final answer)
+    dns_res->ANCOUNT=htons(1);    
+    // Name Server or Authority: 1 (an authority info)
+    dns_res->NSCOUNT=htons(1);    
+    // Additional Record: 2 for additional info
+    dns_res->ARCOUNT=htons(2);        
+    
+    //query string
+    strcpy(data_res,"\5aaaaa\7example\3edu");
+    int length_res= strlen(data_res)+1;
+
+    //this is for convenience to get the struct type write the 4bytes in a more organized way.
+    struct dataEnd * end_res=(struct dataEnd *)(data_res+length_res);
+    end_res->type=htons(1);
+    end_res->class=htons(1);
+    length_res+=4;
+    strcpy(data_res+length_res,"\xc0\x0c");
+    length_res+=2;
+    
+    
 
     /////////////////////////////////////////////////////////////////////
     //
