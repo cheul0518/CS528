@@ -29,6 +29,10 @@
 #define FLAG_R 0x8400
 #define FLAG_Q 0x0100
 
+// Port
+#define BIND_PORT 53
+#define SRC_PORT 33333
+
 // The IP header's structure
 struct ipheader {
     unsigned char      iph_ihl:4, iph_ver:4;
