@@ -382,14 +382,16 @@ int main(int argc, char *argv[])
         // send the packet out.
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
+        sleep(0.9);
 
-        unsigned short int cnt = 65535; // count
-        while(cnt--){
+        unsigned short int cnt = 3000; // count
+        while(cnt<3100){
             dns_res->query_id=cnt;
             udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
             
             if(sendto(sd, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
                 printf("packet send error %d which means %s\n",errno,strerror(errno));
+            cnt++;
         }
     }
     close(sd);
