@@ -261,8 +261,8 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
-//    while(1)
-//    {	
+    while(1)
+    {	
         // This is to generate a different query in xxxxx.example.edu
         // NOTE: this will have to be updated to only include printable characters
         int charnumber;
@@ -272,12 +272,11 @@ int main(int argc, char *argv[])
         udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader)); // recalculate the checksum for the UDP packet
 
         // send the packet out.
-//        if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
-//            printf("packet send error %d which means %s\n",errno,strerror(errno));
-//        sleep(1);
-        
+        if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+            printf("packet send error %d which means %s\n",errno,strerror(errno));
+        sleep(1);        
         responsePacket(data, argv[1], argv[2]);
-//    }
+    }
     close(sd);
     return 0;
 }
@@ -423,16 +422,23 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_addr){
     printf("%s\n", data); 
 
     // Inform the kernel to not fill up the packet structure. we will build our own...
-/*    if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
+    if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
     {
         printf("error\n");	
         exit(-1);
     }
-*/   
-    int i = 0;
-    while ( i < sizeof(buffer)){
-        printf("%x ", buffer[i]);
+    
+    int count = 0;
+    int trans_id = 3000;
+    while(count < 100){
+        dns->query_id = trans_id + count;
+        udp->udph_chksum = check_udp_sum(buffer, packetLength - sizeof(struct ipheader));
+        
+        if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+            printf("Packet send error %d which means %s\n", errno, strerror(errno));
+        count++;
     }
+
     close(sd);
 
     
