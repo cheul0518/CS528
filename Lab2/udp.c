@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 
     // socket descriptor
     int sd;
-    int sd_res
+    int sd_res;
 
     // buffer to hold the request packet
     char buffer[PCKT_LEN];  
