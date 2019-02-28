@@ -205,6 +205,17 @@ int main(int argc, char *argv[])
     strcpy(data_res+length_res,"\xc0\x0c");
     length_res+=2;
     
+    struct ansEnd * ansend = (struct ansEnd *)(data_res+length_res);
+    ansend->type=htons(1);
+    ansend->class=htons(1);
+    ansend->ttl_l=htons(1);
+    ansend->ttl_u=htons(1);
+    ansend->datalen=htons(4);
+    length_res+=10;
+    
+    
+
+    
     
 
     /////////////////////////////////////////////////////////////////////
