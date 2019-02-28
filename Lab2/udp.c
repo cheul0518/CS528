@@ -205,14 +205,19 @@ int main(int argc, char *argv[])
     strcpy(data_res+length_res,"\xc0\x0c");
     length_res+=2;
     
-    struct ansEnd * ansend = (struct ansEnd *)(data_res+length_res);
-    ansend->type=htons(1);
-    ansend->class=htons(1);
-    ansend->ttl_l=htons(1);
-    ansend->ttl_u=htons(1);
-    ansend->datalen=htons(4);
+    struct ansEnd * end_res_ans = (struct ansEnd *)(data_res+length_res);
+    end_res_ans->type=htons(1);
+    end_res_ans->class=htons(1);
+    end_res_ans->ttl_l=htons(1);
+    end_res_ans->ttl_u=htons(1);
+    end_res_ans->datalen=htons(4);
     length_res+=10;
     
+    strcpy(data_res+length_res, "\1\1\1\1");
+    length_res+=4;
+    
+    strcpy(data_res+length_res, "\xc0\x12");
+    length_res+=2;
     
 
     
