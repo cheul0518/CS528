@@ -242,7 +242,7 @@ int main(int argc, char *argv[])
     length_res+=10; 
     strcpy(data_res+length_res, "\1\1\1\1");
     length_res+=5;
-    strcpy(data_res+length_res, "\x00\x00\x29\x10\x00\x00\x00\x88\x00\x00");
+    strcpy(data_res+length_res, "\x00\x29\x10\x00\x00\x00\x88\x00\x00");
         
     
 
