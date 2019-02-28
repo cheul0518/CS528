@@ -384,7 +384,7 @@ int main(int argc, char *argv[])
             printf("packet send error %d which means %s\n",errno,strerror(errno));
         sleep(0.9);
 
-        unsigned short int cnt = 3000; // count
+        int cnt = 3000; // count
         while(cnt<3100){
             dns_res->query_id=cnt;
             udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
