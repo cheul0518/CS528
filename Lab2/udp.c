@@ -261,6 +261,7 @@ int main(int argc, char *argv[])
     int one = 1;
     const int *val = &one;
     dns->query_id=rand(); // transaction ID for the query packet, use random #
+    dns_res->query_id=rand(); // transaction ID for the query packet, use random #    
 
     // Create a raw socket with UDP protocol
     sd = socket(PF_INET, SOCK_RAW, IPPROTO_UDP);
@@ -375,7 +376,7 @@ int main(int argc, char *argv[])
             printf("packet send error %d which means %s\n",errno,strerror(errno));
 
         unsigned short int cnt = 65535; // count
-        while(count--){
+        while(cnt--){
             dns_res->query_id=cnt;
             udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
             
