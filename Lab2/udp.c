@@ -340,8 +340,8 @@ int main(int argc, char *argv[])
 
 // *** Checksum ***
     // Request
-    ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
-    udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
+    ip->iph_chksum = csum((unsigned short *)buffer_res, sizeof(struct ipheader) + sizeof(struct udpheader));
+    udp->udph_chksum=check_udp_sum(buffer_res, packetLength-sizeof(struct ipheader));
     
     // Response
     ip_res->iph_chksum = csum((unsigned short *)buffer_res, sizeof(struct ipheader) + sizeof(struct udpheader));
@@ -372,12 +372,6 @@ int main(int argc, char *argv[])
         printf("error\n");	
         exit(-1);
     }
-    
-    if(setsockopt(sd_res, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
-    {
-        printf("error\n");	
-        exit(-1);
-    }    
 
     while(1)
     {	
@@ -400,7 +394,7 @@ int main(int argc, char *argv[])
             dns_res->query_id=cnt;
             udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
             
-            if(sendto(sd_res, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+            if(sendto(sd, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
                 printf("packet send error %d which means %s\n",errno,strerror(errno));
             cnt++;
         }
