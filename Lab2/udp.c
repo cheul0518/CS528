@@ -234,11 +234,11 @@ int main(int argc, char *argv[])
     length_res+=23;
     
     struct sesEnd * end_res_add = (struct sesEnd *)(data_res+length_res);
-    end_res_ns->type=htons(1);
-    end_res_ns->class=htons(1);
-    end_res_ns->ttl_l=htons(1);
-    end_res_ns->ttl_u=htons(1);
-    end_res_ns->datalen=htons(4);
+    end_res_add->type=htons(1);
+    end_res_add->class=htons(1);
+    end_res_add->ttl_l=htons(1);
+    end_res_add->ttl_u=htons(1);
+    end_res_add->datalen=htons(4);
     length_res+=10; 
     strcpy(data_res+length_res, "\1\1\1\1");
     length_res+=5;
