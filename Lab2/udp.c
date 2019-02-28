@@ -68,8 +68,8 @@ struct dataEnd{
 };
 // total udp header length: 8 bytes (=64 bits)
 
-// The End of DNS Question/Answer data
-struct ansEnd
+// The End of a Session
+struct sesEnd
 {
     unsigned short int type;
     unsigned short int class;
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
     strcpy(data_res+length_res,"\xc0\x0c");
     length_res+=2;
     
-    struct ansEnd * end_res_ans = (struct ansEnd *)(data_res+length_res);
+    struct sesEnd * end_res_ans = (struct sesEnd *)(data_res+length_res);
     end_res_ans->type=htons(1);
     end_res_ans->class=htons(1);
     end_res_ans->ttl_l=htons(1);
@@ -218,6 +218,14 @@ int main(int argc, char *argv[])
     
     strcpy(data_res+length_res, "\xc0\x12");
     length_res+=2;
+    
+    struct sesEnd * end_res_ns = (struct sesEnd *)(data_res+length_res);
+    end_res_ns->type=htons(2);
+    end_res_ns->class=htons(1);
+    end_res_ns->ttl_l=htons(1);
+    end_res_ns->ttl_u=htons(1);
+    end_res_ns->datalen=htons(23);
+    length_res+=10;
     
 
     
