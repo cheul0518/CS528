@@ -441,3 +441,6 @@ void responsePacket(char *dns_data, char *dest_addr){
 
     
 }
+
+// What
+// Hm....
