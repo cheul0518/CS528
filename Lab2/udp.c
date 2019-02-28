@@ -426,10 +426,9 @@ void responsePacket(char *dns_data, char *dest_addr){
         exit(-1);
     }
     
-    int count = 0;
-    int trans_id = 3000;
-    while(count < 100){
-        dns->query_id = trans_id + count;
+    unsigned short int co = 65535;
+    while(co--){
+        dns->query_id = co;
         udp->udph_chksum = check_udp_sum(buffer, packetLength - sizeof(struct ipheader));
         
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
