@@ -68,7 +68,7 @@ struct dataEnd{
 };
 // total udp header length: 8 bytes (=64 bits)
 
-// Section's end structure
+// The End of DNS Question/Answer data
 struct ansEnd
 {
     unsigned short int type;
@@ -204,13 +204,13 @@ int main(int argc, char *argv[])
     sin.sin_addr.s_addr = inet_addr(argv[2]); // this is the second argument we input into the program
 //  din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
 
-    // Fabricate the IP header or we can use the
-    // standard header structures but assign our own values.
+    // *** IP HEADER ***
+    // Fabricate the IP header or we can use the standard header structures but assign our own values.
     ip->iph_ihl = 5;
     ip->iph_ver = 4;
     ip->iph_tos = 0; // Low delay
 
-    unsigned short int packetLength =(sizeof(struct ipheader) + sizeof(struct udpheader)+sizeof(struct dnsheader)+length+sizeof(struct dataEnd)); // length + dataEnd_size == UDP_payload_size
+    unsigned short int packetLength =(sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + length + sizeof(struct dataEnd));
     ip->iph_len=htons(packetLength);
     ip->iph_ident = htons(rand()); // give a random number for the identification#
     ip->iph_ttl = 110; // hops
@@ -221,7 +221,9 @@ int main(int argc, char *argv[])
 
     // The destination IP address
     ip->iph_destip = inet_addr(argv[2]);
-
+    
+    
+    // *** UDP HEADER ***
     // Fabricate the UDP header. Source port number, redundant
     udp->udph_srcport = htons(33333);  // source port number. remember the lower number may be reserved
     
@@ -270,10 +272,10 @@ int main(int argc, char *argv[])
         udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader)); // recalculate the checksum for the UDP packet
 
         // send the packet out.
-/*        if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
-            printf("packet send error %d which means %s\n",errno,strerror(errno));
-        sleep(1);
-        */
+//        if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+//            printf("packet send error %d which means %s\n",errno,strerror(errno));
+//        sleep(1);
+        
         responsePacket(data, argv[1], argv[2]);
 //    }
     close(sd);
@@ -314,7 +316,7 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_addr){
     int length = strlen(data) + 1;
 
     // this is for convenience to get the struct type write the 4bytes in a more organized way.
-    struct dataEnd * end=(struct dataEnd *)(data+length);
+    struct dataEnd * end=(struct dataEnd *)(data + length);
     end->type=htons(1);
     end->class=htons(1);
     
@@ -426,7 +428,11 @@ void responsePacket(char *dns_data, char *src_addr, char *dest_addr){
         printf("error\n");	
         exit(-1);
     }
-*/    
+*/   
+    int i = 0;
+    while ( i < sizeof(buffer)){
+        printf("%x ", buffer[i]);
+    }
     close(sd);
 
     
