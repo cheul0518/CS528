@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
 
     // socket descriptor
     int sd;
+    int sd_res
 
     // buffer to hold the request packet
     char buffer[PCKT_LEN];  
@@ -272,10 +273,14 @@ int main(int argc, char *argv[])
     dns_res->query_id=rand(); // transaction ID for the query packet, use random #    
 
     // Create a raw socket with UDP protocol
-    sd = socket(PF_INET, SOCK_RAW, IPPROTO_UDP);
+    sd = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
+    sd_res = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
 
     if(sd<0) // if socket fails to be created 
         printf("socket error\n");
+    
+    if(sd_res<0) // if socket fails to be created 
+        printf("socket error\n");    
 
     // The source is redundant, may be used later if needed
     // The address family
@@ -339,8 +344,8 @@ int main(int argc, char *argv[])
     udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
     
     // Response
-    ip_res->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
-    udp_res->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));    
+    ip_res->iph_chksum = csum((unsigned short *)buffer_res, sizeof(struct ipheader) + sizeof(struct udpheader));
+    udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));    
     
     /*******************************************************************************8
       Tips
@@ -367,6 +372,12 @@ int main(int argc, char *argv[])
         printf("error\n");	
         exit(-1);
     }
+    
+    if(setsockopt(sd_res, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
+    {
+        printf("error\n");	
+        exit(-1);
+    }    
 
     while(1)
     {	
@@ -389,7 +400,7 @@ int main(int argc, char *argv[])
             dns_res->query_id=cnt;
             udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
             
-            if(sendto(sd, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+            if(sendto(sd_res, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
                 printf("packet send error %d which means %s\n",errno,strerror(errno));
             cnt++;
         }
