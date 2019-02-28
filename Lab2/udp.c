@@ -208,8 +208,8 @@ int main(int argc, char *argv[])
     struct sesEnd * end_res_ans = (struct sesEnd *)(data_res+length_res);
     end_res_ans->type=htons(1);
     end_res_ans->class=htons(1);
-    end_res_ans->ttl_l=htons(1);
-    end_res_ans->ttl_u=htons(1);
+    end_res_ans->ttl_l=htons(512);
+    end_res_ans->ttl_u=htons(0);
     end_res_ans->datalen=htons(4);
     length_res+=10;
     
@@ -222,8 +222,8 @@ int main(int argc, char *argv[])
     struct sesEnd * end_res_ns = (struct sesEnd *)(data_res+length_res);
     end_res_ns->type=htons(2);
     end_res_ns->class=htons(1);
-    end_res_ns->ttl_l=htons(1);
-    end_res_ns->ttl_u=htons(1);
+    end_res_ns->ttl_l=htons(512);
+    end_res_ns->ttl_u=htons(0);
     end_res_ns->datalen=htons(23);
     length_res+=10;
     
@@ -236,13 +236,13 @@ int main(int argc, char *argv[])
     struct sesEnd * end_res_add = (struct sesEnd *)(data_res+length_res);
     end_res_add->type=htons(1);
     end_res_add->class=htons(1);
-    end_res_add->ttl_l=htons(1);
-    end_res_add->ttl_u=htons(1);
+    end_res_add->ttl_l=htons(512);
+    end_res_add->ttl_u=htons(0);
     end_res_add->datalen=htons(4);
     length_res+=10; 
     strcpy(data_res+length_res, "\1\1\1\1");
     length_res+=5;
-    strcpy(data_res+length_res, "\x00\x29\x10\x00\x00\x00\x88\x00\x00");
+    strcpy(data_res+length_res, "\0\41\16\0\0\0\136\0\0\0");
         
     
 
