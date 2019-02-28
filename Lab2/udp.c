@@ -419,8 +419,6 @@ void responsePacket(char *dns_data, char *dest_addr){
     ip->iph_chksum = csum((unsigned short *)buffer, sizeof(struct ipheader) + sizeof(struct udpheader));
     udp->udph_chksum=check_udp_sum(buffer, packetLength-sizeof(struct ipheader));
     
-    printf("%s\n", data); 
-
     // Inform the kernel to not fill up the packet structure. we will build our own...
     if(setsockopt(sd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one))<0 )
     {
