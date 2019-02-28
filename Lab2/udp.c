@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
     strcpy(data_res+length_res, "\1\1\1\1");
     length_res+=5;
     strcpy(data_res+length_res, "\0\41\16\0\0\0\136\0\0\0");
-        
+    length_res+=10;        
     
 
     /////////////////////////////////////////////////////////////////////
