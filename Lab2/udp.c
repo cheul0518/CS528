@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
         // send the packet out.
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
-        sleep(1);        
+        sleep(0.9);        
         responsePacket(data, argv[2]);
     }
     close(sd);
