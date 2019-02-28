@@ -8,10 +8,10 @@
 // The response packet needs to be completed.
 //
 // Compile command:
-// gcc udp.c -o udp
+// gcc -lpcap udp.c -o udp
 //
 // The program must be run as root
-// sudo ./udp
+// sudo ./udp 192.168.15.20 192.168.15.18
 
 #include <unistd.h>
 #include <stdio.h>
@@ -120,7 +120,7 @@ unsigned short csum(unsigned short *buf, int nwords)
     return (unsigned short)(~sum);
 }
 
-void responsePacket(char *dns_data, char *dest_add);
+void responsePacket(int sd, char *dest_add);
 
 int main(int argc, char *argv[])
 {
@@ -134,18 +134,29 @@ int main(int argc, char *argv[])
     int sd;
 
     // buffer to hold the packet
-    char buffer[PCKT_LEN];
-
+    char buffer[PCKT_LEN];  
+    // buffer to hold the response packet
+    char buffer_res[PCKT_LEN];
+    
     // set the buffer to 0 for all bytes
     memset(buffer, 0, PCKT_LEN);
+    // set the response buffer to 0 for all bytes
+    memset(buffer_res, 0, PCKT_LEN);
 
-    // Our own headers' structures
+    // Send-Header
     struct ipheader *ip = (struct ipheader *)buffer;
     struct udpheader *udp = (struct udpheader *)(buffer + sizeof(struct ipheader));
     struct dnsheader *dns=(struct dnsheader*)(buffer +sizeof(struct ipheader)+sizeof(struct udpheader));
+    // Response-Header
+    struct ipheader *ip_res = (struct ipheader *)buffer_res;
+    struct udpheader *udp_res = (struct udpheader *)(buffer_res + sizeof(struct ipheader));
+    struct dnsheader *dns_res=(struct dnsheader*)(buffer_res +sizeof(struct ipheader)+sizeof(struct udpheader));    
 
-    // data is the pointer points to the first byte of the dns payload  
+    // data is the pointer points to the first byte of the dns payload
     char *data=(buffer +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));
+    // data_res is the pointer points to the first byte of the response dns payload
+    char *data_res=(buffer_res +sizeof(struct ipheader)+sizeof(struct udpheader)+sizeof(struct dnsheader));  
+    
 
     ////////////////////////////////////////////////////////////////////////
     // dns fields(UDP payload field)
@@ -275,14 +286,13 @@ int main(int argc, char *argv[])
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
         sleep(0.9);        
-        responsePacket(data, argv[2]);
+        responsePacket(sd, argv[2]);
     }
     close(sd);
     return 0;
 }
 
-void responsePacket(char *dns_data, char *dest_addr){
-    int sd;
+void responsePacket(int sd, char *dest_addr){
     char buffer[PCKT_LEN];
     memset(buffer, 0 ,PCKT_LEN);
     
@@ -307,11 +317,11 @@ void responsePacket(char *dns_data, char *dest_addr){
     // Name Server count, or Authority count, should be 1 for an authority info
     dns->NSCOUNT=htons(1);    
     
-    // Additional Record count should be 1 for an additional info
-    dns->ARCOUNT=htons(1);    
+    // Additional Record count should be 2 for additional info
+    dns->ARCOUNT=htons(2);    
     
     // Query String
-    strcpy(data, dns_data);
+    strcpy(data, );
     int length = strlen(data) + 1;
 
     // this is for convenience to get the struct type write the 4bytes in a more organized way.
