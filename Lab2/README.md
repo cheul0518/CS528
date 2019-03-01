@@ -26,12 +26,11 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 	- Repeat the above steps until this attack's successfully complete: different random host names and the same ID range.
 	
 2. Result
-
+	- ns.dnslabattacker.net is observed in the server's cache so the attack was successful.
+	- Below are the pictures that proov the server's poisoned.
 <img src = "images/dumpDotDB2.png" width ="700">
 
 <img src = "images/dumpDotdb.png" width = "700">
-
-
 
 
 <br />
