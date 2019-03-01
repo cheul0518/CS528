@@ -28,7 +28,7 @@ I dig "www.example.com" on the user VM in order to verify Kaminsky DNS attack is
 
 <img src = "images/11.png" width = "700">
 
-This is because the DNS server finds out that the domain name "dnslabattacker.net" doesn't exist, and marks the NS entry invalid. 
+This is because the DNS server finds out that the domain name "dnslabattacker.net" doesn't exist, and marks the NS entry invalid. An IP address for the name server "ns.dnslabattacker.net" cannot be provided even if you attach it as an additional record in your spoofed response. The bailiwick checking plays a role of ignorning any records that are not within the same domain of the question. Hence ns.dnslabattacker.net cannot be answered in the additional section.
 
 <br />
 <br />
