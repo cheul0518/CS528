@@ -110,5 +110,6 @@ mail		IN	A	1.1.1.2
 <img src = "images/2.png" width = "700">
 
 **6. DNS_user**
-- sudo su
+- dig www.example.com in order to make sure your attack's indeed successful.
+- Below is the image to help understanding:
 <img src = "images/3.png" width = "700">
