@@ -13,8 +13,6 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 4. Even if the spoofed DNS response fails, it doesn't matter, because the next time, the attacker will query a different name, so Apollo has to send out another query, giving the attack another chance to do the spoofing attack. This effectively defeats the caching effect.
 5. If the attack succeeds, in Apollo's DNS cache, the name server for example.com will be replaced by the attacker's name server "ns.dnslabattacker.net".
 
-<br />
-<br />
 
 ### Task1: Remote Cache Poisoning
 
