@@ -92,7 +92,14 @@ mail		IN	A	1.1.1.2
 **3. Apollo and DNS_attacker**
 - restart both Apollo and DNS_attacker's DNS servers; otherwise, the modification will not take effect.
 
+**4. DNS_attacker**
+- sudo su
+- ./udp 192.168.15.20 192.168.15.18
+- The first argument is your dns_attacker IP address. The second argument is your Apollo IP address
+
 <img src = "images/1.png" width = "700">
+
+<br />
 
 <img src = "images/2.png" width = "700">
 
