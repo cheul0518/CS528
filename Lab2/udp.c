@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     }
 
     // socket descriptor
-    int sd;
+    int sd; // You can even use sd_res for the response packet. Either way works.    
 
     // buffer to hold the request packet
     char buffer[PCKT_LEN];  
