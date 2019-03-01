@@ -2,7 +2,7 @@
 
 #### Task1: Remote Cache Poisonin
 
-<img src = "/images/fig3.png">
+<img src = "images/fig3.png">
 
 
 
