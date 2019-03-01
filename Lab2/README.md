@@ -35,7 +35,7 @@ You may say "Hey, include an additional record for the IP address for "ns.dnslab
 
 In this project, we can luckily handle this issue by simply adding some codes on both the Server and Attacker. Specifically, we store this IP address within resolver's name zone.
 
-**1. In the DNS server Apollo**
+**1. Apollo (DNS server)**
 - sudo su
 - cd /etc/bind/
 - nano -c named.conf.default-zones
@@ -59,6 +59,18 @@ $TTL 604800
 @ IN NS ns.dnslabattacker.net.
 @ IN A 192.168.15.20
 @ IN AAAA ::1
+```
+
+**2.DNS_attacker (attacker)**
+- sudo su
+- cd /etc/bind/
+- nano -c named.conf.local
+- Add the following entry:
+```c
+zone "example.com" {
+	type master;
+	file "/etc/bind/example.com.db";
+};
 ```
 
 <img src = "images/1.png" width = "700">
