@@ -11,7 +11,7 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 2. Since the mapping is unavailable in Apollo's DNS cache, Apollo sends a DNS query to the name server of the example.com domain.
 3. While Apollo waits for the reply, the attacker floods Apollo with a stream of spoofed DNS response, each trying a different transaction ID, hoping one is correct.
 4. Even if the spoofed DNS response fails, it doesn't matter, because the next time, the attacker will query a different name, so Apollo has to send out another query, giving the attack another chance to do the spoofing attack. This effectively defeats the caching effect.
-5. If the attack succeeds, in Apollo's DNS cache, the name server for example.com will be replaced by the attacker's name server ns.dnslabattacker.net.
+5. If the attack succeeds, in Apollo's DNS cache, the name server for example.com will be replaced by the attacker's name server "ns.dnslabattacker.net".
 
 <br />
 <br />
