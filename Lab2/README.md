@@ -30,7 +30,7 @@ I dig "www.example.com" on the user VM in order to verify Kaminsky DNS attack is
 
 When the DNS server receives the DNS query, it searches for example.com's NS record in its cache, and finds "ns.dnslabattacker.net". It will therefore send a DNS query to "ns.dnslabattacker.net". But, before sending the query, the server needs to know the IP address of "ns.dnslabattacker.net". A seperate DNS query is issued, and then the DNS server finds out the domain name "dnslabattacker.net" doesn't exist. The server shortly marks the NS entry invalid. 
 
-You may say "Hey, include an additional record for the IP address for "ns.dnslabattacker.net" when forging the DNS response". Unfortunately, an IP address for the name server "ns.dnslabattacker.net" cannot be provided even if you attach it as an additional record in your spoofed response. The bailiwick checking plays a role of ignorning any records that are not within the same domain of the question. Hence "ns.dnslabattacker.net" cannot be answered in the additional section.
+You may say "Hey, include an additional record for the IP address for "ns.dnslabattacker.net" when forging the DNS response". Unfortunately, an IP address for the name server "ns.dnslabattacker.net" cannot be provided even if you actually attach it as an additional record in your spoofed response. The bailiwick checking plays a role of ignorning any records that are not within the same domain of the question. Hence "ns.dnslabattacker.net" cannot be answered in the additional section.
 
 <br />
 <br />
