@@ -103,6 +103,7 @@ mail		IN	A	1.1.1.2
 **5. Apollo**
 - sudo su
 - rndc dumpdb -cache (or rndc -cache dumpdb)
+	- The above command is for dumping bind's cache into /var/cache/bind/dump.db where you set up in /etc/bind/named.conf.options when configuring the local DNS server Apollo. 
 - cat var/cache/bind/dump.db | grep attacker
 	- This is for catching a line that contains the word, attacker. If your poisoning attack was successful, then your malicious name server, "ns.dnslabattacker.net", would be injected in the file; otherwise your attack failed, and nothing would appear.
 - Below is the image to help understanding:
