@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
     int one = 1;
     const int *val = &one;
     dns->query_id=rand(); // transaction ID for the query packet, use random #
-    dns_res->query_id=rand(); // transaction ID for the query packet, use random #    
+    dns_res->query_id=dns->query_id; // transaction ID for the query packet, use random #    
 
     // Create a raw socket with UDP protocol
     sd = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
@@ -328,20 +328,20 @@ int main(int argc, char *argv[])
 
 // *** UDP HEADER ***
     // Request
-    udp->udph_srcport = htons(40000+rand()%10000);
+    udp->udph_srcport = htons(33333);
     udp->udph_destport = htons(53);
     udp->udph_len = htons(sizeof(struct udpheader)+sizeof(struct dnsheader)+length+sizeof(struct dataEnd));
     
     // Response
-    udp_res->udph_srcport = htons(33333);
-    udp_res->udph_destport = htons(53);
+    udp_res->udph_srcport = htons(53);
+    udp_res->udph_destport = htons(33333);
     udp_res->udph_len = htons(sizeof(struct udpheader)+sizeof(struct dnsheader)+length_res+sizeof(struct dataEnd));    
     
 
 // *** Checksum ***
     // Request
     ip->iph_chksum = csum((unsigned short *)buffer_res, sizeof(struct ipheader) + sizeof(struct udpheader));
-    udp->udph_chksum=check_udp_sum(buffer_res, packetLength-sizeof(struct ipheader));
+    udp->udph_chksum=check_udp_sum(buffer, packet-sizeof(struct ipheader));
     
     // Response
     ip_res->iph_chksum = csum((unsigned short *)buffer_res, sizeof(struct ipheader) + sizeof(struct udpheader));
