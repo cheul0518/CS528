@@ -20,7 +20,14 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 
 
 
+<br />
 
 ### Task2: Result Verification
 
+<img src = "images/11.png" width = "700">
 
+<img src = "images/1.png" width = "700">
+
+<img src = "images/2.png" width = "700">
+
+<img src = "images/3.png" width = "700">
