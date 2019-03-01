@@ -28,7 +28,7 @@ I dig "www.example.com" on the user VM in order to verify Kaminsky DNS attack is
 
 <img src = "images/11.png" width = "700">
 
-This is because the DNS server Apollo finds out that the domain name dnslabattacker.net doesn't exist, and marks the NS entry invalid. 
+This is because the DNS server finds out that the domain name "dnslabattacker.net" doesn't exist, and marks the NS entry invalid. 
 
 <br />
 <br />
