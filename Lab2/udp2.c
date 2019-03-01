@@ -23,6 +23,8 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <time.h>
+#include <getopt.h>
 
 // The packet length
 #define PCKT_LEN 8192
@@ -119,8 +121,6 @@ unsigned short csum(unsigned short *buf, int nwords)
     sum += (sum >> 16);
     return (unsigned short)(~sum);
 }
-
-void responsePacket(int sd, char *dest_add);
 
 int main(int argc, char *argv[])
 {
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
     ip_res->iph_ttl = 110; // hops
     ip_res->iph_protocol = 17; // UDP
     // Source IP address, can use spoofed address here!!!
-    ip_res->iph_sourceip = inet_addr("199.43.135.53");
+    ip_res->iph_sourceip = inet_addr("199.43.132.53");
     // The destination IP address
     ip_res->iph_destip = inet_addr(argv[2]);    
     
@@ -394,7 +394,7 @@ int main(int argc, char *argv[])
             dns_res->query_id=cnt;
             udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
             
-            if(sendto(sd, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+            if(sendto(sd_res, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
                 printf("packet send error %d which means %s\n",errno,strerror(errno));
             cnt++;
         }
