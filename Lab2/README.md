@@ -27,8 +27,9 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 I dig "www.example.com" on the user VM in order to verify Kaminsky DNS attack is indeed successful. However it turns out that the attack is incomplete. Look at the picture below: 
 
 <img src = "images/11.png" width = "700">
+When the DNS server Apollo receive the DNS query, it searches for example.com's NS record in its cache, and finds ns.dnslabattacker.net. It will therefore send a DNS query to ns.dnslabattacker.net. However, before
 
-AAA
+<br />
 
 <img src = "images/1.png" width = "700">
 
