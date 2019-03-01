@@ -20,18 +20,15 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 	- Send a DNS query to Apollo for a random host name in the example.com domain. The host name must be a non-existing name such as aaaaa.example.com. 
 	- Predict the random ID range, where the authentic ID will be, genereated by the resolver: transaction IDs are between 22800 and 22900 sooner or later
 	- Forge 100 DNS response packets with random IDs within the range, and send to Apollo all the packets in a very short time window before the server receives the authentic response to the query.
-	- One of the bogus packets matches the correct transaction ID, and then the attack's successfully done.
-	- Repeat the above steps until this attack's successfully complete: different random host names and the same ID range.
+	- One of the bogus packets matches the correct transaction ID, and you win. The server's poisoned in cache.
+	- Repeat these steps until your attack's successfully complete.
 	
 2. Result
 	- ns.dnslabattacker.net is observed in the server's cache so the attack was successful.
-	- Below are the pictures that proov the server's poisoned.
+	- Below are the pictures proving the server's poisoned:
 <img src = "images/dumpDotDB2.png" width ="700">
 
 <img src = "images/dumpDotdb.png" width = "700">
-
-
-<br />
 
 ### Task2: Result Verification
 
