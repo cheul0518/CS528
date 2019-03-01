@@ -39,7 +39,7 @@ In this project, we can luckily handle this issue by simply adding some codes on
 - sudo su
 - cd /etc/bind/
 - nano -c named.conf.default-zones
-- Add the following code:
+- add the following codes:
 ```c
  zone "ns.dnslabattacker.net" {
                 type master;
@@ -47,7 +47,7 @@ In this project, we can luckily handle this issue by simply adding some codes on
 };
 ```
 - nano -c db.attacker
-- Add the following code:
+- add the following codes:
 ```c
 $TTL 604800
 @ IN SOA localhost. root.localhost. (
@@ -65,7 +65,7 @@ $TTL 604800
 - sudo su
 - cd /etc/bind/
 - nano -c named.conf.local
-- Add the following entry:
+- add the following entry:
 ```c
 zone "example.com" {
 	type master;
@@ -73,7 +73,7 @@ zone "example.com" {
 };
 ```
 - nano -c example.com.db
-- Add the following codes:
+- add the following codes:
 ```c
 $TTL 3D
 @		IN		SOA ns.example.com. admin.example.com. (
