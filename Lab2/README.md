@@ -99,14 +99,16 @@ mail		IN	A	1.1.1.2
 - Keep it running. Do not forcefully shut down until your attack's confirmed successful on the DNS server.
 - Below is the image to help understanding:
 <img src = "images/1.png" width = "700">
-
 <br />
 
 **5. Apollo**
 - sudo su
 - rndc dumpdb -cache (or rndc -cache dumpdb)
-- cat var/cache/bind/dump.db | grep attacker (This is for catching a line that contains the word, attacker. If your poisoning attack was successful, then your malicious name server, "ns.dnslabattacker.net", would be injected in the file; otherwise your attack failed.
+- cat var/cache/bind/dump.db | grep attacker
+	- This is for catching a line that contains the word, attacker. If your poisoning attack was successful, then your malicious name server, "ns.dnslabattacker.net", would be injected in the file; otherwise your attack failed, and nothing would appear.
 - Below is the image to help understanding:
 <img src = "images/2.png" width = "700">
 
+**6. DNS_user**
+- sudo su
 <img src = "images/3.png" width = "700">
