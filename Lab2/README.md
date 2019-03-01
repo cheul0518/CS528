@@ -99,7 +99,6 @@ mail		IN	A	1.1.1.2
 - Keep it running. Do not forcefully shut down until your attack's confirmed successful on the DNS server.
 - Below is the image to help understanding:
 <img src = "images/1.png" width = "700">
-<br />
 
 **5. Apollo**
 - sudo su
