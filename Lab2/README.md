@@ -72,6 +72,25 @@ zone "example.com" {
 	file "/etc/bind/example.com.db";
 };
 ```
+- nano -c example.com.db
+- Add the following codes:
+```c
+$TTL 3D
+@		IN		SOA ns.example.com. admin.example.com. (
+		2008111001	
+		8H
+		2H
+		4W
+		1D)
+@		IN	NS	ns.dnslabattacker.net.
+@		IN	MX	10 mail.example.com.
+www		IN	A	1.1.1.1
+mail		IN	A	1.1.1.2
+*.example.com.	IN	A	1.1.1.100
+```
+
+**3. Apollo and DNS_attacker**
+- restart both Apollo and DNS_attacker's DNS servers; otherwise, the modification will not take effect.
 
 <img src = "images/1.png" width = "700">
 
