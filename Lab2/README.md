@@ -10,9 +10,14 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 <br />
 <br />
 
-### Task1: Remote Cache Poisonin
+### Task1: Remote Cache Poisoning
 
 
+<img src = "images/fig3.png">
+
+<img src = "images/fig3.png">
+
+<img src = "images/11.png">
 
 
 
