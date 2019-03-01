@@ -33,7 +33,9 @@ When the DNS server receives the DNS query, it searches for example.com's NS rec
 You may say "Hey, include an additional record for the IP address for "ns.dnslabattacker.net" when forging the DNS response". Unfortunately, an IP address for the name server "ns.dnslabattacker.net" cannot be provided even if you actually attach it as an additional record in your spoofed response. Bailiwick checking plays a role of ignorning any records that are not within the same domain of the question. Hence "ns.dnslabattacker.net" cannot be answered in the additional section.
 
 
-In this project, we can luckily handle this issue by simply adding some codes on both the Server and Attacker.
+In this project, we can luckily handle this issue by simply adding some codes on both the Server and Attacker. Specifically, we store this IP address within resolver's name zone.
+
+1. 
 
 <img src = "images/1.png" width = "700">
 
