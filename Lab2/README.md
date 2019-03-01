@@ -36,6 +36,8 @@ You may say "Hey, include an additional record for the IP address for "ns.dnslab
 <br />
 <br />
 
+In this project, we can luckily handle this issue by simply adding some codes on both the Server and Attacker.
+
 <img src = "images/1.png" width = "700">
 
 <img src = "images/2.png" width = "700">
