@@ -13,9 +13,9 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 ### Task1: Remote Cache Poisoning
 
 
-<img src = "images/dumpDotdb.png", width ="750">
+<img src = "images/dumpDotDB2.png" width ="700">
 
-<img src = "images/dumpDotDB2.png", width = "750">
+<img src = "images/dumpDotdb.png" width = "700">
 
 
 
