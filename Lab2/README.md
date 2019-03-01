@@ -24,7 +24,11 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 
 ### Task2: Result Verification
 
+I dig "www.example.com" on the user VM in order to verify Kaminsky DNS attack is indeed successful. However it turns out that the attack is incomplete. Look at the picture below: 
+
 <img src = "images/11.png" width = "700">
+
+AAA
 
 <img src = "images/1.png" width = "700">
 
