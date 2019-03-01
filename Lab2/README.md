@@ -7,7 +7,7 @@ This project provides first-hand experience on the remote DNS cache poisoning at
 <img src = "images/fig3.png">
 For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker is 198.165.15.20.
 
-1. The attacker queries the DNS server Apollo for a non-existing name in example.com, such as aaaaa.example.com, where aaaaa is a random name.
+1. The attacker queries the DNS server Apollo for a non-existing name in example.com, such as "aaaaa.example.com", where aaaaa is a random name.
 2. Since the mapping is unavailable in Apollo's DNS cache, Apollo sends a DNS query to the name server of the example.com domain.
 3. While Apollo waits for the reply, the attacker floods Apollo with a stream of spoofed DNS response, each trying a different transaction ID, hoping one is correct.
 4. Even if the spoofed DNS response fails, it doesn't matter, because the next time, the attacker will query a different name, so Apollo has to send out another query, giving the attack another chance to do the spoofing attack. This effectively defeats the caching effect.
@@ -18,6 +18,14 @@ For my machine, DNS server is 198.165.15.18, user is 198.165.15.19, and attacker
 
 ### Task1: Remote Cache Poisoning
 
+1. Implementation
+	- Send a DNS query to Apollo for a random host name in the example.com domain. The host name must be a non-existing name such as aaaaa.example.com. 
+	- Predict the random ID range, where the authentic ID will be, genereated by the resolver: transaction IDs are between 22800 and 22900 sooner or later
+	- Forge 100 DNS response packets with random IDs within the range, and send to Apollo all the packets in a very short time window before the server receives the authentic response to the query.
+	- One of the packets hits the correct transaction ID, and then the attack's successfully done.
+	- Repeat the above steps until this attack's successfully complete: different random host names and the same ID range.
+	
+2. Result
 
 <img src = "images/dumpDotDB2.png" width ="700">
 
