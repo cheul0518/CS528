@@ -95,8 +95,8 @@ mail		IN	A	1.1.1.2
 **4. DNS_attacker**
 - sudo su
 - ./udp 192.168.15.20 192.168.15.18
-- The first argument is your dns_attacker IP address. The second argument is your Apollo IP address
-
+- The first argument is your dns_attacker IP address. The second argument is your Apollo IP address.
+- Keep it running. Do not forcefully shut down until your attack's confirmed successful on the DNS server.
 <img src = "images/1.png" width = "700">
 
 <br />
