@@ -1,5 +1,3 @@
-## Lab2: Remote DNS Cache Poisoning Attack Lab (Due: Feb 28th)
-
 ### Introduction
 
 This project provides first-hand experience on the remote DNS cache poisoning attack, or Kaminsky DNS attack. In the project, we're allowed to simultaneously run three virtual machines on a network. The three virtual machines play a role of DNS server, user, and attacker respectively. Kamingsky DNS attack is implemented as follows:
