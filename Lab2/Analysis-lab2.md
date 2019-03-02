@@ -1,8 +1,9 @@
-## Seungcheul Kim
-## Professor Aniket Kate
-## CS528
-## 2/28/2019
+### Seungcheul Kim
+### Professor Aniket Kate
+### CS528
+### 2/28/2019
 
+<br />
 
 ### Introduction
 
